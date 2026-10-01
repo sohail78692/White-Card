@@ -43,8 +43,8 @@ export default function HomePage() {
           {/* Left Column: Headlines & CTA */}
           <div className="lg:col-span-7 xl:col-span-7 text-left space-y-5 lg:space-y-6">
             {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2.5 rounded-full bg-white/[0.05] border border-white/10 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-semibold text-neutral-300 tracking-[0.16em] uppercase backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-[#00d2ff] shadow-[0_0_10px_#00d2ff]" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.05] border border-white/10 px-3 py-1 text-[9px] sm:text-[10px] font-semibold text-neutral-300 tracking-[0.15em] uppercase backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#00d2ff] shadow-[0_0_8px_#00d2ff]" />
               <span>ONE WALLET. FOUR IDENTITY DOCUMENTS.</span>
             </div>
 
