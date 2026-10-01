@@ -30,6 +30,19 @@ import {
 } from "lucide-react";
 
 export default function HomePage() {
+  const [tilt, setTilt] = React.useState({ x: 0, y: 0, isHovered: false });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
+    const y = -((e.clientY - rect.top) / rect.height - 0.5) * 14;
+    setTilt({ x: y, y: x, isHovered: true });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0, isHovered: false });
+  };
+
   return (
     <div className="relative space-y-12 sm:space-y-16 pt-0 pb-12 overflow-hidden bg-black">
       {/* 1. Hero Section (Two-Column Layout with 3D Glass Wallet Mockup) */}
@@ -83,18 +96,25 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Column: 3D Stacked Glass Wallet Mockup (iOS Glass Aesthetic) */}
+          {/* Right Column: 3D Stacked Glass Wallet Mockup (Interactive Hover & 3D Tilt) */}
           <div className="lg:col-span-5 xl:col-span-5 relative flex justify-center lg:justify-center items-center pt-2 lg:pt-0">
-            {/* Mockup Card Wrapper */}
-            <div className="relative w-full max-w-[310px] sm:max-w-[380px] lg:max-w-[410px] lg:-translate-x-8 xl:-translate-x-12">
+            {/* Mockup Card Interactive Area Wrapper */}
+            <div
+              className="group/stack relative w-full max-w-[315px] sm:max-w-[385px] lg:max-w-[415px] lg:-translate-x-8 xl:-translate-x-12 cursor-pointer perspective-1000 py-3"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+            >
               {/* Subtle Ambient Backing (Soft, no harsh glow) */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[340px] h-[240px] sm:h-[300px] bg-blue-500/[0.07] blur-3xl pointer-events-none rounded-full" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[340px] h-[240px] sm:h-[300px] bg-blue-500/[0.07] group-hover/stack:bg-blue-500/[0.11] blur-3xl pointer-events-none rounded-full transition-colors duration-500" />
 
               {/* Stack Layer 4 (Left Peeking Curved Card Edge) */}
               <div
                 className="absolute inset-0 rounded-[26px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md pointer-events-none shadow-[0_8px_24px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]"
                 style={{
-                  transform: "translate3d(-8px, 4px, 0) rotate(-5deg)",
+                  transform: tilt.isHovered
+                    ? `translate3d(-12px, 6px, -40px) rotateX(${tilt.x * 0.4}deg) rotateY(${tilt.y * 0.4}deg) rotate(-7deg)`
+                    : "translate3d(-8px, 4px, 0) rotate(-5deg)",
+                  transition: tilt.isHovered ? "transform 0.14s ease-out" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
                 aria-hidden="true"
               />
@@ -103,7 +123,10 @@ export default function HomePage() {
               <div
                 className="absolute inset-0 rounded-[26px] border border-white/[0.1] bg-white/[0.03] backdrop-blur-lg pointer-events-none shadow-[0_12px_28px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.1)]"
                 style={{
-                  transform: "translate3d(28px, -14px, 0) rotate(4.5deg)",
+                  transform: tilt.isHovered
+                    ? `translate3d(36px, -18px, -30px) rotateX(${tilt.x * 0.5}deg) rotateY(${tilt.y * 0.5}deg) rotate(6deg)`
+                    : "translate3d(28px, -14px, 0) rotate(4.5deg)",
+                  transition: tilt.isHovered ? "transform 0.14s ease-out" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
                 aria-hidden="true"
               />
@@ -112,7 +135,10 @@ export default function HomePage() {
               <div
                 className="absolute inset-0 rounded-[26px] border border-white/[0.12] bg-white/[0.04] backdrop-blur-xl pointer-events-none shadow-[0_14px_32px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
                 style={{
-                  transform: "translate3d(18px, -9px, 0) rotate(2.5deg)",
+                  transform: tilt.isHovered
+                    ? `translate3d(24px, -12px, -20px) rotateX(${tilt.x * 0.65}deg) rotateY(${tilt.y * 0.65}deg) rotate(3.8deg)`
+                    : "translate3d(18px, -9px, 0) rotate(2.5deg)",
+                  transition: tilt.isHovered ? "transform 0.12s ease-out" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
                 aria-hidden="true"
               />
@@ -121,22 +147,31 @@ export default function HomePage() {
               <div
                 className="absolute inset-0 rounded-[26px] border border-white/[0.14] bg-[#0c1220]/75 backdrop-blur-xl pointer-events-none shadow-[0_16px_36px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.14)]"
                 style={{
-                  transform: "translate3d(9px, -4px, 0) rotate(0.5deg)",
+                  transform: tilt.isHovered
+                    ? `translate3d(13px, -6px, -10px) rotateX(${tilt.x * 0.8}deg) rotateY(${tilt.y * 0.8}deg) rotate(1.6deg)`
+                    : "translate3d(9px, -4px, 0) rotate(0.5deg)",
+                  transition: tilt.isHovered ? "transform 0.1s ease-out" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
                 aria-hidden="true"
               />
 
-              {/* Main Front Glass Wallet Device Card (iOS Liquid Glass Material) */}
+              {/* Main Front Glass Wallet Device Card (Interactive 3D Tilt) */}
               <div
-                className="relative z-10 w-full rounded-[26px] p-4 sm:p-5 bg-gradient-to-b from-[#131b2e]/85 via-[#0d1424]/80 to-[#080d18]/85 backdrop-blur-2xl border border-white/[0.15] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1.5px_1px_rgba(255,255,255,0.18),inset_0_-1px_1px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-[1.01]"
+                className="relative z-10 w-full rounded-[26px] p-4 sm:p-5 bg-gradient-to-b from-[#131b2e]/85 via-[#0d1424]/80 to-[#080d18]/85 backdrop-blur-2xl border border-white/[0.15] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1.5px_1px_rgba(255,255,255,0.18),inset_0_-1px_1px_rgba(0,0,0,0.5)] group-hover/stack:border-white/[0.22] group-hover/stack:shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1.5px_2px_rgba(255,255,255,0.25),inset_0_-1px_1px_rgba(0,0,0,0.5)]"
                 style={{
-                  transform: "rotate(-2.5deg)",
+                  transform: tilt.isHovered
+                    ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) rotate(-0.5deg) scale3d(1.02, 1.02, 1.02)`
+                    : "rotate(-2.5deg)",
+                  transition: tilt.isHovered
+                    ? "transform 0.08s ease-out, border-color 0.3s ease, box-shadow 0.3s ease"
+                    : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease",
+                  transformStyle: "preserve-3d",
                 }}
               >
                 {/* Card Header */}
                 <div className="flex items-center justify-between pb-3.5 sm:pb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
+                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] group-hover/stack:scale-105 transition-transform duration-300">
                       <Wallet className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-white" />
                     </div>
                     <div>
@@ -153,16 +188,16 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells) */}
+                {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells with Hover States) */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
                   {/* 1. Driving License */}
-                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-sm shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <Car className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-[11px] sm:text-xs font-bold text-white truncate leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           Driving License
                         </div>
                         <div className="text-[8px] sm:text-[9px] text-neutral-400 font-normal leading-tight mt-0.5">
@@ -170,36 +205,36 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 2. PAN Card */}
-                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-sm shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-[11px] sm:text-xs font-bold text-white truncate leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           PAN Card
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 3. Voter ID */}
-                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-sm shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <Users className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-[11px] sm:text-xs font-bold text-white truncate leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           Voter ID
                         </div>
                         <div className="text-[8px] sm:text-[9px] text-neutral-400 font-normal leading-tight mt-0.5">
@@ -207,24 +242,24 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 4. Ration Card */}
-                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-sm shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <Wheat className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-[11px] sm:text-xs font-bold text-white truncate leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           Ration Card
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
