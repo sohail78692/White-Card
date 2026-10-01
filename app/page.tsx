@@ -67,7 +67,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <Link
                 href="/signin"
-                className="group flex items-center gap-2.5 rounded-full bg-white hover:bg-neutral-100 text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_0_30px_rgba(56,189,248,0.7),0_0_12px_rgba(59,130,246,0.5)] hover:shadow-[0_0_40px_rgba(56,189,248,0.9)] hover:scale-105 active:scale-95 transition-all duration-200"
+                className="group flex items-center gap-2.5 rounded-full bg-white hover:bg-neutral-100 text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_4px_20px_rgba(255,255,255,0.15),0_2px_6px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_24px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 transition-all duration-200"
               >
                 <Wallet className="h-4 w-4 text-black" />
                 <span>Open Wallet</span>
@@ -75,9 +75,9 @@ export default function HomePage() {
               </Link>
               <a
                 href="#features"
-                className="flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/30 hover:text-white px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-neutral-200 active:scale-95 transition-all duration-200 backdrop-blur-md"
+                className="flex items-center gap-2.5 rounded-full border border-white/[0.14] bg-white/[0.05] hover:bg-white/[0.09] hover:border-white/[0.22] hover:text-white px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-neutral-200 active:scale-95 transition-all duration-200 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
               >
-                <div className="h-5 w-5 rounded-full border border-white/50 flex items-center justify-center text-white">
+                <div className="h-5 w-5 rounded-full border border-white/40 flex items-center justify-center text-white">
                   <Play className="h-2.5 w-2.5 fill-white translate-x-0.5" />
                 </div>
                 <span>Explore Features</span>
@@ -85,52 +85,52 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Column: 3D Stacked Glass Wallet Mockup (Smaller, Compact Size) */}
+          {/* Right Column: 3D Stacked Glass Wallet Mockup (iOS Glass Aesthetic) */}
           <div className="lg:col-span-5 xl:col-span-5 relative flex justify-center lg:justify-center items-center pt-2 lg:pt-0">
             {/* Mockup Card Wrapper */}
             <div className="relative w-full max-w-[310px] sm:max-w-[380px] lg:max-w-[410px] lg:-translate-x-8 xl:-translate-x-12">
-              {/* Ambient Behind-Card Glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[380px] h-[260px] sm:h-[340px] bg-gradient-to-tr from-blue-600/35 via-indigo-600/25 to-sky-400/30 blur-3xl pointer-events-none rounded-full" />
+              {/* Subtle Ambient Backing (Soft, no harsh glow) */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[340px] h-[240px] sm:h-[300px] bg-blue-500/[0.07] blur-3xl pointer-events-none rounded-full" />
 
               {/* Stack Layer 4 (Left Peeking Curved Card Edge) */}
               <div
-                className="absolute inset-0 rounded-[26px] border border-sky-500/20 bg-gradient-to-br from-blue-950/20 via-[#0a1122]/30 to-transparent backdrop-blur-sm pointer-events-none shadow-[0_0_20px_rgba(56,189,248,0.15)]"
+                className="absolute inset-0 rounded-[26px] border border-white/[0.08] bg-white/[0.02] backdrop-blur-md pointer-events-none shadow-[0_8px_24px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]"
                 style={{
                   transform: "translate3d(-8px, 4px, 0) rotate(-5deg)",
                 }}
                 aria-hidden="true"
               />
 
-              {/* Stack Layer 3 (Furthest Back Violet Neon Rim Card) */}
+              {/* Stack Layer 3 (Furthest Back Glass Sheet) */}
               <div
-                className="absolute inset-0 rounded-[26px] border border-indigo-400/30 bg-gradient-to-br from-indigo-950/25 via-blue-950/15 to-transparent backdrop-blur-sm pointer-events-none shadow-[0_0_28px_rgba(168,85,247,0.22)]"
+                className="absolute inset-0 rounded-[26px] border border-white/[0.1] bg-white/[0.03] backdrop-blur-lg pointer-events-none shadow-[0_12px_28px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.1)]"
                 style={{
                   transform: "translate3d(28px, -14px, 0) rotate(4.5deg)",
                 }}
                 aria-hidden="true"
               />
 
-              {/* Stack Layer 2 (Cyan-Blue Curved Rim Card) */}
+              {/* Stack Layer 2 (Middle Glass Sheet) */}
               <div
-                className="absolute inset-0 rounded-[26px] border border-sky-400/45 bg-gradient-to-br from-sky-950/30 via-blue-950/25 to-slate-900/40 backdrop-blur-md pointer-events-none shadow-[0_0_32px_rgba(56,189,248,0.3)]"
+                className="absolute inset-0 rounded-[26px] border border-white/[0.12] bg-white/[0.04] backdrop-blur-xl pointer-events-none shadow-[0_14px_32px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
                 style={{
                   transform: "translate3d(18px, -9px, 0) rotate(2.5deg)",
                 }}
                 aria-hidden="true"
               />
 
-              {/* Stack Layer 1 (Immediate Back Parallel Glowing Rim Card) */}
+              {/* Stack Layer 1 (Immediate Back Frosted Glass Sheet) */}
               <div
-                className="absolute inset-0 rounded-[26px] border border-sky-300/40 bg-[#0a1224]/80 backdrop-blur-lg pointer-events-none shadow-[0_0_25px_rgba(56,189,248,0.25)]"
+                className="absolute inset-0 rounded-[26px] border border-white/[0.14] bg-[#0c1220]/75 backdrop-blur-xl pointer-events-none shadow-[0_16px_36px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.14)]"
                 style={{
                   transform: "translate3d(9px, -4px, 0) rotate(0.5deg)",
                 }}
                 aria-hidden="true"
               />
 
-              {/* Main Front Glass Wallet Device Card (Tilted -2.5deg) */}
+              {/* Main Front Glass Wallet Device Card (iOS Liquid Glass Material) */}
               <div
-                className="relative z-10 w-full rounded-[26px] p-4 sm:p-5 bg-[#09111e]/85 backdrop-blur-2xl border border-sky-400/45 shadow-[0_25px_60px_rgba(0,0,0,0.92),inset_0_1.5px_2px_rgba(255,255,255,0.22),0_0_30px_rgba(56,189,248,0.2)] transition-all duration-300 hover:scale-[1.01]"
+                className="relative z-10 w-full rounded-[26px] p-4 sm:p-5 bg-gradient-to-b from-[#131b2e]/85 via-[#0d1424]/80 to-[#080d18]/85 backdrop-blur-2xl border border-white/[0.15] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1.5px_1px_rgba(255,255,255,0.18),inset_0_-1px_1px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-[1.01]"
                 style={{
                   transform: "rotate(-2.5deg)",
                 }}
@@ -138,7 +138,7 @@ export default function HomePage() {
                 {/* Card Header */}
                 <div className="flex items-center justify-between pb-3.5 sm:pb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.07] border border-white/10 flex items-center justify-center text-white shrink-0 shadow-inner">
+                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
                       <Wallet className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-white" />
                     </div>
                     <div>
@@ -155,12 +155,12 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* 2x2 Grid of 4 Supported Documents */}
+                {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells) */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
                   {/* 1. Driving License */}
-                  <div className="group rounded-[16px] bg-[#0d1627]/90 hover:bg-[#111c33] border border-blue-500/30 shadow-[0_0_14px_rgba(37,99,235,0.18)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer">
+                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-md shadow-blue-600/35 shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-sm shrink-0">
                         <Car className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
@@ -172,15 +172,15 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.07] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 2. PAN Card */}
-                  <div className="group rounded-[16px] bg-[#0d1627]/90 hover:bg-[#111c33] border border-purple-500/30 shadow-[0_0_14px_rgba(147,51,234,0.18)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer">
+                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-md shadow-purple-600/35 shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-sm shrink-0">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
@@ -189,15 +189,15 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.07] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 3. Voter ID */}
-                  <div className="group rounded-[16px] bg-[#0d1627]/90 hover:bg-[#111c33] border border-emerald-500/35 shadow-[0_0_14px_rgba(16,185,129,0.2)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer">
+                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-md shadow-emerald-600/35 shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-sm shrink-0">
                         <Users className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
@@ -209,15 +209,15 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.07] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 4. Ration Card */}
-                  <div className="group rounded-[16px] bg-[#0d1627]/90 hover:bg-[#111c33] border border-amber-500/30 shadow-[0_0_14px_rgba(245,158,11,0.2)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer">
+                  <div className="group rounded-[16px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-md shadow-amber-600/35 shrink-0">
+                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-sm shrink-0">
                         <Wheat className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
@@ -226,7 +226,7 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.07] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover:bg-white/12 flex items-center justify-center text-neutral-400 group-hover:text-white shrink-0 ml-1 transition-colors">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
@@ -242,11 +242,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Bottom Trust Highlights (3 Features Row with vertical dividers) */}
+        {/* Bottom Trust Highlights (iOS Glass Squircles with Clean Dividers) */}
         <div className="pt-10 sm:pt-14 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 px-2">
           {/* 1. Client Encrypted */}
           <div className="flex items-center gap-4 flex-1">
-            <div className="h-11 w-11 rounded-2xl bg-[#091224] border border-blue-500/25 flex items-center justify-center text-[#38bdf8] shrink-0 shadow-[0_0_18px_rgba(56,189,248,0.18)]">
+            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
               <Lock className="h-4.5 w-4.5" />
             </div>
             <div className="text-left">
@@ -260,7 +260,7 @@ export default function HomePage() {
 
           {/* 2. Zero PII Leakage */}
           <div className="flex items-center gap-4 flex-1 md:justify-center">
-            <div className="h-11 w-11 rounded-2xl bg-[#091224] border border-blue-500/25 flex items-center justify-center text-[#38bdf8] shrink-0 shadow-[0_0_18px_rgba(56,189,248,0.18)]">
+            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
               <ShieldCheck className="h-4.5 w-4.5" />
             </div>
             <div className="text-left">
@@ -274,7 +274,7 @@ export default function HomePage() {
 
           {/* 3. Fast & Secure */}
           <div className="flex items-center gap-4 flex-1 md:justify-end">
-            <div className="h-11 w-11 rounded-2xl bg-[#091224] border border-blue-500/25 flex items-center justify-center text-[#38bdf8] shrink-0 shadow-[0_0_18px_rgba(56,189,248,0.18)]">
+            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
               <Zap className="h-4.5 w-4.5" />
             </div>
             <div className="text-left">
