@@ -1,0 +1,40 @@
+import pino from "pino";
+
+export const logger = pino({
+  level: process.env.LOG_LEVEL || (process.env.NODE_ENV === "production" ? "info" : "debug"),
+  redact: {
+    paths: [
+      "number",
+      "*.number",
+      "*.*.number",
+      "dob",
+      "*.dob",
+      "*.*.dob",
+      "address",
+      "*.address",
+      "*.*.address",
+      "email",
+      "*.email",
+      "*.*.email",
+      "otp",
+      "*.otp",
+      "*.*.otp",
+      "code",
+      "*.code",
+      "authorization",
+      "*.authorization",
+      "cookie",
+      "*.cookie",
+      "req.headers.cookie",
+      "req.headers.authorization",
+      "headers.cookie",
+      "headers.authorization",
+      "password",
+      "*.password",
+    ],
+    censor: "[REDACTED_PII]",
+  },
+  browser: {
+    asObject: true,
+  },
+});
