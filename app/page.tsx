@@ -12,6 +12,7 @@ import {
   FileKey2,
   CheckCircle2,
   Car,
+  CarFront,
   CreditCard,
   Vote,
   ShoppingBag,
@@ -100,12 +101,12 @@ export default function HomePage() {
           <div className="lg:col-span-5 xl:col-span-5 relative flex justify-center lg:justify-center items-center pt-2 lg:pt-0">
             {/* Mockup Card Interactive Area Wrapper */}
             <div
-              className="group/stack relative w-full max-w-[315px] sm:max-w-[385px] lg:max-w-[415px] lg:-translate-x-8 xl:-translate-x-12 cursor-pointer perspective-1000 py-3"
+              className="group/stack relative w-full max-w-[335px] sm:max-w-[405px] lg:max-w-[435px] lg:-translate-x-8 xl:-translate-x-12 cursor-pointer perspective-1000 py-3"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
               {/* Subtle Ambient Backing (Soft, no harsh glow) */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] sm:w-[340px] h-[240px] sm:h-[300px] bg-blue-500/[0.07] group-hover/stack:bg-blue-500/[0.11] blur-3xl pointer-events-none rounded-full transition-colors duration-500" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[360px] h-[250px] sm:h-[320px] bg-blue-500/[0.07] group-hover/stack:bg-blue-500/[0.11] blur-3xl pointer-events-none rounded-full transition-colors duration-500" />
 
               {/* Stack Layer 4 (Left Peeking Curved Card Edge) */}
               <div
@@ -191,75 +192,69 @@ export default function HomePage() {
                 {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells with Hover States) */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
                   {/* 1. Driving License */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
-                        <Car className="h-4 w-4" />
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(37,99,235,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                        <CarFront className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           Driving License
                         </div>
-                        <div className="text-[8px] sm:text-[9px] text-neutral-400 font-normal leading-tight mt-0.5">
-                          (DL)
-                        </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 2. PAN Card */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
-                        <FileText className="h-4 w-4" />
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(124,58,237,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                        <FileText className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           PAN Card
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 3. Voter ID */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
-                        <Users className="h-4 w-4" />
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(16,185,129,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                        <Vote className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           Voter ID
                         </div>
-                        <div className="text-[8px] sm:text-[9px] text-neutral-400 font-normal leading-tight mt-0.5">
-                          (EPIC)
-                        </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
 
                   {/* 4. Ration Card */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
-                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-sm shrink-0 group-hover/item:scale-105 transition-transform duration-200">
-                        <Wheat className="h-4 w-4" />
+                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                    <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(245,158,11,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                        <Wheat className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
                           Ration Card
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </div>
