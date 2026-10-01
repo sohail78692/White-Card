@@ -133,6 +133,65 @@ body {
   animation: authModalSlideUp 0.25s ease-out forwards;
 }
 
+/* Extruded 3D Isometric Text Shadow Hover Animation */
+.isometric-3d-title {
+  display: inline-block;
+  cursor: default;
+  user-select: none;
+  padding: 8px 14px 8px 6px;
+  margin: -8px -14px -8px -6px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.isometric-3d-title:hover {
+  transform: translate3d(-3.5px, -3.5px, 0);
+}
+
+.isometric-text {
+  display: inline;
+  color: #ffffff;
+  transition: text-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.isometric-3d-title:hover .isometric-text {
+  text-shadow:
+    1px 1px 0 #1e3a8a,
+    2px 2px 0 #1e40af,
+    3px 3px 0 #2563eb,
+    4px 4px 0 #1d4ed8,
+    5px 5px 0 #1e3a8a,
+    6px 6px 0 #0f172a,
+    8px 8px 18px rgba(56, 189, 248, 0.4),
+    14px 14px 28px rgba(0, 0, 0, 0.95);
+}
+
+.isometric-identity {
+  display: inline-block;
+  padding-right: 0.16em;
+  margin-right: -0.06em;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+  padding-top: 0.04em;
+  margin-top: -0.04em;
+  background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 2;
+  transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.isometric-3d-title:hover .isometric-identity {
+  filter:
+    drop-shadow(1px 1px 0 #1d4ed8)
+    drop-shadow(2px 2px 0 #1e40af)
+    drop-shadow(3px 3px 0 #1e3a8a)
+    drop-shadow(5px 5px 14px rgba(56, 189, 248, 0.65))
+    drop-shadow(10px 10px 24px rgba(0, 0, 0, 0.9));
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   * {

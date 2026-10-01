@@ -62,14 +62,18 @@ export default function HomePage() {
               <span>ONE WALLET. FOUR IDENTITY DOCUMENTS.</span>
             </div>
 
-            {/* Bold Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[54px] xl:text-[62px] font-black tracking-tight text-white leading-[1.08]">
-              Your personal <br />
-              <span className="bg-gradient-to-r from-[#38bdf8] via-[#60a5fa] to-[#3b82f6] bg-clip-text text-transparent">
-                identity
-              </span>{" "}
-              wallet.
-            </h1>
+            {/* Bold Headline with Extruded 3D Isometric Text Shadow on Hover */}
+            <div className="relative inline-block">
+              <h1 className="isometric-3d-title text-4xl sm:text-5xl lg:text-[54px] xl:text-[62px] font-black tracking-tight leading-[1.16]">
+                <span className="isometric-text">Your personal</span> <br />
+                <span className="isometric-identity">
+                  identity
+                </span>{" "}
+                <span className="isometric-text">
+                  wallet.
+                </span>
+              </h1>
+            </div>
 
             {/* Subtitle Description */}
             <p className="text-sm sm:text-base text-neutral-400 leading-relaxed font-normal max-w-lg">
