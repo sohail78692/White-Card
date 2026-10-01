@@ -163,9 +163,11 @@ export function WalletCard({
             {/* Top Bar: Brand, Status Dot & NFC */}
             <div className="flex items-center justify-between z-10">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-900 text-white shadow-sm">
-                  <Shield className="h-4 w-4" />
-                </div>
+                <img
+                  src="/logo.png"
+                  alt="White Card"
+                  className="h-7 w-7 object-contain"
+                />
                 <div>
                   <span className="text-xs font-black tracking-widest text-slate-900 block leading-tight">
                     WHITE CARD WALLET

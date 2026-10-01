@@ -70,6 +70,10 @@ class SoundManager {
     this.playTone(320, "sine", 0.08, 0.04);
   }
 
+  public playPop() {
+    this.playTone(440, "sine", 0.05, 0.04);
+  }
+
   public playSuccess() {
     if (this.muted) return;
     this.playTone(523.25, "triangle", 0.1, 0.05); // C5

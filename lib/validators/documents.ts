@@ -5,12 +5,7 @@ export type DocumentType =
   | "DRIVING_LICENSE"
   | "PAN"
   | "VOTER_ID"
-  | "RATION_CARD"
-  | "PASSPORT"
-  | "AYUSHMAN_BHARAT"
-  | "E_SHRAM"
-  | "UDID"
-  | "CUSTOM";
+  | "RATION_CARD";
 
 export interface DocumentTypeMeta {
   type: DocumentType;
@@ -25,7 +20,7 @@ export interface DocumentTypeMeta {
 export const DOCUMENT_TYPES: Record<DocumentType, DocumentTypeMeta> = {
   DRIVING_LICENSE: {
     type: "DRIVING_LICENSE",
-    title: "Driving License",
+    title: "Driving License (DL)",
     category: "Identity",
     numberLabel: "DL Number",
     placeholder: "DL0120150001234",
@@ -59,51 +54,6 @@ export const DOCUMENT_TYPES: Record<DocumentType, DocumentTypeMeta> = {
     placeholder: "RC1234567890",
     regex: /^[A-Z0-9]{8,18}$/,
     hint: "8 to 18 uppercase alphanumeric characters.",
-  },
-  PASSPORT: {
-    type: "PASSPORT",
-    title: "Passport",
-    category: "Identity",
-    numberLabel: "Passport Number",
-    placeholder: "A1234567",
-    regex: /^[A-Z][0-9]{7}$/,
-    hint: "1 uppercase letter followed by 7 digits.",
-  },
-  AYUSHMAN_BHARAT: {
-    type: "AYUSHMAN_BHARAT",
-    title: "Ayushman Bharat PM-JAY",
-    category: "Welfare",
-    numberLabel: "PM-JAY ID",
-    placeholder: "PMJAY1234567",
-    regex: /^[A-Z0-9]{9,16}$/,
-    hint: "9 to 16 alphanumeric characters.",
-  },
-  E_SHRAM: {
-    type: "E_SHRAM",
-    title: "e-Shram Card",
-    category: "Welfare",
-    numberLabel: "UAN (12 digits)",
-    placeholder: "123456789012",
-    regex: /^[0-9]{12}$/,
-    hint: "12 numeric digits Universal Account Number.",
-  },
-  UDID: {
-    type: "UDID",
-    title: "UDID Card",
-    category: "Welfare",
-    numberLabel: "UDID Number",
-    placeholder: "DL1234567890123456",
-    regex: /^[A-Z]{2}[0-9]{16}$/,
-    hint: "2 uppercase letters followed by 16 numeric digits.",
-  },
-  CUSTOM: {
-    type: "CUSTOM",
-    title: "Custom Document",
-    category: "Identity",
-    numberLabel: "Document ID / Number",
-    placeholder: "DOC-987654321",
-    regex: /^.{3,32}$/,
-    hint: "3 to 32 characters.",
   },
 };
 
@@ -144,11 +94,6 @@ export function maskDocumentNumber(normalizedNumber: string, type: DocumentType)
     return `${normalizedNumber.slice(0, 2)}••••••${normalizedNumber.slice(-1)}`;
   }
 
-  if (type === "E_SHRAM") {
-    // Show last 4: •••• •••• 1234
-    return `•••• •••• ${normalizedNumber.slice(-4)}`;
-  }
-
   // General default: mask all but the last 4 characters
   const visible = normalizedNumber.slice(-4);
   const maskedCount = Math.max(4, len - 4);
@@ -161,11 +106,6 @@ export const createDocumentSchema = z.object({
     "PAN",
     "VOTER_ID",
     "RATION_CARD",
-    "PASSPORT",
-    "AYUSHMAN_BHARAT",
-    "E_SHRAM",
-    "UDID",
-    "CUSTOM",
   ]),
   customTitle: z.string().optional(),
   number: z.string().min(1, "Document number is required"),

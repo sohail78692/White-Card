@@ -171,7 +171,7 @@ export default function WalletPage() {
         </Link>
 
         <Link
-          href="/verify"
+          href="/share"
           className="rounded-2xl glass-panel p-5 border border-white/10 hover:border-emerald-500/30 transition flex items-center justify-between"
         >
           <div className="space-y-1">

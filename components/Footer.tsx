@@ -17,9 +17,11 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-600">
-                <Lock className="h-3.5 w-3.5 text-white" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="White Card Logo"
+                className="h-6 w-6 object-contain"
+              />
               <span className="font-bold text-white text-sm">White Card Wallet</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed max-w-md">
@@ -51,11 +53,6 @@ export function Footer() {
               <li>
                 <Link href="/share" className="hover:text-white transition">
                   Selective Disclosure
-                </Link>
-              </li>
-              <li>
-                <Link href="/verify" className="hover:text-white transition">
-                  Verifier Portal
                 </Link>
               </li>
             </ul>

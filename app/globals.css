@@ -3,22 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
-  --card-bg: rgba(15, 23, 42, 0.75);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --accent-indigo: #6366f1;
-  --accent-emerald: #10b981;
-  --accent-amber: #f59e0b;
-  --accent-cyan: #06b6d4;
+  --background: #000000;
+  --foreground: #ffffff;
+  --card-bg: rgba(18, 18, 22, 0.75);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --accent-white: #ffffff;
+  --accent-platinum: #e4e4e7;
+  --accent-zinc: #a1a1aa;
 }
 
+html,
 body {
   color: var(--foreground);
   background: var(--background);
   font-feature-settings: "rlig" 1, "calt" 1;
   min-height: 100vh;
   overflow-x: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbars across all browsers globally */
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
 }
 
 /* 3D Card Flip styles */
@@ -39,19 +55,33 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Glassmorphism utility classes */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Apple Card Luxury Frosted Glass Utilities */
+.glass-ios {
+  background: rgba(18, 18, 22, 0.75);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-.glass-panel-subtle {
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.glass-ios-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(14, 14, 18, 0.6) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.glass-ios-pill {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-glow-white {
+  box-shadow: 0 0 35px -8px rgba(255, 255, 255, 0.2);
 }
 
 /* Holographic dynamic gradient reflection */
@@ -65,6 +95,42 @@ body {
     rgba(255, 255, 255, 0.15) 100%
   );
   background-size: 200% 200%;
+}
+
+/* 3D continuous floating animation */
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(1.5deg) rotateY(-1.5deg);
+  }
+}
+
+.animate-float-3d {
+  animation: float3d 5.5s ease-in-out infinite;
+}
+
+/* Auth Modal Animations */
+@keyframes authModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes authModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.auth-modal-backdrop {
+  animation: authModalFadeIn 0.2s ease-out forwards;
+}
+.auth-modal-card {
+  animation: authModalSlideUp 0.25s ease-out forwards;
 }
 
 /* Reduced motion preference */

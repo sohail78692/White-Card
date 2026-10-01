@@ -23,7 +23,6 @@ interface AddDocumentModalProps {
 
 export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
   const [type, setType] = useState<DocumentType>("DRIVING_LICENSE");
-  const [customTitle, setCustomTitle] = useState("");
   const [number, setNumber] = useState("");
   const [issuer, setIssuer] = useState("Ministry of Road Transport & Highways");
   const [expiry, setExpiry] = useState("");
@@ -42,7 +41,7 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
     setError(null);
     setNumber("");
 
-    // Set sensible default issuers and details structure
+    // Set sensible default issuers and details structure for the 4 documents
     switch (newType) {
       case "DRIVING_LICENSE":
         setIssuer("Ministry of Road Transport & Highways");
@@ -65,26 +64,6 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
           monthlyRiceQuotaKg: 20,
           monthlyWheatQuotaKg: 15,
         });
-        break;
-      case "PASSPORT":
-        setIssuer("Consular, Passport & Visa Division");
-        setDetails({ placeOfIssue: "New Delhi", dateOfIssue: "" });
-        break;
-      case "AYUSHMAN_BHARAT":
-        setIssuer("National Health Authority");
-        setDetails({ state: "National", familyId: "" });
-        break;
-      case "E_SHRAM":
-        setIssuer("Ministry of Labour & Employment");
-        setDetails({ occupation: "Construction / Technician", primarySkill: "Electrical" });
-        break;
-      case "UDID":
-        setIssuer("Department of Empowerment of Persons with Disabilities");
-        setDetails({ disabilityType: "Locomotor", percentage: 40 });
-        break;
-      default:
-        setIssuer("Self-Declared Issuer");
-        setDetails({});
         break;
     }
   };
@@ -109,7 +88,6 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type,
-          customTitle: type === "CUSTOM" ? customTitle : undefined,
           number: validation.normalized,
           issuer: issuer.trim(),
           expiry: expiry || undefined,
@@ -189,21 +167,6 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
             </select>
           </div>
 
-          {type === "CUSTOM" && (
-            <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Custom Document Name
-              </label>
-              <input
-                type="text"
-                required
-                value={customTitle}
-                onChange={(e) => setCustomTitle(e.target.value)}
-                placeholder="e.g. Employee ID or Medical Card"
-                className="w-full rounded-xl border border-white/10 bg-slate-900/90 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
-              />
-            </div>
-          )}
 
           {/* Document Number with auto-uppercase and hint */}
           <div>

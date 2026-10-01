@@ -197,11 +197,10 @@ export default async function ShareViewPage({ params }: ShareViewPageProps) {
 
           <div className="pt-2 text-center">
             <Link
-              href="/verify"
+              href="/"
               className="text-xs text-indigo-400 hover:text-indigo-300 font-medium inline-flex items-center gap-1.5"
             >
-              <span>Switch to Verifier Scanner Portal</span>
-              <span>→</span>
+              <span>← Back to White Card Wallet</span>
             </Link>
           </div>
         </div>

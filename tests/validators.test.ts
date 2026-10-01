@@ -37,20 +37,12 @@ describe("Document Number Validators", () => {
     expect(invalid.valid).toBe(false);
   });
 
-  it("should validate Passport correctly", () => {
-    // Valid: 1 letter, 7 digits
-    const valid = validateDocumentNumber("PASSPORT", "A1234567");
+  it("should validate Ration Card correctly", () => {
+    // Valid: 8 to 18 uppercase alphanumeric
+    const valid = validateDocumentNumber("RATION_CARD", "RC1234567890");
     expect(valid.valid).toBe(true);
 
-    const invalid = validateDocumentNumber("PASSPORT", "12345678");
-    expect(invalid.valid).toBe(false);
-  });
-
-  it("should validate e-Shram (12 digits UAN) correctly", () => {
-    const valid = validateDocumentNumber("E_SHRAM", "123456789012");
-    expect(valid.valid).toBe(true);
-
-    const invalid = validateDocumentNumber("E_SHRAM", "12345");
+    const invalid = validateDocumentNumber("RATION_CARD", "RC12");
     expect(invalid.valid).toBe(false);
   });
 });
@@ -59,11 +51,6 @@ describe("Document Masking Helper", () => {
   it("should mask PAN appropriately", () => {
     const masked = maskDocumentNumber("ABCDE1234F", "PAN");
     expect(masked).toBe("AB••••••F");
-  });
-
-  it("should mask e-Shram appropriately", () => {
-    const masked = maskDocumentNumber("123456789012", "E_SHRAM");
-    expect(masked).toBe("•••• •••• 9012");
   });
 
   it("should mask general documents preserving only trailing characters", () => {

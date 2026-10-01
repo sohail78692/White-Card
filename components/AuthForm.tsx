@@ -134,9 +134,9 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto rounded-2xl glass-panel p-6 sm:p-8 shadow-2xl border border-white/10">
+    <div className="w-full max-w-md mx-auto">
       {/* Tabs */}
-      <div className="flex rounded-xl bg-slate-900/80 p-1 mb-6 border border-white/5" role="tablist">
+      <div className="flex rounded-xl bg-black/60 p-1 mb-6 border border-white/10" role="tablist">
         <button
           type="button"
           role="tab"
@@ -147,8 +147,8 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
           }}
           className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-semibold rounded-lg transition ${
             tab === "otp"
-              ? "bg-indigo-600 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-white text-black shadow-sm"
+              : "text-neutral-400 hover:text-white"
           }`}
         >
           <Mail className="h-4 w-4" />
@@ -165,8 +165,8 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
           }}
           className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-semibold rounded-lg transition ${
             tab === "passkey"
-              ? "bg-indigo-600 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-white text-black shadow-sm"
+              : "text-neutral-400 hover:text-white"
           }`}
         >
           <Fingerprint className="h-4 w-4" />
@@ -195,21 +195,21 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
           {step === "email" ? (
             <form onSubmit={handleSendOtp} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-neutral-300 mb-1.5">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+                  <Mail className="absolute left-3.5 top-3 h-4 w-4 text-neutral-500" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="w-full rounded-xl border border-white/10 bg-slate-900/90 pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-white/10 bg-black/80 pl-10 pr-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
                   />
                 </div>
-                <p className="mt-1.5 text-[11px] text-slate-400">
+                <p className="mt-1.5 text-[11px] text-neutral-400">
                   We&apos;ll send a 6-digit one-time code to authenticate your wallet.
                 </p>
               </div>
@@ -217,7 +217,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 transition"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-neutral-200 text-black px-4 py-2.5 text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 transition"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
                 <span>Send Verification Code</span>
@@ -227,19 +227,19 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
             <form onSubmit={handleVerifyOtp} className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-medium text-slate-300">
+                  <label className="block text-xs font-medium text-neutral-300">
                     6-Digit Security Code
                   </label>
                   <button
                     type="button"
                     onClick={() => setStep("email")}
-                    className="text-[11px] text-indigo-400 hover:text-indigo-300"
+                    className="text-[11px] text-neutral-300 hover:text-white underline"
                   >
                     Change Email
                   </button>
                 </div>
                 <div className="relative">
-                  <KeyRound className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+                  <KeyRound className="absolute left-3.5 top-3 h-4 w-4 text-neutral-500" />
                   <input
                     type="text"
                     required
@@ -248,18 +248,18 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
                     value={code}
                     onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                     placeholder="123456"
-                    className="w-full rounded-xl border border-white/10 bg-slate-900/90 pl-10 pr-4 py-2.5 text-center text-lg font-mono tracking-widest text-white placeholder-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-white/10 bg-black/80 pl-10 pr-4 py-2.5 text-center text-lg font-mono tracking-widest text-white placeholder-neutral-600 focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
                   />
                 </div>
-                <p className="mt-1.5 text-[11px] text-slate-400">
-                  Sent to <strong className="text-slate-300">{email}</strong>. Valid for 10 minutes.
+                <p className="mt-1.5 text-[11px] text-neutral-400">
+                  Sent to <strong className="text-white">{email}</strong>. Valid for 10 minutes.
                 </p>
               </div>
 
               <button
                 type="submit"
                 disabled={loading || code.length !== 6}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 transition"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-neutral-200 text-black px-4 py-2.5 text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 transition"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                 <span>Verify & Open Wallet</span>
@@ -272,13 +272,13 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
       {/* Tab: WebAuthn Passkeys */}
       {tab === "passkey" && (
         <div className="space-y-4 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-950/50 border border-indigo-500/20 text-indigo-400">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/15 text-white">
             <Fingerprint className="h-8 w-8" />
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-white">Biometric / Security Key</h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-neutral-400 mt-1">
               Sign in instantly using Touch ID, Face ID, Windows Hello, or your hardware security key.
             </p>
           </div>
@@ -288,7 +288,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
               type="button"
               onClick={handlePasskeySignIn}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 transition"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-neutral-200 text-black px-4 py-3 text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 transition"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
