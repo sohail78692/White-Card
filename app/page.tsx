@@ -77,9 +77,7 @@ export default function HomePage() {
                 href="#features"
                 className="flex items-center gap-2.5 rounded-full border border-white/[0.14] bg-white/[0.05] hover:bg-white/[0.09] hover:border-white/[0.22] hover:text-white px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-neutral-200 active:scale-95 transition-all duration-200 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
               >
-                <div className="h-5 w-5 rounded-full border border-white/40 flex items-center justify-center text-white">
-                  <Play className="h-2.5 w-2.5 fill-white translate-x-0.5" />
-                </div>
+                <Layers className="h-4 w-4 text-white/90" />
                 <span>Explore Features</span>
               </a>
             </div>
