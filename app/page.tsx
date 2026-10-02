@@ -499,10 +499,10 @@ function SelfDestructQRFeatureCard() {
       const livePayload = `https://whitecard.internal/v/proof-${Date.now().toString(36)}`;
       const url = await QRCode.toDataURL(livePayload, {
         width: 320,
-        margin: 1,
+        margin: 0,
         color: {
-          dark: "#FFFFFF",
-          light: "#00000000",
+          dark: "#060b17",
+          light: "#FFFFFF",
         },
       });
       setQrUrl(url);
@@ -527,7 +527,6 @@ function SelfDestructQRFeatureCard() {
 
   const mins = Math.floor(timeLeft / 60);
   const secs = timeLeft % 60;
-  const formattedTime = `${String(mins).padStart(2, "0")} : ${String(secs).padStart(2, "0")}`;
 
   return (
     <div className="relative group rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[310px]">
@@ -566,21 +565,21 @@ function SelfDestructQRFeatureCard() {
 
       {/* QR & Verification Panel */}
       <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 mt-3 max-w-[340px]">
-        {/* Left: QR Code with Cyan Bracket Glow */}
-        <div className="relative p-2 shrink-0 flex items-center justify-center">
-          {/* Corner Brackets */}
-          <div className="absolute inset-0 pointer-events-none drop-shadow-[0_0_8px_rgba(41,151,255,0.7)]">
-            <span className="absolute top-0 left-0 w-3.5 h-3.5 border-t-[2.5px] border-l-[2.5px] border-[#2997FF] rounded-tl-md" />
-            <span className="absolute top-0 right-0 w-3.5 h-3.5 border-t-[2.5px] border-r-[2.5px] border-[#2997FF] rounded-tr-md" />
-            <span className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b-[2.5px] border-l-[2.5px] border-[#2997FF] rounded-bl-md" />
-            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b-[2.5px] border-r-[2.5px] border-[#2997FF] rounded-br-md" />
+        {/* Left: QR Code with Precision Cyan Bracket Glow */}
+        <div className="relative shrink-0 flex items-center justify-center">
+          {/* Snug Viewfinder Reticle Brackets */}
+          <div className="absolute -inset-1.5 pointer-events-none drop-shadow-[0_0_8px_rgba(41,151,255,0.85)]">
+            <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#2997FF] rounded-tl-sm" />
+            <span className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#2997FF] rounded-tr-sm" />
+            <span className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#2997FF] rounded-bl-sm" />
+            <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#2997FF] rounded-br-sm" />
           </div>
 
-          <div className="w-[84px] h-[84px] rounded-xl bg-black/90 border border-white/[0.14] p-1.5 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-md">
+          <div className="w-[94px] h-[94px] sm:w-[98px] sm:h-[98px] rounded-xl bg-white p-2 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.7)]">
             {qrUrl ? (
               <img src={qrUrl} alt="Temporary Sharing QR Code" className="w-full h-full object-contain" />
             ) : (
-              <QrCode className="w-full h-full text-white/90" />
+              <QrCode className="w-full h-full text-[#070b14]" />
             )}
           </div>
         </div>
@@ -598,7 +597,7 @@ function SelfDestructQRFeatureCard() {
           <div>
             <div className="text-[10px] text-[#94A3B8] font-bold uppercase tracking-wider">Expires in</div>
             <div className="text-[24px] font-extrabold text-white tracking-wider font-mono my-0.5 tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-              {formattedTime}
+              {String(mins).padStart(2, "0")} : {String(secs).padStart(2, "0")}
             </div>
             <p className="text-[11px] text-[#CBD5E1] leading-tight font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
               This QR code will expire automatically.
