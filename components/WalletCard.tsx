@@ -11,6 +11,10 @@ interface WalletCardProps {
   linkedDocsCount: number;
   emergencyContact?: string;
   onUpdateEmergencyContact?: (contact: string) => void;
+  onEmergencyContactChange?: (contact: string) => void;
+  documents?: any[];
+  onAddDocument?: () => void;
+  onOpenDocument?: (docId: string) => void;
 }
 
 export function WalletCard({
@@ -19,6 +23,10 @@ export function WalletCard({
   linkedDocsCount = 0,
   emergencyContact = "+91 98765 43210",
   onUpdateEmergencyContact,
+  onEmergencyContactChange,
+  documents = [],
+  onAddDocument,
+  onOpenDocument,
 }: WalletCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });

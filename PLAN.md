@@ -33,7 +33,7 @@ You are a senior full-stack engineer and security-minded product designer. Build
 
 ## 1. Mission and Positioning
 
-Build a REAL, deployable web app (not a demo) where a person stores their own identity documents (Driving License, PAN, Voter ID, Ration Card, plus others) in one encrypted wallet and shares only the minimum required information with verifiers via signed, expiring, revocable tokens.
+Build a REAL, deployable web app (not a demo) where a person stores their own identity documents (Driving License, PAN Card, Voter ID, Ration Card) in one encrypted wallet and shares only the minimum required information with verifiers via signed, expiring, revocable tokens.
 
 - This is a **private wallet, not a government-issued ID.** Use neutral branding ("White Card Wallet"). Footer on every page: *"Personal document wallet – not a government-issued ID."*
 - All documents are **"Self-declared"**. Include a `VerificationProvider` interface with only a `ManualProvider` implemented, so DigiLocker / NSDL / Parivahan providers can be plugged in later. **Never display "Verified" unless a provider confirmed it.**
@@ -165,8 +165,8 @@ Provide `scripts/gen-keys.ts` that prints a MASTER_KEY, an Ed25519 keypair (priv
   - Subtle tilt on hover. All motion disabled under `prefers-reduced-motion` (use fades).
 
 ### 5.2 Document Vault
-- Types: Driving License, PAN, Voter ID, Ration Card, Passport, Ayushman Bharat PM-JAY, e-Shram, UDID, custom.
-- Type-specific validation (regex), e.g. PAN `^[A-Z]{5}[0-9]{4}[A-Z]$`, Passport `^[A-Z][0-9]{7}$`; auto-uppercase; inline field errors; duplicate rejection via blind index.
+- Types: Strictly the 4 core Indian documents: **Driving License (DL)**, **PAN Card**, **Voter ID (EPIC)**, and **Ration Card** (removed extraneous types: Passport, Ayushman Bharat, e-Shram, UDID, and custom).
+- Type-specific validation (regex): DL, PAN (`^[A-Z]{5}[0-9]{4}[A-Z]$`), Voter ID (`^[A-Z]{3}[0-9]{7}$`), Ration Card (`^[A-Z0-9]{8,18}$`); auto-uppercase; inline field errors; duplicate rejection via blind index.
 - Type-specific details: DL (vehicle classes, expiry, organ donor, RTO), PAN (father's name, taxpayer category, Aadhaar-link status as declared), Voter ID (AC number, polling booth, parliamentary constituency, part/serial), Ration (scheme, FPS depot ID, family members, monthly rice/wheat quota).
 - Expiry tracking with email reminders (Vercel Cron route, 30 days and 7 days before). Status: Self-declared / Expired.
 - Optional attachments: max 500 KB each, PDF/JPG/PNG (check magic bytes, not just extension), encrypted before storage, max 5 per user; show storage usage.
@@ -201,12 +201,14 @@ Provide `scripts/gen-keys.ts` that prints a MASTER_KEY, an Ed25519 keypair (priv
 
 ## 6. UI / UX
 
-- Dark slate theme: background `#020617`, frosted-glass panels (`backdrop-blur`, translucent 1px borders), accents indigo (primary), emerald (success), amber (warning), cyan (info). Colors as CSS variables. WCAG AA contrast.
-- Typography: Inter if available, else system UI stack.
-- Mobile-first, fluid from 360px to 1440px, no horizontal scroll at 360px. Navigation becomes a scrollable pill bar on mobile.
-- Installable PWA (manifest, icons, theme color). Keyboard accessible everywhere, visible focus rings, ARIA roles for tabs, modals, toasts (`role="status"`).
-- Header shows counters: Linked IDs, Verifications today, Audit entries.
-- Persistent footer badge as in Section 1.
+- **Aesthetic Direction: Apple-grade iOS Luxury Frosted Glass**: Refined, curated glassmorphism (`glass-ios`, `glass-ios-card`, `backdrop-blur-xl`, subtle translucent borders) with no harsh neon halos or loud glows. Dark theme (`#000000` / `#020617`).
+- **Hero 3D Interactive Wallet Stack**: 4-layer physical card stack with interactive mouse-follow 3D tilt (`rotateX`, `rotateY`) and layer fanning on hover. Features a 2x2 grid for the 4 supported documents (Driving License with `CarFront`, PAN Card with `FileText`, Voter ID with `Vote`, Ration Card with `Wheat`) with Apple squircle depth highlights and unified single-line vertical centering.
+- **Hero Headline 3D Isometric Hover Animation**: Headline ("Your personal identity wallet.") features an extruded 3D multi-tiered isometric shadow with physical diagonal lift on hover, with safety line-height and bounding buffers preventing any letter clipping on 'Y' and 'y'.
+- **Asset Hygiene & Optimization**: Removed all unused, external, or placeholder image files. All icons use inline SVGs via `lucide-react`, and graphics use clean, high-performance CSS.
+- **Typography & Sound Controls**: Modern Inter font hierarchy. Refined iOS glass sound toggle button with synthesized `AudioContext` tones and persistent mute preferences.
+- **Mobile-first Responsiveness**: Fluid from 360px to 1440px with zero horizontal scroll at 360px.
+- **Installable PWA**: Manifest, icons, theme color, accessible keyboard navigation, visible focus rings, ARIA status badges.
+- **Persistent Required Footer**: *"Personal document wallet – not a government-issued ID."*
 
 ---
 

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { X, KeyRound } from "lucide-react";
 import { AuthForm } from "@/components/AuthForm";
 import { sound } from "@/lib/sound";
@@ -11,7 +12,10 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     if (!isOpen) return;
 
     // Lock body scroll when modal is open
@@ -32,14 +36,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
-      className="auth-modal-backdrop fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-xl"
+      className="auth-modal-backdrop fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-black/95 backdrop-blur-2xl"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           sound.playPop();
@@ -60,7 +64,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 Access Your Wallet
               </h2>
               <p className="text-[11px] text-neutral-500 mt-0.5">
-                Passwordless OTP or Biometric Passkey
+                Passwordless Email Verification
               </p>
             </div>
           </div>
@@ -85,6 +89,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           }} />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

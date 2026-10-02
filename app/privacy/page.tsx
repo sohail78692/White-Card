@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { sound } from "@/lib/sound";
 import {
   ShieldCheck,
-  ShieldAlert,
   History,
   FileCheck2,
   Download,
@@ -13,10 +12,9 @@ import {
   Loader2,
   CheckCircle2,
   XCircle,
-  HelpCircle,
   Clock,
   Layers,
-  FileText,
+  Sparkles,
 } from "lucide-react";
 
 export default function PrivacyCenterPage() {
@@ -46,6 +44,11 @@ export default function PrivacyCenterPage() {
         fetch("/api/privacy/consents"),
         fetch("/api/privacy/blocklist"),
       ]);
+
+      if (logsRes.status === 401 || consentsRes.status === 401 || blockRes.status === 401) {
+        window.location.href = "/signin?redirect=/privacy";
+        return;
+      }
 
       if (logsRes.ok) {
         const d = await logsRes.json();
@@ -84,7 +87,7 @@ export default function PrivacyCenterPage() {
       }
     } catch {
       sound.playError();
-      setChainStatus({ intact: false, reason: "Network error during chain verification" });
+      setChainStatus({ intact: false, reason: "Network error while checking records" });
     } finally {
       setVerifyingChain(false);
     }
@@ -95,27 +98,23 @@ export default function PrivacyCenterPage() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `whitecard-audit-logs-${new Date().toISOString().slice(0, 10)}.json`);
+    downloadAnchor.setAttribute("download", `whitecard-activity-log-${new Date().toISOString().slice(0, 10)}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
   };
 
   const handleDeleteAccount = async () => {
-    const confirmation = prompt(
-      "WARNING: This action is permanent and irreversible under the DPDP Act.\n\nAll your encrypted documents, shares, sessions, and audit records will be immediately erased.\n\nType 'ERASE MY ACCOUNT' to confirm:"
+    const confirmed = window.confirm(
+      "Are you sure you want to permanently delete your wallet? All documents and records will be deleted forever."
     );
-
-    if (confirmation !== "ERASE MY ACCOUNT") {
-      alert("Account erasure cancelled.");
-      return;
-    }
+    if (!confirmed) return;
 
     try {
-      const res = await fetch("/api/vault/account", { method: "DELETE" });
+      const res = await fetch("/api/privacy/erase", { method: "POST" });
       if (res.ok) {
         sound.playSuccess();
-        alert("Your account and all personal identity data have been completely erased.");
+        alert("Your account and all personal data have been completely deleted.");
         window.location.href = "/";
       } else {
         sound.playError();
@@ -123,43 +122,48 @@ export default function PrivacyCenterPage() {
       }
     } catch {
       sound.playError();
-      alert("Network error during erasure request.");
+      alert("Network error during account deletion.");
     }
   };
 
   return (
-    <div className="space-y-8 py-2">
+    <div className="space-y-8 py-2 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="h-6 w-6 text-emerald-400" />
-            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Privacy & Audit Center
-            </h1>
-          </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Tamper-evident mathematical audit trail, consent management, data export, and DPDP erasure.
+        <div className="space-y-1.5">
+          <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3.5 py-1 text-xs font-semibold text-neutral-300">
+            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+            <span>Data &amp; Privacy</span>
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Privacy &amp; <span className="text-[#60a5fa]">Security</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-neutral-400">
+            Check security logs, manage permissions, or download and delete your account anytime.
           </p>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex rounded-xl bg-slate-900/80 p-1 border border-white/5 overflow-x-auto no-scrollbar shrink-0">
+        {/* Navigation Tabs (Apple iOS Glass Pill Selector) */}
+        <div className="flex rounded-full bg-white/[0.05] p-1 border border-white/10 overflow-x-auto no-scrollbar shrink-0 backdrop-blur-md">
           {[
-            { id: "audit", label: "Audit Hash Chain", icon: History },
-            { id: "consents", label: "Consents", icon: FileCheck2 },
-            { id: "blocklist", label: "Blocklist", icon: Ban },
-            { id: "data", label: "Export & Erasure", icon: Download },
+            { id: "audit", label: "Security Activity", icon: History },
+            { id: "consents", label: "Permissions", icon: FileCheck2 },
+            { id: "blocklist", label: "Blocked Organizations", icon: Ban },
+            { id: "data", label: "Download & Erase", icon: Download },
           ].map((tab) => {
             const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition shrink-0 ${
-                  activeTab === tab.id
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-white"
+                onClick={() => {
+                  sound.playTone(440, "sine", 0.04);
+                  setActiveTab(tab.id as any);
+                }}
+                className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all shrink-0 ${
+                  isActive
+                    ? "bg-white text-black shadow-sm"
+                    : "text-neutral-400 hover:text-white"
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -170,22 +174,18 @@ export default function PrivacyCenterPage() {
         </div>
       </div>
 
-      {/* TAB 1: Audit Hash Chain */}
+      {/* TAB 1: Audit Activity */}
       {activeTab === "audit" && (
         <div className="space-y-6">
           {/* Tamper Verification Banner */}
-          <div className="rounded-2xl glass-panel p-6 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:border-white/20 transition-all duration-300">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Layers className="h-5 w-5 text-indigo-400" />
-                <h3 className="text-base font-bold text-white">SHA-256 Tamper-Evident Hash Chain</h3>
+                <Layers className="h-5 w-5 text-blue-400" />
+                <h3 className="text-base font-bold text-white">Tamper-Proof Activity History</h3>
               </div>
-              <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
-                Every wallet event is cryptographically linked to the previous block hash:{" "}
-                <code className="text-indigo-300 font-mono text-[11px]">
-                  hash = SHA-256(prevHash + canonicalJSON(entry))
-                </code>
-                . If any record in MongoDB is modified, inserted, or deleted out of order, the chain breaks.
+              <p className="text-xs text-neutral-400 max-w-xl leading-relaxed">
+                Every action in your wallet is permanently sealed in an unchangeable chain. You can check anytime to confirm that no records were altered or deleted.
               </p>
             </div>
 
@@ -194,22 +194,22 @@ export default function PrivacyCenterPage() {
                 type="button"
                 onClick={handleVerifyChain}
                 disabled={verifyingChain}
-                className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition disabled:opacity-50"
+                className="flex items-center gap-2 rounded-full bg-white hover:bg-neutral-100 px-5 py-2.5 text-xs font-bold text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)] hover:scale-[1.02] active:scale-[0.98] transition disabled:opacity-50"
               >
                 {verifyingChain ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <CheckCircle2 className="h-4 w-4" />
                 )}
-                <span>Verify Chain Integrity</span>
+                <span>Check Log Integrity</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleExportAuditLogs}
-                className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-900 px-3.5 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
+                className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] hover:bg-white/[0.1] px-4 py-2.5 text-xs font-semibold text-neutral-200 transition"
               >
-                <Download className="h-4 w-4 text-cyan-400" />
+                <Download className="h-4 w-4 text-neutral-400" />
                 <span className="hidden sm:inline">Export Log</span>
               </button>
             </div>
@@ -218,10 +218,10 @@ export default function PrivacyCenterPage() {
           {/* Verification Result Feedback */}
           {chainStatus && (
             <div
-              className={`rounded-xl p-4 border flex items-start gap-3 text-xs ${
+              className={`rounded-[24px] p-5 border flex items-start gap-3 text-xs backdrop-blur-md ${
                 chainStatus.intact
-                  ? "bg-emerald-950/40 border-emerald-500/30 text-emerald-300"
-                  : "bg-red-950/40 border-red-500/30 text-red-300"
+                  ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-300"
+                  : "bg-red-950/30 border-red-500/30 text-red-300"
               }`}
             >
               {chainStatus.intact ? (
@@ -230,15 +230,15 @@ export default function PrivacyCenterPage() {
                 <XCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
               )}
               <div>
-                <strong className="block font-semibold">
+                <strong className="block font-bold text-sm">
                   {chainStatus.intact
-                    ? "Audit Chain Mathematically Verified Intact!"
-                    : "Tampering Detected in Audit Log!"}
+                    ? "All Security Records Verified Authentic!"
+                    : "Discrepancy Detected in Security Records!"}
                 </strong>
-                <span className="text-[11px] opacity-90">
+                <span className="text-xs opacity-90">
                   {chainStatus.intact
-                    ? `All ${chainStatus.totalEntries} sequential entries from genesis (seq 0) verified without discrepancies.`
-                    : `Broken link at sequence index ${chainStatus.firstBrokenIndex}: ${chainStatus.reason}`}
+                    ? `All ${chainStatus.totalEntries} sequential entries were verified without any missing or altered records.`
+                    : `Issue at item ${chainStatus.firstBrokenIndex}: ${chainStatus.reason}`}
                 </span>
               </div>
             </div>
@@ -246,23 +246,23 @@ export default function PrivacyCenterPage() {
 
           {/* Action Filter Bar */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs">
-            <span className="text-slate-400 mr-2">Filter Action:</span>
+            <span className="text-neutral-400 mr-1 text-[11px] font-semibold">Filter:</span>
             {[
               { id: "all", label: "All Actions" },
-              { id: "verify", label: "Verifications" },
-              { id: "link_document", label: "Linked Docs" },
-              { id: "create_share", label: "Shares Created" },
-              { id: "revoke_share", label: "Revocations" },
-              { id: "ration_dispense", label: "Ration Dispenses" },
-              { id: "polling_checkin", label: "Polling Checkins" },
+              { id: "verify", label: "Scans / Checks" },
+              { id: "link_document", label: "Saved Docs" },
+              { id: "create_share", label: "Created Shares" },
+              { id: "revoke_share", label: "Cancelled Shares" },
+              { id: "ration_dispense", label: "Ration Grain Dispenses" },
+              { id: "polling_checkin", label: "Election Polling Checkins" },
             ].map((f) => (
               <button
                 key={f.id}
                 onClick={() => setActionFilter(f.id)}
-                className={`rounded-lg px-3 py-1 font-medium transition shrink-0 ${
+                className={`rounded-full px-3 py-1 font-medium transition shrink-0 ${
                   actionFilter === f.id
-                    ? "bg-indigo-600/30 text-indigo-300 border border-indigo-500/30"
-                    : "bg-slate-900/60 text-slate-400 border border-white/5 hover:text-white"
+                    ? "bg-white text-black font-semibold shadow-sm"
+                    : "bg-white/[0.04] text-neutral-400 border border-white/10 hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
                 {f.label}
@@ -270,37 +270,37 @@ export default function PrivacyCenterPage() {
             ))}
           </div>
 
-          {/* Audit Logs Table */}
-          <div className="rounded-2xl glass-panel p-6 border border-white/10 space-y-4">
+          {/* Audit Logs Table (Apple iOS Frosted Glass) */}
+          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />
+                <Loader2 className="h-6 w-6 animate-spin text-white/40" />
               </div>
             ) : logs.length === 0 ? (
-              <p className="text-xs text-slate-400 py-8 text-center">No audit entries match filter.</p>
+              <p className="text-xs text-neutral-500 py-8 text-center">No activity matches this filter.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-white/10 text-slate-400">
-                      <th className="py-2.5 pr-3 font-semibold">Seq</th>
-                      <th className="py-2.5 pr-4 font-semibold">Timestamp</th>
-                      <th className="py-2.5 pr-4 font-semibold">Actor</th>
+                    <tr className="border-b border-white/10 text-neutral-400">
+                      <th className="py-2.5 pr-3 font-semibold">#</th>
+                      <th className="py-2.5 pr-4 font-semibold">Time</th>
+                      <th className="py-2.5 pr-4 font-semibold">Who Checked</th>
                       <th className="py-2.5 pr-4 font-semibold">Action</th>
-                      <th className="py-2.5 pr-4 font-semibold">Disclosed Fields</th>
-                      <th className="py-2.5 pr-4 font-semibold">Result</th>
-                      <th className="py-2.5 font-mono text-[11px] text-right">SHA-256 Hash</th>
+                      <th className="py-2.5 pr-4 font-semibold">Fields Shown</th>
+                      <th className="py-2.5 pr-4 font-semibold">Status</th>
+                      <th className="py-2.5 font-mono text-[11px] text-right">Receipt Hash</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
                     {logs.map((log) => (
-                      <tr key={log.seq} className="text-slate-300 hover:bg-white/[0.02]">
-                        <td className="py-3 pr-3 font-mono font-bold text-indigo-400">{log.seq}</td>
-                        <td className="py-3 pr-4 text-[11px] text-slate-400">
+                      <tr key={log.seq} className="text-neutral-300 hover:bg-white/[0.02] transition">
+                        <td className="py-3 pr-3 font-mono font-bold text-blue-400">{log.seq}</td>
+                        <td className="py-3 pr-4 text-[11px] text-neutral-400">
                           {new Date(log.ts).toLocaleString()}
                         </td>
                         <td className="py-3 pr-4 font-medium text-white">{log.actor}</td>
-                        <td className="py-3 pr-4 capitalize text-indigo-300">
+                        <td className="py-3 pr-4 capitalize text-neutral-300">
                           {log.action.replace(/_/g, " ")}
                         </td>
                         <td className="py-3 pr-4">
@@ -309,19 +309,19 @@ export default function PrivacyCenterPage() {
                               log.fields.map((f: string) => (
                                 <span
                                   key={f}
-                                  className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] text-slate-300 border border-white/5 font-mono"
+                                  className="rounded-full bg-white/[0.05] px-2 py-0.5 text-[10px] text-neutral-300 border border-white/10"
                                 >
                                   {f}
                                 </span>
                               ))
                             ) : (
-                              <span className="text-slate-500">—</span>
+                              <span className="text-neutral-500">—</span>
                             )}
                           </div>
                         </td>
                         <td className="py-3 pr-4">
                           <span
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold border ${
+                            className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold border ${
                               log.result === "success"
                                 ? "bg-emerald-950/60 text-emerald-300 border-emerald-500/30"
                                 : log.result === "revoked"
@@ -332,7 +332,7 @@ export default function PrivacyCenterPage() {
                             {log.result}
                           </span>
                         </td>
-                        <td className="py-3 text-right font-mono text-[11px] text-slate-400">
+                        <td className="py-3 text-right font-mono text-[11px] text-neutral-500">
                           <span title={log.hash}>{log.shortHash}</span>
                         </td>
                       </tr>
@@ -347,45 +347,45 @@ export default function PrivacyCenterPage() {
 
       {/* TAB 2: Consents History */}
       {activeTab === "consents" && (
-        <div className="rounded-2xl glass-panel p-6 border border-white/10 space-y-4">
+        <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4">
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">
-              DPDP Act Explicit Consent Ledger
+            <h3 className="text-sm font-bold text-white tracking-tight">
+              Sharing Permissions History
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Full record of explicit consents granted by you for selective disclosure tokens.
+            <p className="text-xs text-neutral-400 mt-0.5">
+              Full record of permissions granted by you whenever you created a share link.
             </p>
           </div>
 
           {consents.length === 0 ? (
-            <p className="text-xs text-slate-400 py-8 text-center">No consents recorded yet.</p>
+            <p className="text-xs text-neutral-500 py-8 text-center">No permissions recorded yet.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-white/10 text-slate-400">
+                  <tr className="border-b border-white/10 text-neutral-400">
                     <th className="py-2.5 pr-4 font-semibold">Granted At</th>
-                    <th className="py-2.5 pr-4 font-semibold">Purpose</th>
-                    <th className="py-2.5 pr-4 font-semibold">Audience</th>
+                    <th className="py-2.5 pr-4 font-semibold">Reason</th>
+                    <th className="py-2.5 pr-4 font-semibold">Receiver</th>
                     <th className="py-2.5 pr-4 font-semibold">Duration</th>
-                    <th className="py-2.5 font-semibold">Consented Fields</th>
+                    <th className="py-2.5 font-semibold">Shared Fields</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {consents.map((c) => (
-                    <tr key={c.id} className="text-slate-300">
-                      <td className="py-3 pr-4 text-[11px] text-slate-400">
+                    <tr key={c.id} className="text-neutral-300">
+                      <td className="py-3 pr-4 text-[11px] text-neutral-400">
                         {new Date(c.at).toLocaleString()}
                       </td>
                       <td className="py-3 pr-4 font-medium text-white">{c.purpose}</td>
-                      <td className="py-3 pr-4 uppercase text-[11px] text-indigo-300">{c.audience}</td>
+                      <td className="py-3 pr-4 uppercase text-[11px] text-blue-400">{c.audience}</td>
                       <td className="py-3 pr-4">{c.duration / 60} minutes</td>
                       <td className="py-3">
                         <div className="flex flex-wrap gap-1">
                           {c.fields?.map((f: string) => (
                             <span
                               key={f}
-                              className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] text-indigo-200 border border-white/5 font-mono"
+                              className="rounded-full bg-white/[0.05] px-2 py-0.5 text-[10px] text-neutral-300 border border-white/10"
                             >
                               {f}
                             </span>
@@ -403,30 +403,30 @@ export default function PrivacyCenterPage() {
 
       {/* TAB 3: Verifier Blocklist */}
       {activeTab === "blocklist" && (
-        <div className="rounded-2xl glass-panel p-6 border border-white/10 space-y-4">
+        <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4">
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">
-              Verifier Access Blocklist
+            <h3 className="text-sm font-bold text-white tracking-tight">
+              Blocked Organizations
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Blocked verifiers are rejected immediately by the verification engine, even if presented with a signed token.
+            <p className="text-xs text-neutral-400 mt-0.5">
+              Blocked organizations cannot verify your documents even if someone provides them with a link.
             </p>
           </div>
 
           {blocklist.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-white/10 p-8 text-center text-xs text-slate-400">
-              No verifiers currently blocked.
+            <div className="rounded-[22px] border border-dashed border-white/10 p-8 text-center text-xs text-neutral-500">
+              No organizations currently blocked.
             </div>
           ) : (
             <div className="space-y-2">
               {blocklist.map((b) => (
                 <div
                   key={b.id}
-                  className="flex items-center justify-between rounded-xl bg-slate-900/60 p-4 border border-white/5 text-xs"
+                  className="flex items-center justify-between rounded-2xl bg-white/[0.03] p-4 border border-white/5 text-xs"
                 >
                   <div>
                     <h4 className="font-semibold text-white">{b.verifierName}</h4>
-                    <span className="text-[10px] text-slate-400 uppercase">{b.verifierType}</span>
+                    <span className="text-[10px] text-neutral-400 uppercase">{b.verifierType}</span>
                   </div>
 
                   <button
@@ -439,7 +439,7 @@ export default function PrivacyCenterPage() {
                       });
                       loadData();
                     }}
-                    className="rounded-lg border border-white/10 bg-slate-800 px-3 py-1.5 text-xs text-slate-300 hover:text-white"
+                    className="rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 text-xs text-neutral-300 hover:text-white hover:bg-white/[0.1] transition"
                   >
                     Unblock
                   </button>
@@ -450,60 +450,58 @@ export default function PrivacyCenterPage() {
         </div>
       )}
 
-      {/* TAB 4: Data Export & Right to Erasure */}
+      {/* TAB 4: Data Export & Erasure */}
       {activeTab === "data" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Right to Export */}
-          <div className="rounded-2xl glass-panel p-6 sm:p-8 border border-white/10 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-950 border border-indigo-500/20 text-indigo-400">
+          {/* Download Data */}
+          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/20 transition-all duration-300">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                 <Download className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Right to Data Portability</h3>
-                <span className="text-[11px] text-slate-400">DPDP Act Section 12</span>
+                <h3 className="text-base font-bold text-white">Download Your Data</h3>
+                <span className="text-[11px] text-neutral-400">Your Complete Wallet File</span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Export your entire encrypted personal wallet in machine-readable JSON format. Includes
-              all decrypted document numbers, metadata, share token history, and profile attributes.
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              Export your entire encrypted personal wallet in one file. Contains your document numbers, share history, and profile attributes.
             </p>
 
             <a
               href="/api/vault/export"
               download
-              className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md hover:bg-indigo-500 transition"
+              className="inline-flex items-center gap-2 rounded-full bg-white hover:bg-neutral-100 px-5 py-2.5 text-xs font-bold text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)] hover:scale-[1.02] active:scale-[0.98] transition"
             >
               <Download className="h-4 w-4" />
-              <span>Download Complete Wallet JSON</span>
+              <span>Download Wallet Data (.JSON)</span>
             </a>
           </div>
 
-          {/* Right to Erasure (Account Deletion) */}
-          <div className="rounded-2xl glass-panel p-6 sm:p-8 border border-red-500/20 bg-red-950/10 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-950 border border-red-500/30 text-red-400">
+          {/* Delete Account */}
+          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 border border-red-500/20 bg-red-950/10 space-y-4 hover:border-red-500/30 transition-all duration-300">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
                 <Trash2 className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Right to Erasure</h3>
-                <span className="text-[11px] text-red-400">Irreversible Deletion</span>
+                <h3 className="text-base font-bold text-white">Delete Account &amp; Wipe Data</h3>
+                <span className="text-[11px] text-red-400">Permanent &amp; Irreversible</span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Irreversibly delete your account, wrapped DEK, documents, attachments, sessions, passkeys,
-              and sequential audit trail from MongoDB.
+            <p className="text-xs text-neutral-300 leading-relaxed">
+              Permanently erase your account, all linked documents, security keys, and activity logs. Once deleted, this data cannot be recovered.
             </p>
 
             <button
               type="button"
               onClick={handleDeleteAccount}
-              className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-900/40 px-4 py-2.5 text-xs font-semibold text-red-300 hover:bg-red-900/60 transition"
+              className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-950/40 hover:bg-red-900/50 px-5 py-2.5 text-xs font-bold text-red-300 transition hover:scale-[1.02] active:scale-[0.98]"
             >
               <Trash2 className="h-4 w-4" />
-              <span>Erase All Personal Data & Delete Account</span>
+              <span>Delete Account &amp; Wipe All Data</span>
             </button>
           </div>
         </div>

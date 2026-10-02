@@ -15,8 +15,13 @@ import {
   CheckCircle2,
   Loader2,
   ArrowRight,
-  Eye,
-  FileCheck2,
+  Sparkles,
+  Lock,
+  CarFront,
+  Wheat,
+  MapPin,
+  CreditCard,
+  UserCheck,
 } from "lucide-react";
 
 interface ShareRecord {
@@ -62,6 +67,8 @@ export default function SharePage() {
       if (res.ok) {
         const data = await res.json();
         setSharesHistory(data.shares || []);
+      } else if (res.status === 401) {
+        window.location.href = "/signin?redirect=/share";
       }
     } catch {
       // Ignore
@@ -90,31 +97,44 @@ export default function SharePage() {
     return () => clearInterval(interval);
   }, [activeToken]);
 
-  const presetDescriptions: Record<string, { title: string; desc: string; disclosed: string[] }> = {
+  const presetDescriptions: Record<
+    string,
+    { title: string; desc: string; icon: any; iconColor: string; simpleClaims: string[] }
+  > = {
     age_18_plus: {
-      title: "Age 18+ Verification",
-      desc: "Confirms whether you are over 18 without revealing your DOB, name, address, or document numbers.",
-      disclosed: ["over18: boolean"],
+      title: "Age 18+ Check",
+      desc: "Confirms you are 18 or older. Never reveals your birthdate, full name, or ID numbers.",
+      icon: UserCheck,
+      iconColor: "text-blue-400 bg-blue-500/10 border-blue-500/20",
+      simpleClaims: ["Age: 18 or older (Yes/No)"],
     },
     driving_auth: {
-      title: "Driving Authorization",
-      desc: "Proves legal driving eligibility and vehicle categories for traffic inspectors.",
-      disclosed: ["drivingLicenseValid: boolean", "vehicleClasses: string[]", "organDonor: boolean"],
+      title: "Driving Permission",
+      desc: "Shows traffic officers that your license is valid and which vehicles you can drive.",
+      icon: CarFront,
+      iconColor: "text-sky-400 bg-sky-500/10 border-sky-500/20",
+      simpleClaims: ["License Valid: Yes", "Allowed Vehicles", "Organ Donor Status"],
     },
     ration_entitlement: {
-      title: "Fair Price Shop (FPS) Ration",
-      desc: "Discloses food grain entitlement quota and remaining monthly balance.",
-      disclosed: ["scheme", "familyMembersCount", "remainingRiceKg", "remainingWheatKg"],
+      title: "Ration Shop Quota",
+      desc: "Shows your monthly food grain balance and quota for Fair Price Shops.",
+      icon: Wheat,
+      iconColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+      simpleClaims: ["Ration Scheme", "Family Member Count", "Monthly Rice & Wheat Balance"],
     },
     address_only: {
-      title: "Address Verification",
-      desc: "Discloses current address for deliveries, residency proof, or bank verification.",
-      disclosed: ["address"],
+      title: "Address Only",
+      desc: "Confirms your current home address for delivery or residence proof.",
+      icon: MapPin,
+      iconColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+      simpleClaims: ["Verified Home Address"],
     },
     full_id: {
-      title: "Full Identity Overview",
-      desc: "Discloses holder name, wallet ID, and masked list of linked government credentials.",
-      disclosed: ["name", "walletId", "linkedDocuments (masked)"],
+      title: "Basic ID Card",
+      desc: "Shows your name and wallet ID with protected, masked numbers.",
+      icon: CreditCard,
+      iconColor: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+      simpleClaims: ["Full Name", "Wallet ID", "Masked Document Badges"],
     },
   };
 
@@ -138,7 +158,7 @@ export default function SharePage() {
       const data = await res.json();
       if (!res.ok) {
         sound.playError();
-        setError(data.error || "Failed to create share token");
+        setError(data.error || "Could not create share link");
         setStep("configure");
       } else {
         sound.playSuccess();
@@ -146,7 +166,7 @@ export default function SharePage() {
           width: 300,
           margin: 1.5,
           color: {
-            dark: "#020617",
+            dark: "#000000",
             light: "#ffffff",
           },
         });
@@ -166,7 +186,7 @@ export default function SharePage() {
       }
     } catch {
       sound.playError();
-      setError("Network error while generating share");
+      setError("Network error while creating share link");
       setStep("configure");
     } finally {
       setLoading(false);
@@ -205,123 +225,138 @@ export default function SharePage() {
   };
 
   return (
-    <div className="space-y-8 py-2">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2">
-          <Share2 className="h-6 w-6 text-indigo-400" />
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Selective Disclosure Sharing
-          </h1>
-        </div>
-        <p className="text-xs text-slate-400 mt-1">
-          Generate cryptographic Ed25519 tokens disclosing only minimal required claims with explicit consent.
+    <div className="space-y-8 py-2 max-w-4xl mx-auto">
+      {/* Page Header */}
+      <div className="space-y-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3.5 py-1 text-xs font-semibold text-neutral-300">
+          <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+          <span>Secure Sharing</span>
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Share Your <span className="text-[#60a5fa]">Proof</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-neutral-400 max-w-xl">
+          Share only what is needed (like age 18+ or driving status) without revealing your private details or full document numbers.
         </p>
       </div>
 
       {error && (
-        <div className="flex items-start gap-2.5 rounded-lg border border-red-500/20 bg-red-950/40 p-3 text-xs text-red-300">
+        <div className="flex items-start gap-2.5 rounded-2xl border border-red-500/20 bg-red-950/30 p-4 text-xs text-red-300 backdrop-blur-md">
           <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Main Flow Card */}
-      <div className="rounded-2xl glass-panel p-6 sm:p-8 border border-white/10 shadow-xl space-y-6">
+      {/* Main Flow Card (Apple iOS Frosted Glass) */}
+      <div className="rounded-[28px] glass-ios-card p-6 sm:p-8 space-y-6 shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
         {step === "configure" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">
-                1. Select Disclosure Preset
+              <h3 className="text-sm font-bold text-white tracking-tight">
+                1. What do you want to prove?
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Choose the minimal set of data necessary for your verifier.
+              <p className="text-xs text-neutral-400 mt-0.5">
+                Pick what the receiver needs to verify. All other information stays private.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              {Object.entries(presetDescriptions).map(([key, item]) => (
-                <div
-                  key={key}
-                  onClick={() => {
-                    sound.playTone(400, "sine", 0.05);
-                    setPreset(key);
-                    if (key === "age_18_plus") setPurpose("Age Verification");
-                    if (key === "driving_auth") setPurpose("Traffic Check");
-                    if (key === "ration_entitlement") setPurpose("Ration Collection");
-                    if (key === "address_only") setPurpose("Address Verification");
-                    if (key === "full_id") setPurpose("General Identification");
-                  }}
-                  className={`cursor-pointer rounded-xl p-4 border transition ${
-                    preset === key
-                      ? "border-indigo-500 bg-indigo-950/40 shadow-glow"
-                      : "border-white/5 bg-slate-900/60 hover:border-white/15"
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <span className="font-semibold text-white text-sm">{item.title}</span>
-                    <input
-                      type="radio"
-                      name="preset"
-                      checked={preset === key}
-                      onChange={() => setPreset(key)}
-                      className="mt-1 text-indigo-600 focus:ring-indigo-500"
-                    />
+            {/* Presets Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {Object.entries(presetDescriptions).map(([key, item]) => {
+                const Icon = item.icon;
+                const isSelected = preset === key;
+                return (
+                  <div
+                    key={key}
+                    onClick={() => {
+                      sound.playTone(400, "sine", 0.05);
+                      setPreset(key);
+                      if (key === "age_18_plus") setPurpose("Age Verification");
+                      if (key === "driving_auth") setPurpose("Traffic Check");
+                      if (key === "ration_entitlement") setPurpose("Ration Collection");
+                      if (key === "address_only") setPurpose("Address Verification");
+                      if (key === "full_id") setPurpose("General Identification");
+                    }}
+                    className={`cursor-pointer rounded-[22px] p-4 sm:p-5 border transition-all duration-300 relative ${
+                      isSelected
+                        ? "border-blue-500/60 bg-blue-500/[0.08] shadow-[0_0_20px_rgba(59,130,246,0.15)] translate-y-[-2px]"
+                        : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`h-10 w-10 rounded-2xl flex items-center justify-center shrink-0 border ${item.iconColor}`}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-white text-sm">{item.title}</span>
+                          <div
+                            className={`h-4.5 w-4.5 rounded-full border flex items-center justify-center transition-colors ${
+                              isSelected ? "border-blue-500 bg-blue-500 text-white" : "border-white/20"
+                            }`}
+                          >
+                            {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
+                          </div>
+                        </div>
+                        <p className="text-xs text-neutral-400 leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap gap-1.5 pl-13">
+                      {item.simpleClaims.map((claim) => (
+                        <span
+                          key={claim}
+                          className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-[10px] font-medium text-neutral-300 border border-white/10"
+                        >
+                          {claim}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">{item.desc}</p>
-                  <div className="mt-2.5 flex flex-wrap gap-1">
-                    {item.disclosed.map((field) => (
-                      <span
-                        key={field}
-                        className="rounded-md bg-slate-900 px-2 py-0.5 font-mono text-[10px] text-indigo-300 border border-white/5"
-                      >
-                        {field}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
+            {/* Customization Details */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Authorized Purpose
+                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                  Reason for Sharing
                 </label>
                 <input
                   type="text"
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
                   placeholder="e.g. Hotel Check-in"
-                  className="w-full rounded-xl border border-white/10 bg-slate-900/90 px-3.5 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-white/30"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Target Audience
+                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                  Who is Checking?
                 </label>
                 <select
                   value={audience}
                   onChange={(e) => setAudience(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-slate-900/90 px-3.5 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-[#12131a] px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/30"
                 >
-                  <option value="general">General / Public</option>
+                  <option value="general">General Person / Business</option>
                   <option value="police">Traffic Police</option>
                   <option value="fps">Fair Price Shop (FPS)</option>
-                  <option value="polling">Polling Booth Officer</option>
-                  <option value="bank">Bank / Financial</option>
+                  <option value="polling">Election Polling Officer</option>
+                  <option value="bank">Bank / Financial Institution</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Token Expiration
+                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                  Link Duration
                 </label>
                 <select
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-slate-900/90 px-3.5 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-[#12131a] px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/30"
                 >
                   <option value="60">1 Minute</option>
                   <option value="300">5 Minutes (Recommended)</option>
@@ -332,19 +367,21 @@ export default function SharePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pt-1">
+            {/* Single Use Toggle */}
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
               <input
                 type="checkbox"
                 id="single-use-toggle"
                 checked={singleUse}
                 onChange={(e) => setSingleUse(e.target.checked)}
-                className="rounded border-white/10 bg-slate-900 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                className="h-4.5 w-4.5 rounded border-white/20 bg-white/10 text-blue-500 focus:ring-0 cursor-pointer"
               />
-              <label htmlFor="single-use-toggle" className="text-xs text-slate-300 cursor-pointer">
-                <strong>Single-use token:</strong> Auto-expire immediately after first successful verification.
+              <label htmlFor="single-use-toggle" className="text-xs text-neutral-300 cursor-pointer select-none">
+                <strong className="text-white">One-time scan only:</strong> Link closes immediately after the receiver checks it once.
               </label>
             </div>
 
+            {/* Next Button */}
             <div className="pt-2">
               <button
                 type="button"
@@ -352,57 +389,57 @@ export default function SharePage() {
                   sound.playFlip();
                   setStep("consent");
                 }}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition"
+                className="w-full flex items-center justify-center gap-2 rounded-full bg-white hover:bg-neutral-100 px-5 py-3 text-xs font-bold text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200"
               >
-                <span>Review DPDP Consent Screen</span>
+                <span>Continue to Review</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 2: DPDP Explicit Consent Screen */}
+        {/* Step 2: Review Screen */}
         {step === "consent" && (
           <div className="space-y-6">
-            <div className="flex items-center gap-2 text-indigo-400">
-              <Shield className="h-5 w-5" />
-              <h3 className="text-base font-bold text-white">Explicit DPDP Consent Confirmation</h3>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                <Shield className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Review Before Sharing</h3>
+                <span className="text-xs text-neutral-400">You are in full control of what is shown.</span>
+              </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Under the Digital Personal Data Protection (DPDP) Act 2023, you retain complete ownership
-              of your identity data. Review the exact claims that will be disclosed by this cryptographic token:
-            </p>
-
-            <div className="rounded-xl border border-indigo-500/20 bg-indigo-950/20 p-5 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-[24px] border border-white/10 bg-white/[0.03] p-5 sm:p-6 space-y-4 text-xs">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Authorized Purpose:</span>
-                  <strong className="text-white">{purpose}</strong>
+                  <span className="text-neutral-400 block text-[11px]">Reason for sharing:</span>
+                  <strong className="text-white text-sm">{purpose}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Intended Verifier / Audience:</span>
-                  <strong className="text-white uppercase">{audience}</strong>
+                  <span className="text-neutral-400 block text-[11px]">Receiver:</span>
+                  <strong className="text-white text-sm uppercase">{audience}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Lifespan:</span>
-                  <strong className="text-white">{Number(duration) / 60} minutes</strong>
+                  <span className="text-neutral-400 block text-[11px]">Active for:</span>
+                  <strong className="text-white text-sm">{Number(duration) / 60} minutes</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Single-use:</span>
-                  <strong className="text-white">{singleUse ? "Yes (Revokes after 1 scan)" : "No"}</strong>
+                  <span className="text-neutral-400 block text-[11px]">Single scan:</span>
+                  <strong className="text-white text-sm">{singleUse ? "Yes (auto-expires)" : "Multiple scans allowed"}</strong>
                 </div>
               </div>
 
-              <div className="border-t border-white/5 pt-3">
-                <span className="text-slate-400 block text-[11px] mb-2 font-medium">
-                  Fields Disclosed to Verifier:
+              <div className="border-t border-white/5 pt-4">
+                <span className="text-neutral-400 block text-[11px] mb-2 font-medium">
+                  Information that WILL be visible to the receiver:
                 </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {presetDescriptions[preset]?.disclosed.map((f) => (
+                <div className="flex flex-wrap gap-2">
+                  {presetDescriptions[preset]?.simpleClaims.map((f) => (
                     <span
                       key={f}
-                      className="rounded-lg bg-indigo-900/60 px-2.5 py-1 text-xs font-mono text-indigo-200 border border-indigo-500/30"
+                      className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-300 border border-blue-500/20"
                     >
                       {f}
                     </span>
@@ -411,11 +448,11 @@ export default function SharePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setStep("configure")}
-                className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+                className="flex-1 rounded-full border border-white/10 bg-white/[0.05] hover:bg-white/[0.08] px-4 py-3 text-xs font-semibold text-neutral-300 transition"
               >
                 Back to Edit
               </button>
@@ -424,28 +461,31 @@ export default function SharePage() {
                 type="button"
                 onClick={handleCreateShare}
                 disabled={loading}
-                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition"
+                className="flex-1 flex items-center justify-center gap-2 rounded-full bg-white hover:bg-neutral-100 px-5 py-3 text-xs font-bold text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)] hover:scale-[1.01] active:scale-[0.99] transition disabled:opacity-50"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-                <span>I Consent & Sign Token</span>
+                <span>Create Secure QR Code</span>
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 3: Active Token Display with QR and Countdown */}
+        {/* Step 3: Active QR Code & Countdown */}
         {step === "active" && activeToken && (
           <div className="space-y-6 text-center">
             <div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-300">
+              <span className="inline-flex items-center gap-1 rounded-full glass-ios-pill px-3 py-1 text-xs font-semibold text-emerald-400">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Active Signed Token</span>
+                <span>Ready to Scan</span>
               </span>
-              <h3 className="text-xl font-bold text-white mt-2">Ready to Verify</h3>
+              <h3 className="text-2xl font-bold text-white mt-2">Show This QR Code</h3>
+              <p className="text-xs text-neutral-400 mt-1 max-w-sm mx-auto">
+                The receiver can scan this code with any camera or phone to verify your proof instantly.
+              </p>
             </div>
 
-            {/* QR Code Container */}
-            <div className="mx-auto w-64 h-64 p-3 bg-white rounded-2xl shadow-2xl flex items-center justify-center">
+            {/* Apple-grade QR Code Frame */}
+            <div className="mx-auto w-64 h-64 p-4 bg-white rounded-[28px] shadow-[0_12px_40px_rgba(0,0,0,0.8)] flex items-center justify-center">
               <img
                 src={activeToken.qrDataUrl}
                 alt="Verification QR Code"
@@ -453,32 +493,32 @@ export default function SharePage() {
               />
             </div>
 
-            {/* Countdown Timer */}
-            <div className="flex items-center justify-center gap-2 text-sm font-mono font-semibold">
-              <Clock className="h-4 w-4 text-cyan-400" />
-              <span className={timeLeft < 60 ? "text-red-400" : "text-slate-200"}>
-                Expires in: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, "0")}
+            {/* Live Countdown Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full glass-ios-pill px-4 py-1.5 text-xs font-mono font-bold">
+              <Clock className="h-3.5 w-3.5 text-blue-400" />
+              <span className={timeLeft < 60 ? "text-red-400" : "text-white"}>
+                Expires in {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, "0")}
               </span>
             </div>
 
-            {/* Actions */}
+            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
               <button
                 type="button"
                 onClick={() => copyUrl(activeToken.shareUrl)}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-900 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
+                className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.06] hover:bg-white/[0.1] px-5 py-2.5 text-xs font-semibold text-white transition"
               >
                 {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
-                <span>{copied ? "Copied URL" : "Copy Share Link"}</span>
+                <span>{copied ? "Link Copied!" : "Copy Share Link"}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleRevoke(activeToken.jti)}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-950/40 px-4 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-900/50 transition"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full border border-red-500/20 bg-red-950/30 hover:bg-red-900/40 px-5 py-2.5 text-xs font-semibold text-red-400 transition"
               >
                 <Ban className="h-4 w-4" />
-                <span>Revoke Immediately</span>
+                <span>Cancel Link</span>
               </button>
             </div>
 
@@ -489,9 +529,9 @@ export default function SharePage() {
                   setActiveToken(null);
                   setStep("configure");
                 }}
-                className="text-xs text-indigo-400 hover:text-indigo-300"
+                className="text-xs text-blue-400 hover:text-blue-300 font-semibold"
               >
-                + Create Another Share Token
+                + Create Another Share Link
               </button>
             </div>
           </div>
@@ -499,21 +539,20 @@ export default function SharePage() {
       </div>
 
       {/* Shares History Table */}
-      <div className="rounded-2xl glass-panel p-6 border border-white/10 space-y-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">
-          Share Token History & Revocation
+      <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4">
+        <h3 className="text-sm font-bold text-white tracking-tight">
+          Recent Shared Links
         </h3>
 
         {sharesHistory.length === 0 ? (
-          <p className="text-xs text-slate-400 py-4 text-center">No shares created yet.</p>
+          <p className="text-xs text-neutral-500 py-4 text-center">No links created yet.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-white/10 text-slate-400">
-                  <th className="py-2.5 pr-4 font-semibold">Preset</th>
-                  <th className="py-2.5 pr-4 font-semibold">Purpose</th>
-                  <th className="py-2.5 pr-4 font-semibold">Audience</th>
+                <tr className="border-b border-white/10 text-neutral-400">
+                  <th className="py-2.5 pr-4 font-semibold">Shared Proof</th>
+                  <th className="py-2.5 pr-4 font-semibold">Reason</th>
                   <th className="py-2.5 pr-4 font-semibold">Status</th>
                   <th className="py-2.5 pr-4 font-semibold">Expires</th>
                   <th className="py-2.5 font-semibold text-right">Action</th>
@@ -521,26 +560,25 @@ export default function SharePage() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {sharesHistory.map((s) => (
-                  <tr key={s.jti} className="text-slate-300">
-                    <td className="py-3 pr-4 font-medium capitalize text-white">
+                  <tr key={s.jti} className="text-neutral-300">
+                    <td className="py-3 pr-4 font-semibold text-white capitalize">
                       {s.preset.replace(/_/g, " ")}
                     </td>
-                    <td className="py-3 pr-4">{s.purpose}</td>
-                    <td className="py-3 pr-4 uppercase text-[11px] text-slate-400">{s.audience}</td>
+                    <td className="py-3 pr-4 text-neutral-400">{s.purpose}</td>
                     <td className="py-3 pr-4">
                       <span
-                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold border ${
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold border ${
                           s.status === "active"
                             ? "bg-emerald-950/60 text-emerald-300 border-emerald-500/30"
                             : s.status === "revoked"
                             ? "bg-red-950/60 text-red-300 border-red-500/30"
-                            : "bg-slate-800 text-slate-400 border-white/5"
+                            : "bg-white/5 text-neutral-400 border-white/10"
                         }`}
                       >
-                        {s.status}
+                        {s.status === "active" ? "Active" : s.status === "revoked" ? "Cancelled" : s.status}
                       </span>
                     </td>
-                    <td className="py-3 pr-4 text-[11px] text-slate-400">
+                    <td className="py-3 pr-4 text-[11px] text-neutral-400">
                       {new Date(s.expiresAt).toLocaleTimeString()}
                     </td>
                     <td className="py-3 text-right">
@@ -548,9 +586,9 @@ export default function SharePage() {
                         <button
                           type="button"
                           onClick={() => handleRevoke(s.jti)}
-                          className="rounded-lg border border-red-500/20 bg-red-950/30 px-2.5 py-1 text-[11px] text-red-400 hover:bg-red-900/40 transition"
+                          className="rounded-full border border-red-500/20 bg-red-950/30 px-3 py-1 text-[11px] font-medium text-red-400 hover:bg-red-900/50 transition"
                         >
-                          Revoke
+                          Cancel
                         </button>
                       )}
                     </td>

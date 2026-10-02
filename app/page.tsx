@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { sound } from "@/lib/sound";
 import {
   ShieldCheck,
   Lock,
@@ -28,10 +29,917 @@ import {
   Wheat,
   Users,
   FileText,
+  Plus,
+  Calendar,
+  Landmark,
+  User,
+  LayoutGrid,
+  MapPin,
+  Building2,
+  Sparkles,
+  Trash2,
+  Key,
+  ShieldAlert,
+  Scan,
+  KeyRound,
+  Mail,
+  Check,
+  Clock,
 } from "lucide-react";
+import QRCode from "qrcode";
+
+interface DocCardFeature {
+  label: string;
+  icon: React.ReactNode;
+}
+
+interface DocumentCardProps {
+  title: string;
+  description: string;
+  badgeText: string;
+  icon: React.ReactNode;
+  theme: "blue" | "purple" | "emerald" | "amber";
+  pills: DocCardFeature[];
+  targetHref?: string;
+}
+
+const themeStyles = {
+  blue: {
+    borderHover: "hover:border-blue-400/50",
+    glowBg: "bg-blue-600/20 group-hover:bg-blue-500/35",
+    frontCardGrad: "from-[#2563eb] via-[#1d4ed8] to-[#172554]",
+    frontCardBorder: "border-blue-300/60",
+    frontCardShadow: "shadow-[0_10px_25px_rgba(37,99,235,0.5),inset_0_1px_0_rgba(255,255,255,0.45)]",
+    backCardBg: "bg-blue-600/30 border-blue-400/30",
+    btnHover: "group-hover:border-blue-400/40 group-hover:bg-blue-500/10",
+    pillHover: "hover:border-blue-400/30",
+  },
+  purple: {
+    borderHover: "hover:border-purple-400/50",
+    glowBg: "bg-purple-600/20 group-hover:bg-purple-500/35",
+    frontCardGrad: "from-[#9333ea] via-[#7c3aed] to-[#3b0764]",
+    frontCardBorder: "border-purple-300/60",
+    frontCardShadow: "shadow-[0_10px_25px_rgba(147,51,234,0.5),inset_0_1px_0_rgba(255,255,255,0.45)]",
+    backCardBg: "bg-purple-600/30 border-purple-400/30",
+    btnHover: "group-hover:border-purple-400/40 group-hover:bg-purple-500/10",
+    pillHover: "hover:border-purple-400/30",
+  },
+  emerald: {
+    borderHover: "hover:border-emerald-400/50",
+    glowBg: "bg-emerald-600/20 group-hover:bg-emerald-500/35",
+    frontCardGrad: "from-[#10b981] via-[#059669] to-[#022c22]",
+    frontCardBorder: "border-emerald-300/60",
+    frontCardShadow: "shadow-[0_10px_25px_rgba(16,185,129,0.5),inset_0_1px_0_rgba(255,255,255,0.45)]",
+    backCardBg: "bg-emerald-600/30 border-emerald-400/30",
+    btnHover: "group-hover:border-emerald-400/40 group-hover:bg-emerald-500/10",
+    pillHover: "hover:border-emerald-400/30",
+  },
+  amber: {
+    borderHover: "hover:border-amber-400/50",
+    glowBg: "bg-amber-600/20 group-hover:bg-amber-500/35",
+    frontCardGrad: "from-[#d97706] via-[#b45309] to-[#451a03]",
+    frontCardBorder: "border-amber-300/60",
+    frontCardShadow: "shadow-[0_10px_25px_rgba(217,119,6,0.5),inset_0_1px_0_rgba(255,255,255,0.45)]",
+    backCardBg: "bg-amber-600/30 border-amber-400/30",
+    btnHover: "group-hover:border-amber-400/40 group-hover:bg-amber-500/10",
+    pillHover: "hover:border-amber-400/30",
+  },
+};
+
+function DocumentFeatureCard({
+  title,
+  description,
+  badgeText,
+  icon,
+  theme,
+  pills,
+  targetHref = "/vault",
+}: DocumentCardProps) {
+  const [tilt, setTilt] = React.useState({ x: 0, y: 0, isHovered: false });
+  const styles = themeStyles[theme];
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+    const y = -((e.clientY - rect.top) / rect.height - 0.5) * 10;
+    setTilt({ x: y, y: x, isHovered: true });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0, isHovered: false });
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`group relative rounded-[28px] sm:rounded-[32px] bg-gradient-to-b from-[#0c1424]/90 via-[#080e1b]/95 to-[#040810]/98 border border-white/[0.08] ${styles.borderHover} p-4 sm:p-5 flex flex-col justify-between space-y-4 transition-all duration-300 shadow-[0_14px_40px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] overflow-hidden cursor-pointer`}
+      style={{
+        transform: tilt.isHovered
+          ? `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1.02, 1.02, 1.02)`
+          : "perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
+        transition: tilt.isHovered
+          ? "transform 0.1s ease-out, border-color 0.3s ease"
+          : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease",
+        transformStyle: "preserve-3d",
+      }}
+    >
+      {/* Ambient background glow matching card theme */}
+      <div className={`absolute top-2 left-2 w-36 h-28 ${styles.glowBg} rounded-full blur-3xl pointer-events-none transition-all duration-500`} />
+
+      {/* Glass specular shimmer sheen on hover */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      {/* Top Bar: 3D Stacked Mini-Card & Chevron Button */}
+      <div className="flex items-center justify-between relative z-10">
+        {/* 3D Stacked Mini Card */}
+        <div className="relative w-30 sm:w-32 h-17 sm:h-18 flex items-center justify-start">
+          {/* Back card */}
+          <div
+            className={`absolute inset-0 rounded-[18px] ${styles.backCardBg} border -rotate-[9deg] -translate-x-2 -translate-y-1 blur-[0.4px] transition-transform duration-300 group-hover:-translate-x-2.5 group-hover:-translate-y-1.5 group-hover:-rotate-[11deg]`}
+          />
+          {/* Front card */}
+          <div
+            className={`relative w-full h-full rounded-[18px] bg-gradient-to-br ${styles.frontCardGrad} border ${styles.frontCardBorder} p-3 flex items-center justify-between ${styles.frontCardShadow} -rotate-[4deg] transition-all duration-300 group-hover:-rotate-[2deg] group-hover:-translate-y-1 backdrop-blur-xl`}
+          >
+            <div className="shrink-0 text-white">
+              {icon}
+            </div>
+            <div className="flex-1 pl-3 space-y-1.5 text-right">
+              <div className="text-[11px] font-black text-white tracking-widest leading-none">
+                {badgeText}
+              </div>
+              <div className="space-y-1 pt-0.5 flex flex-col items-end">
+                <div className="h-1.5 w-full rounded-full bg-white/80" />
+                <div className="h-1.5 w-3/4 rounded-full bg-white/50" />
+                <div className="h-1.5 w-1/2 rounded-full bg-white/30" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Top-Right Circular Chevron Arrow Button */}
+        <Link
+          href={targetHref}
+          className={`h-11 w-11 rounded-full bg-white/[0.04] border border-white/10 ${styles.btnHover} flex items-center justify-center text-white/80 hover:text-white transition-all duration-200 shadow-md group/btn`}
+        >
+          <ChevronRight className="h-4.5 w-4.5 text-white group-hover:translate-x-0.5 transition-transform duration-200" />
+        </Link>
+      </div>
+
+      {/* Title & Description */}
+      <div className="space-y-1.5 relative z-10">
+        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+          {title}
+        </h3>
+        <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed font-normal">
+          {description}
+        </p>
+      </div>
+
+      {/* 4 Feature Pills in 2x2 */}
+      <div className="grid grid-cols-2 gap-1.5 sm:gap-2 pt-1 relative z-10">
+        {pills.map((pill, idx) => (
+          <div
+            key={idx}
+            className={`h-8.5 sm:h-9 rounded-full bg-white/[0.04] border border-white/[0.08] ${styles.pillHover} px-2.5 sm:px-3 flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-semibold tracking-tight text-neutral-200 transition-all duration-200 hover:bg-white/[0.08] hover:text-white overflow-hidden`}
+          >
+            <span className="text-white/70 group-hover:text-white shrink-0 scale-90">
+              {pill.icon}
+            </span>
+            <span className="whitespace-nowrap">{pill.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StepToggleGraphic() {
+  const [activeToggle, setActiveToggle] = React.useState<number>(0);
+
+  return (
+    <div className="w-full flex flex-col justify-center gap-2.5 px-0.5 select-none">
+      {/* Row 1 */}
+      <div
+        onClick={() => {
+          sound.playPop();
+          setActiveToggle(activeToggle === 0 ? -1 : 0);
+        }}
+        className="flex items-center justify-between gap-2.5 cursor-pointer group/row"
+        title="Toggle claim sharing"
+      >
+        <div className="h-1.5 w-9 sm:w-10 rounded-full bg-white/20 group-hover/row:bg-white/35 transition-colors" />
+        <div
+          className={`w-9 h-5 rounded-full flex items-center px-0.5 transition-all duration-200 ${
+            activeToggle === 0
+              ? "bg-[#2f86ff] justify-end shadow-[0_0_12px_rgba(47,134,255,0.7)]"
+              : "bg-[#222531] border border-white/10 justify-start"
+          }`}
+        >
+          <div
+            className={`h-4 w-4 rounded-full shadow-sm transition-colors ${
+              activeToggle === 0 ? "bg-white" : "bg-[#6b7280]"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Row 2 */}
+      <div
+        onClick={() => {
+          sound.playPop();
+          setActiveToggle(activeToggle === 1 ? -1 : 1);
+        }}
+        className="flex items-center justify-between gap-2.5 cursor-pointer group/row"
+        title="Toggle claim sharing"
+      >
+        <div className="h-1.5 w-11 sm:w-12 rounded-full bg-white/20 group-hover/row:bg-white/35 transition-colors" />
+        <div
+          className={`w-9 h-5 rounded-full flex items-center px-0.5 transition-all duration-200 ${
+            activeToggle === 1
+              ? "bg-[#2f86ff] justify-end shadow-[0_0_12px_rgba(47,134,255,0.7)]"
+              : "bg-[#222531] border border-white/10 justify-start"
+          }`}
+        >
+          <div
+            className={`h-4 w-4 rounded-full shadow-sm transition-colors ${
+              activeToggle === 1 ? "bg-white" : "bg-[#6b7280]"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Row 3 */}
+      <div
+        onClick={() => {
+          sound.playPop();
+          setActiveToggle(activeToggle === 2 ? -1 : 2);
+        }}
+        className="flex items-center justify-between gap-2.5 cursor-pointer group/row"
+        title="Toggle claim sharing"
+      >
+        <div className="h-1.5 w-8 sm:w-9 rounded-full bg-white/20 group-hover/row:bg-white/35 transition-colors" />
+        <div
+          className={`w-9 h-5 rounded-full flex items-center px-0.5 transition-all duration-200 ${
+            activeToggle === 2
+              ? "bg-[#2f86ff] justify-end shadow-[0_0_12px_rgba(47,134,255,0.7)]"
+              : "bg-[#222531] border border-white/10 justify-start"
+          }`}
+        >
+          <div
+            className={`h-4 w-4 rounded-full shadow-sm transition-colors ${
+              activeToggle === 2 ? "bg-white" : "bg-[#6b7280]"
+            }`}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HowItWorksStepCard({
+  stepNumber,
+  title,
+  description,
+  graphic,
+}: {
+  stepNumber: string;
+  title: React.ReactNode;
+  description: string;
+  graphic: React.ReactNode;
+}) {
+  const [tilt, setTilt] = React.useState({ x: 0, y: 0, isHovered: false });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+    const y = -((e.clientY - rect.top) / rect.height - 0.5) * 8;
+    setTilt({ x: y, y: x, isHovered: true });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0, isHovered: false });
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: tilt.isHovered
+          ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-4px)`
+          : "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)",
+        transition: tilt.isHovered ? "transform 0.08s ease-out" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+      className="group relative flex-1 min-w-0 rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.2] p-5 sm:p-6 lg:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-300 flex items-center justify-between gap-4 backdrop-blur-2xl"
+    >
+      {/* Content Column */}
+      <div className="flex-1 min-w-0 space-y-2">
+        <div className="h-7 w-7 rounded-full bg-white/[0.06] border border-white/15 flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
+          {stepNumber}
+        </div>
+        <h3 className="text-base sm:text-lg lg:text-[19px] font-bold text-white tracking-tight leading-snug">
+          {title}
+        </h3>
+        <p className="text-[11px] sm:text-xs lg:text-[12.5px] text-neutral-400 leading-relaxed font-normal">
+          {description}
+        </p>
+      </div>
+
+      {/* Graphic Container (Squircle) */}
+      <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 lg:w-[116px] lg:h-[116px] rounded-[22px] bg-[#11131a] border border-white/[0.08] group-hover:border-white/[0.18] shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_10px_24px_rgba(0,0,0,0.6)] flex items-center justify-center p-3 relative backdrop-blur-md transition-all duration-300 group-hover:scale-105">
+        {graphic}
+      </div>
+    </div>
+  );
+}
+
+function SelectiveDisclosureFeatureCard() {
+  const [items, setItems] = React.useState([
+    { id: "age", label: "Age 18+", sub: "Only your age group is shared", type: "user", status: "verified" as "verified" | "hidden" },
+    { id: "dl", label: "Driving License", sub: "License status is shared", type: "car", status: "verified" as "verified" | "hidden" },
+    { id: "addr", label: "Full Address", sub: "Your complete address is hidden", type: "address", status: "hidden" as "verified" | "hidden" },
+  ]);
+
+  const toggleItem = (id: string) => {
+    sound.playPop();
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              status: item.status === "verified" ? "hidden" : "verified",
+              sub:
+                item.status === "verified"
+                  ? item.id === "addr"
+                    ? "Your complete address is hidden"
+                    : `${item.label} is hidden`
+                  : item.id === "addr"
+                  ? "Address claim verified"
+                  : item.id === "age"
+                  ? "Only your age group is shared"
+                  : "License status is shared",
+            }
+          : item
+      )
+    );
+  };
+
+  return (
+    <div className="relative group rounded-[22px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
+      {/* Subtle Glass Specular Sheen Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[22px]" />
+
+      {/* Top Header: Icon + Titles on left, Pill on right */}
+      <div className="relative z-10 flex items-start justify-between gap-3">
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] flex items-center justify-center shrink-0 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
+            <EyeOff className="w-4 h-4 stroke-[1.8]" />
+          </div>
+          <div>
+            <h3 className="text-[15px] sm:text-[17px] font-bold text-[#F5F5F7] tracking-tight">
+              Share Only What You Need
+            </h3>
+            <p className="text-[11.5px] sm:text-xs text-[#8B9099] mt-0.5 leading-normal">
+              Prove eligibility without revealing your full identity details.
+            </p>
+          </div>
+        </div>
+        <span className="text-[9.5px] font-bold tracking-wider rounded-full bg-gradient-to-r from-[#2997FF]/15 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] px-2.5 py-0.5 shrink-0 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
+          SELECTIVE SHARING
+        </span>
+      </div>
+
+      {/* Information to Share Panel (Inset Glass Tray) */}
+      <div className="relative z-10 rounded-2xl bg-black/50 border border-white/[0.08] p-3 sm:p-3.5 flex-1 flex flex-col justify-between mt-3.5 sm:mt-4 min-h-[205px] shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06),0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        {/* Panel Header */}
+        <div className="flex items-center justify-between px-1 pb-1">
+          <span className="text-[11.5px] text-[#8B9099] font-medium">Information to Share</span>
+          <span className="text-[11.5px] text-[#22C55E] font-medium flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
+            <span>You&apos;re in control</span>
+          </span>
+        </div>
+
+        {/* Rows */}
+        <div className="space-y-1.5">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => toggleItem(item.id)}
+              className="flex items-center justify-between p-2 sm:p-2.5 rounded-xl bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.08] hover:border-white/[0.18] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200 cursor-pointer select-none active:scale-[0.99] backdrop-blur-md"
+            >
+              <div className="flex items-center gap-2.5">
+                {item.type === "user" && (
+                  <div className="w-8 h-8 rounded-xl bg-[#091D34] border border-[#2997FF]/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+                    <svg className="w-4 h-4 fill-[#2997FF]" viewBox="0 0 24 24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                  </div>
+                )}
+                {item.type === "car" && (
+                  <div className="w-8 h-8 rounded-xl bg-[#1D1233] border border-[#A78BFA]/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+                    <svg className="w-4 h-4 fill-[#A78BFA]" viewBox="0 0 24 24">
+                      <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
+                      <circle cx="7.5" cy="14.5" r="1.5" className="fill-[#1D1233]" />
+                      <circle cx="16.5" cy="14.5" r="1.5" className="fill-[#1D1233]" />
+                    </svg>
+                  </div>
+                )}
+                {item.type === "address" && (
+                  <div className="w-8 h-8 rounded-xl bg-[#2A1B08] border border-[#F59E0B]/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+                    <svg className="w-4 h-4 fill-[#F59E0B]" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                  </div>
+                )}
+                <div className="text-left">
+                  <div className="text-xs sm:text-[12px] font-bold text-[#F5F5F7]">{item.label}</div>
+                  <div className="text-[10px] text-[#8B9099]">{item.sub}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {item.status === "verified" ? (
+                  <span className="rounded-full bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/12 border border-[#2997FF]/40 text-[#2997FF] px-2 py-0.5 text-[10px] font-semibold flex items-center gap-1.5 shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
+                    <CheckCircle2 className="w-3 h-3 fill-[#2997FF] text-[#080E1B]" />
+                    <span>Verified</span>
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-white/[0.06] border border-white/[0.12] text-[#A1A1AA] px-2 py-0.5 text-[10px] font-medium flex items-center gap-1.5 shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md">
+                    <EyeOff className="w-3 h-3 stroke-[2]" />
+                    <span>Hidden</span>
+                  </span>
+                )}
+                <ChevronRight className="w-3.5 h-3.5 text-[#8B9099]" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SelfDestructQRFeatureCard() {
+  const [timeLeft, setTimeLeft] = React.useState(284); // 284s = 04:44
+  const [qrUrl, setQrUrl] = React.useState<string>("");
+
+  const generateQr = React.useCallback(async () => {
+    try {
+      const livePayload = `https://whitecard.internal/v/proof-${Date.now().toString(36)}`;
+      const url = await QRCode.toDataURL(livePayload, {
+        width: 320,
+        margin: 1,
+        color: {
+          dark: "#FFFFFF",
+          light: "#00000000",
+        },
+      });
+      setQrUrl(url);
+    } catch {
+      // Fallback
+    }
+  }, []);
+
+  React.useEffect(() => {
+    generateQr();
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 284));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [generateQr]);
+
+  const handleGenerateNewQr = () => {
+    sound.playPop();
+    setTimeLeft(284); // reset to 04:44
+    generateQr();
+  };
+
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+  const formattedTime = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+
+  return (
+    <div className="relative group rounded-[22px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
+      {/* Subtle Glass Specular Sheen Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[22px]" />
+
+      {/* Top Header: Icon + Titles on left, Pill on right */}
+      <div className="relative z-10 flex items-start justify-between gap-3">
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] flex items-center justify-center shrink-0 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
+            <Zap className="w-4 h-4 stroke-[1.8]" />
+          </div>
+          <div>
+            <h3 className="text-[15px] sm:text-[17px] font-bold text-[#F5F5F7] tracking-tight">
+              Temporary QR Sharing
+            </h3>
+            <p className="text-[11.5px] sm:text-xs text-[#8B9099] mt-0.5 leading-normal">
+              Create a QR code that expires automatically after a short time.
+            </p>
+          </div>
+        </div>
+        <span className="text-[9.5px] font-bold tracking-wider rounded-full bg-gradient-to-r from-[#2997FF]/15 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] px-2.5 py-0.5 shrink-0 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
+          AUTO-EXPIRING ACCESS
+        </span>
+      </div>
+
+      {/* QR & Verification Panel (Inset Glass Tray) */}
+      <div className="relative z-10 rounded-2xl bg-black/50 border border-white/[0.08] p-3 sm:p-3.5 mt-3.5 sm:mt-4 flex-1 flex flex-col justify-center min-h-[205px] shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06),0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div className="flex flex-col sm:flex-row items-center gap-4.5 sm:gap-5">
+          {/* Left: QR Code with Clean Thin Blue Corner Markers */}
+          <div className="relative p-1.5 shrink-0 flex items-center justify-center">
+            {/* Thin Blue Corner Markers with subtle contrast */}
+            <div className="absolute inset-0 pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+              <span className="absolute top-0 left-0 w-4 h-4 border-t-[2px] border-l-[2px] border-[#2997FF] rounded-tl-lg" />
+              <span className="absolute top-0 right-0 w-4 h-4 border-t-[2px] border-r-[2px] border-[#2997FF] rounded-tr-lg" />
+              <span className="absolute bottom-0 left-0 w-4 h-4 border-b-[2px] border-l-[2px] border-[#2997FF] rounded-bl-lg" />
+              <span className="absolute bottom-0 right-0 w-4 h-4 border-b-[2px] border-r-[2px] border-[#2997FF] rounded-br-lg" />
+            </div>
+
+            {/* QR Pattern Frame */}
+            <div className="w-24 h-24 sm:w-26 sm:h-26 rounded-xl bg-black/85 border border-white/[0.1] p-1.5 flex items-center justify-center overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_20px_rgba(0,0,0,0.6)] backdrop-blur-md">
+              {qrUrl ? (
+                <img
+                  src={qrUrl}
+                  alt="Temporary Sharing QR Code"
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <QrCode className="w-full h-full text-white/90" />
+              )}
+            </div>
+          </div>
+
+          {/* Right Side: Active, Countdown, Description, Button */}
+          <div className="flex-1 w-full space-y-1.5 text-left">
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
+              <span className="text-xs font-semibold text-[#22C55E]">Active</span>
+            </div>
+
+            <div>
+              <div className="text-[10.5px] text-[#8B9099] font-medium">Expires in</div>
+              <div className="text-2xl sm:text-[26px] font-extrabold text-[#F5F5F7] tracking-wider font-mono my-0.5 tabular-nums leading-none">
+                {formattedTime}
+              </div>
+              <p className="text-[11px] text-[#8B9099] leading-tight mt-1">
+                This QR code will expire automatically.
+              </p>
+            </div>
+
+            <div className="pt-1">
+              <button
+                onClick={handleGenerateNewQr}
+                className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-b from-[#38bdf8] via-[#2997FF] to-[#1D7AD9] hover:brightness-105 text-white text-xs font-semibold py-2 px-3 shadow-[0_2px_8px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              >
+                <Clock className="w-3.5 h-3.5 text-white" />
+                <span>Generate New QR</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PasswordlessAuthFeatureCard() {
+  const [authState, setAuthState] = React.useState<"idle" | "sending" | "verified">("idle");
+
+  const handleSimulateAuth = () => {
+    sound.playPop();
+    setAuthState("sending");
+    setTimeout(() => {
+      sound.playSuccess();
+      setAuthState("verified");
+      setTimeout(() => setAuthState("idle"), 2400);
+    }, 700);
+  };
+
+  return (
+    <div className="relative group rounded-[20px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-3.5 sm:p-4.5 pt-3.5 pb-3.5 sm:pt-4 sm:pb-4 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
+      {/* Subtle Glass Specular Sheen */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[20px]" />
+
+      <div className="relative z-10">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] flex items-center justify-center shrink-0 mb-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
+          <Key className="w-4 h-4 stroke-[1.8]" />
+        </div>
+        <h3 className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F5F5F7] tracking-tight">
+          Passwordless Email OTP
+        </h3>
+        <p className="text-[11.5px] text-[#8B9099] leading-relaxed mt-1 font-normal">
+          No passwords to forget, steal, or leak. Your wallet authenticates with hardware-random one-time verification tokens.
+        </p>
+      </div>
+
+      <div className="relative z-10 rounded-xl bg-black/50 border border-white/[0.08] p-2 sm:p-2.5 flex items-center justify-between gap-2 mt-3 sm:mt-3.5 shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white/80 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <Mail className="w-3.5 h-3.5" />
+          </div>
+          <div className="min-w-0 pr-1">
+            <div className="text-[11.5px] font-bold text-[#F5F5F7] truncate">Secure 6-Digit OTP</div>
+            <div className="text-[9.5px] text-[#8B9099] truncate">Cryptographic Verification</div>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSimulateAuth}
+          disabled={authState !== "idle"}
+          className="bg-gradient-to-b from-[#38bdf8] via-[#2997FF] to-[#1D7AD9] hover:brightness-105 text-white text-[10.5px] font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg shadow-[0_2px_6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-200 active:scale-95 shrink-0 cursor-pointer disabled:opacity-75 whitespace-nowrap"
+        >
+          {authState === "idle" ? "Simulate OTP →" : authState === "sending" ? "Sending..." : "Verified ✓"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function InstantRevokeFeatureCard() {
+  const [isRevoked, setIsRevoked] = React.useState(false);
+
+  return (
+    <div className="relative group rounded-[20px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-3.5 sm:p-4.5 pt-3.5 pb-3.5 sm:pt-4 sm:pb-4 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
+      {/* Subtle Glass Specular Sheen */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[20px]" />
+
+      <div className="relative z-10">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#FF3B5C]/25 to-[#FF3B5C]/08 border border-[#FF3B5C]/35 text-[#FF3B5C] flex items-center justify-center shrink-0 mb-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
+          <Lock className="w-4 h-4 stroke-[1.8]" />
+        </div>
+        <h3 className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F5F5F7] tracking-tight">
+          Instant 1-Tap Access Revocation
+        </h3>
+        <p className="text-[11.5px] text-[#8B9099] leading-relaxed mt-1 font-normal">
+          Changed your mind after showing an ID? Kill the token remotely in real time. Verifiers immediately see an invalidated claim notice.
+        </p>
+      </div>
+
+      <div className="relative z-10 rounded-xl bg-black/50 border border-white/[0.08] p-2 sm:p-2.5 flex items-center justify-between gap-2 mt-3 sm:mt-3.5 shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+        <div>
+          <div className="text-[9.5px] text-[#8B9099] font-medium">Token Status</div>
+          <div className={`text-[11.5px] font-bold mt-0.5 ${isRevoked ? "text-[#FF3B5C]" : "text-[#22C55E]"}`}>
+            {isRevoked ? "Terminated ✕" : "Active & Authorised"}
+          </div>
+        </div>
+
+        <button
+          onClick={() => {
+            sound.playPop();
+            setIsRevoked(!isRevoked);
+          }}
+          className={`text-white text-[10.5px] font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 active:scale-95 shrink-0 cursor-pointer whitespace-nowrap ${
+            isRevoked
+              ? "bg-white/[0.08] hover:bg-white/[0.14] text-neutral-300 border border-white/10"
+              : "bg-gradient-to-b from-[#FF526F] via-[#FF3B5C] to-[#D92D4A] hover:brightness-105 shadow-[0_2px_6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.25)]"
+          }`}
+        >
+          <Trash2 className="w-3 h-3" />
+          <span>{isRevoked ? "Restore" : "Revoke Access"}</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function LiveAuditLogFeatureCard() {
+  const [logs] = React.useState([
+    { id: 1, action: "Driving License age proof shared", time: "Just now", dot: "bg-[#22C55E]" },
+    { id: 2, action: "PAN Card masked copy generated", time: "18m ago", dot: "bg-[#2997FF]" },
+    { id: 3, action: "Voter ID token expired and cleared", time: "1h ago", dot: "bg-[#3B82F6]" },
+  ]);
+
+  return (
+    <div className="relative group rounded-[20px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-3.5 sm:p-4.5 pt-3.5 pb-3.5 sm:pt-4 sm:pb-4 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
+      {/* Subtle Glass Specular Sheen */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[20px]" />
+
+      <div className="relative z-10">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#22C55E]/25 to-[#22C55E]/08 border border-[#22C55E]/35 text-[#22C55E] flex items-center justify-center shrink-0 mb-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
+          <FileText className="w-4 h-4 stroke-[1.8]" />
+        </div>
+        <h3 className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F5F5F7] tracking-tight">
+          Real-Time Verification Log
+        </h3>
+        <p className="text-[11.5px] text-[#8B9099] leading-relaxed mt-1 font-normal">
+          Every scan, share, or download writes to your local private ledger. You always know who inspected your credentials and when.
+        </p>
+      </div>
+
+      <div className="relative z-10 rounded-xl bg-black/50 border border-white/[0.08] p-2 sm:p-2.5 space-y-1 mt-3 sm:mt-3.5 shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+        {logs.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center justify-between text-xs py-0.5 text-[#8B9099] hover:text-white transition cursor-pointer select-none"
+          >
+            <div className="flex items-center gap-2 truncate pr-2">
+              <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0`} />
+              <span className="truncate text-[#F5F5F7] text-[10.5px] font-medium">{item.action}</span>
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-[9.5px] text-[#8B9099]">{item.time}</span>
+              <ChevronRight className="w-3 h-3 text-[#8B9099]" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SecurityEnclaveMasterCard() {
+  return (
+    <div className="group rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.2] p-6 sm:p-7 lg:p-8 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between pb-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            <Cpu className="h-5 w-5 stroke-[2]" />
+          </div>
+          <span className="text-[10px] uppercase font-bold tracking-wider rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 px-3 py-1">
+            Hardware Isolation
+          </span>
+        </div>
+        <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          Silicon-Sealed Encryption Keys
+        </h3>
+        <p className="text-xs sm:text-[13px] text-neutral-400 mt-2 leading-relaxed font-normal">
+          Your cryptographic keys are forged and sealed inside your physical phone&apos;s Secure Enclave. They never travel over any network and cannot be extracted—even if your device is plugged into a computer.
+        </p>
+      </div>
+
+      <div className="mt-6 rounded-2xl bg-[#090b10] border border-white/[0.08] p-4 space-y-2.5 shadow-inner">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-semibold text-neutral-300">Device Hardware Enclave</span>
+          <span className="text-emerald-400 font-mono text-[10px] flex items-center gap-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Active Enclave
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 pt-1 text-[11px]">
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-1">
+            <div className="text-neutral-400 text-[10px] font-medium">Encryption Standard</div>
+            <div className="font-mono font-bold text-white">AES-256-GCM</div>
+          </div>
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-1">
+            <div className="text-neutral-400 text-[10px] font-medium">Key Custody</div>
+            <div className="font-mono font-bold text-emerald-300">100% On-Device</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SecurityProofSealCard() {
+  return (
+    <div className="group rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.2] p-6 sm:p-7 lg:p-8 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between pb-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400 shadow-[0_0_15px_rgba(20,184,166,0.2)]">
+            <ShieldCheck className="h-5 w-5 stroke-[2]" />
+          </div>
+          <span className="text-[10px] uppercase font-bold tracking-wider rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 px-3 py-1">
+            Cryptographic Integrity
+          </span>
+        </div>
+        <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          Tamper-Evident SHA-256 Chain
+        </h3>
+        <p className="text-xs sm:text-[13px] text-neutral-400 mt-2 leading-relaxed font-normal">
+          Every document verification is stamped into an immutable cryptographic hash chain. Any attempt to alter or counterfeit credentials is mathematically rejected in milliseconds.
+        </p>
+      </div>
+
+      <div className="mt-6 rounded-2xl bg-[#090b10] border border-white/[0.08] p-4 space-y-2.5 shadow-inner">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-semibold text-neutral-300">Cryptographic Seal State</span>
+          <span className="text-teal-400 font-mono text-[10px] flex items-center gap-1">
+            <CheckCircle2 className="h-3 w-3" /> Chain Intact
+          </span>
+        </div>
+        <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-1 text-[11px]">
+          <div className="text-neutral-400 text-[10px] font-medium">Merkle Genesis Proof</div>
+          <div className="font-mono text-[10px] text-teal-300 truncate">
+            sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SecurityShredderCard() {
+  const [isWiped, setIsWiped] = React.useState(false);
+
+  const handleWipe = () => {
+    sound.playPop();
+    setIsWiped(true);
+    setTimeout(() => {
+      sound.playSuccess();
+    }, 400);
+    setTimeout(() => setIsWiped(false), 3000);
+  };
+
+  return (
+    <div className="group rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.22] p-6 sm:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between">
+      <div>
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)] mb-4">
+          <Trash2 className="h-5 w-5 stroke-[2]" />
+        </div>
+        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+          1-Tap Cryptographic Shredder
+        </h3>
+        <p className="text-xs sm:text-[13px] text-neutral-400 mt-2 leading-relaxed font-normal">
+          In emergency situations, permanently obliterate your local document cache and cryptographic private keys in one click with zero recovery traces.
+        </p>
+      </div>
+
+      <div className="mt-5 p-3.5 rounded-2xl bg-[#090b10] border border-white/[0.08] flex items-center justify-between gap-3 shadow-inner">
+        <div className="space-y-0.5">
+          <div className="text-[11px] font-medium text-neutral-400">Emergency Protocol</div>
+          <div className="text-xs font-bold text-white">
+            {isWiped ? "Keys Shredded &amp; Erased" : "Local Data Wipe Ready"}
+          </div>
+        </div>
+        <button
+          onClick={handleWipe}
+          disabled={isWiped}
+          className="px-3.5 py-1.5 rounded-full bg-red-600/30 hover:bg-red-600/50 border border-red-500/30 text-[11px] font-bold text-red-300 transition active:scale-95 shrink-0"
+        >
+          {isWiped ? "Destroyed ✓" : "Test Shredder"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function SecurityAntiReplayCard() {
+  return (
+    <div className="group rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.22] p-6 sm:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between">
+      <div>
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)] mb-4">
+          <ShieldAlert className="h-5 w-5 stroke-[2]" />
+        </div>
+        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+          Anti-Screenshot Replay Guard
+        </h3>
+        <p className="text-xs sm:text-[13px] text-neutral-400 mt-2 leading-relaxed font-normal">
+          Every token includes dynamic recipient-bound nonces. If someone takes a screenshot or recording of your QR, attempting to reuse it triggers an immediate fraud alert.
+        </p>
+      </div>
+
+      <div className="mt-5 p-3.5 rounded-2xl bg-[#090b10] border border-white/[0.08] flex items-center justify-between text-xs shadow-inner">
+        <span className="font-semibold text-neutral-300">Dynamic Nonce Rotating</span>
+        <span className="text-emerald-400 font-mono text-[10px] font-bold">100% Replay Immune</span>
+      </div>
+    </div>
+  );
+}
+
+function SecurityZeroTrackersCard() {
+  return (
+    <div className="group rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.22] p-6 sm:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between">
+      <div>
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)] mb-4">
+          <Sparkles className="h-5 w-5 stroke-[2]" />
+        </div>
+        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+          Zero Trackers &amp; Zero Ads
+        </h3>
+        <p className="text-xs sm:text-[13px] text-neutral-400 mt-2 leading-relaxed font-normal">
+          No ad trackers, no third-party SDKs, and zero behavioral telemetry. White Card operates as a pure, privacy-first cryptographic vault on your phone.
+        </p>
+      </div>
+
+      <div className="mt-5 p-3.5 rounded-2xl bg-[#090b10] border border-white/[0.08] flex items-center justify-between text-xs shadow-inner">
+        <span className="font-semibold text-neutral-300">Third-Party Scripts</span>
+        <span className="text-emerald-400 font-mono text-[10px] font-bold">0 Trackers Found</span>
+      </div>
+    </div>
+  );
+}
 
 export default function HomePage() {
   const [tilt, setTilt] = React.useState({ x: 0, y: 0, isHovered: false });
+  const [user, setUser] = React.useState<{ email?: string; name?: string } | null>(null);
+
+  React.useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => {
+        if (res.ok) return res.json();
+        return null;
+      })
+      .then((data) => {
+        if (data?.user) setUser(data.user);
+      })
+      .catch(() => setUser(null));
+  }, []);
+
+  const vaultLink = user ? "/vault" : "/signin?redirect=/vault";
+  const walletLink = user ? "/wallet" : "/signin?redirect=/wallet";
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -45,13 +953,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative space-y-12 sm:space-y-16 pt-0 pb-12 overflow-hidden bg-black">
+    <div className="relative space-y-10 sm:space-y-12 pt-0 pb-12 overflow-hidden bg-black">
       {/* 1. Hero Section (Two-Column Layout with 3D Glass Wallet Mockup) */}
-      <section id="hero" className="relative max-w-7xl mx-auto pt-6 sm:pt-8 lg:pt-10 pb-10 sm:pb-14 px-4 sm:px-6 lg:px-8">
-        {/* Subtle Dark Ambient Background Curves matching screenshot */}
-        <div className="absolute top-4 -left-20 w-[55vw] max-w-[600px] h-[600px] bg-gradient-to-br from-[#07132e]/60 via-[#050b1a]/30 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
-        <div className="absolute -bottom-10 left-0 right-0 h-40 bg-gradient-to-t from-[#050c1b]/50 via-[#030711]/20 to-transparent pointer-events-none -z-10" />
-
+      <section id="hero" className="relative max-w-7xl mx-auto pt-6 sm:pt-8 lg:pt-10 pb-0 sm:pb-1 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* 2-Column Hero Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 items-center">
           {/* Left Column: Headlines & CTA */}
@@ -84,7 +988,7 @@ export default function HomePage() {
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <Link
-                href="/signin"
+                href={walletLink}
                 className="group flex items-center gap-2.5 rounded-full bg-white hover:bg-neutral-100 text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_4px_20px_rgba(255,255,255,0.15),0_2px_6px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_24px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 transition-all duration-200"
               >
                 <Wallet className="h-4 w-4 text-black" />
@@ -196,7 +1100,10 @@ export default function HomePage() {
                 {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells with Hover States) */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
                   {/* 1. Driving License */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                  <Link
+                    href={vaultLink}
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                  >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
                       <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(37,99,235,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <CarFront className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
@@ -210,10 +1117,13 @@ export default function HomePage() {
                     <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
-                  </div>
+                  </Link>
 
                   {/* 2. PAN Card */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                  <Link
+                    href={vaultLink}
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                  >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
                       <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(124,58,237,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <FileText className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
@@ -227,10 +1137,13 @@ export default function HomePage() {
                     <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
-                  </div>
+                  </Link>
 
                   {/* 3. Voter ID */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                  <Link
+                    href={vaultLink}
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                  >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
                       <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(16,185,129,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <Vote className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
@@ -244,10 +1157,13 @@ export default function HomePage() {
                     <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
-                  </div>
+                  </Link>
 
                   {/* 4. Ration Card */}
-                  <div className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]">
+                  <Link
+                    href={vaultLink}
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                  >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
                       <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(245,158,11,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
                         <Wheat className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
@@ -261,7 +1177,7 @@ export default function HomePage() {
                     <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
-                  </div>
+                  </Link>
                 </div>
 
                 {/* Card Footer */}
@@ -275,7 +1191,7 @@ export default function HomePage() {
         </div>
 
         {/* Bottom Trust Highlights (iOS Glass Squircles with Clean Dividers) */}
-        <div className="pt-10 sm:pt-14 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 px-2">
+        <div className="pt-8 sm:pt-10 lg:pt-12 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 px-2">
           {/* 1. Client Encrypted */}
           <div className="flex items-center gap-4 flex-1">
             <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
@@ -317,279 +1233,237 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Documents Section */}
-      <section id="documents" className="scroll-mt-28 space-y-8 max-w-5xl mx-auto pt-4 sm:pt-6">
-        <div className="text-center space-y-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3.5 py-1 text-xs font-semibold text-neutral-200">
-            <FileCheck className="h-3.5 w-3.5 text-white" />
-            <span>Focused & Streamlined</span>
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            4 Core Supported Documents
+      {/* 2. Documents Section: All Your Important Documents, Together. */}
+      <section id="documents" className="scroll-mt-28 space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-0 !mt-2 sm:!mt-3 overflow-hidden">
+        {/* Section Header: Pill, Headline, Subtitle */}
+        <div className="space-y-4 max-w-3xl text-left">
+          {/* Pill Tag */}
+          <div className="inline-flex items-center gap-2 rounded-full glass-ios-pill px-3.5 py-1 text-[11px] font-semibold text-neutral-300 tracking-wider uppercase">
+            <span className="h-2 w-2 rounded-full bg-[#00e5ff] shadow-[0_0_10px_#00e5ff]" />
+            <span>FOUR ESSENTIAL DOCUMENTS</span>
+          </div>
+
+          {/* Headline */}
+          <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-white tracking-tight leading-[1.12]">
+            All Your Important<br />
+            Documents, <span className="text-[#2f86ff]">Together.</span>
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto">
-            Cleanly designed for the 4 most vital personal Indian credentials, each with tailored
-            formatting, masking, and selective disclosure attributes.
+
+          {/* Subtitle Paragraph */}
+          <p className="text-[11px] sm:text-xs text-neutral-400 max-w-lg leading-relaxed">
+            Store, manage and share your Driving License, PAN Card, Voter ID (EPIC) and Ration Card
+            in one secure White Card wallet. Access only what&apos;s needed, whenever you need it.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* 1. Driving License Widget */}
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/25 hover:translate-y-[-2px] transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white shadow-sm">
-                  <Car className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Driving License (DL)</h3>
-                  <span className="text-[11px] text-neutral-400 font-medium">Category: Identity & Transit</span>
-                </div>
-              </div>
-              <span className="rounded-full glass-ios-pill px-3 py-0.5 text-[10px] text-neutral-300 font-mono">
-                15-16 chars
-              </span>
-            </div>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Standardized format with state code and RTO numeric validation. Enables quick traffic
-              inspection and emergency organ-donor indication without revealing your home address.
-            </p>
-            <div className="rounded-2xl bg-white/[0.03] p-3.5 border border-white/5 space-y-2 text-[11px]">
-              <span className="text-neutral-400 font-medium block">Selective Claims Available:</span>
-              <div className="flex flex-wrap gap-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Vehicle Classes</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Organ Donor</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">RTO Code</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Expiry Date</span>
-              </div>
-            </div>
-          </div>
+        {/* 4 Supported Document Cards in 4 Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <DocumentFeatureCard
+            title="Driving License (DL)"
+            description="Keep your driving license details safe and ready for verification."
+            badgeText="DL"
+            icon={<Car className="h-6 w-6 stroke-[1.9]" />}
+            theme="blue"
+            targetHref={vaultLink}
+            pills={[
+              { label: "Vehicle Details", icon: <Car className="h-3.5 w-3.5" /> },
+              { label: "RTO Info", icon: <Building2 className="h-3.5 w-3.5" /> },
+              { label: "Validity Date", icon: <Calendar className="h-3.5 w-3.5" /> },
+              { label: "Issue State", icon: <MapPin className="h-3.5 w-3.5" /> },
+            ]}
+          />
 
-          {/* 2. PAN Card Widget */}
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/25 hover:translate-y-[-2px] transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white shadow-sm">
-                  <CreditCard className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">PAN Card</h3>
-                  <span className="text-[11px] text-neutral-400 font-medium">Category: Financial Identity</span>
-                </div>
-              </div>
-              <span className="rounded-full glass-ios-pill px-3 py-0.5 text-[10px] text-neutral-300 font-mono">
-                10 chars
-              </span>
-            </div>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Strict regex validation (5 letters, 4 digits, 1 letter). Secure UI masking (e.g.{" "}
-              <code className="text-white font-mono font-semibold">AB••••••F</code>) protects your financial
-              identifier from casual observers and shoulder surfers.
-            </p>
-            <div className="rounded-2xl bg-white/[0.03] p-3.5 border border-white/5 space-y-2 text-[11px]">
-              <span className="text-neutral-400 font-medium block">Selective Claims Available:</span>
-              <div className="flex flex-wrap gap-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Taxpayer Category</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Father&apos;s Name</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Masked ID Number</span>
-              </div>
-            </div>
-          </div>
+          <DocumentFeatureCard
+            title="PAN Card"
+            description="Store your PAN details securely for financial and tax related services."
+            badgeText="PAN"
+            icon={<FileText className="h-6 w-6 stroke-[1.9]" />}
+            theme="purple"
+            targetHref={vaultLink}
+            pills={[
+              { label: "PAN Number", icon: <User className="h-3.5 w-3.5" /> },
+              { label: "Name", icon: <CreditCard className="h-3.5 w-3.5" /> },
+              { label: "Date of Birth", icon: <Calendar className="h-3.5 w-3.5" /> },
+              { label: "Card Status", icon: <ShieldCheck className="h-3.5 w-3.5" /> },
+            ]}
+          />
 
-          {/* 3. Voter ID Widget */}
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/25 hover:translate-y-[-2px] transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white shadow-sm">
-                  <Vote className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Voter ID (EPIC)</h3>
-                  <span className="text-[11px] text-neutral-400 font-medium">Category: Civic & Election</span>
-                </div>
-              </div>
-              <span className="rounded-full glass-ios-pill px-3 py-0.5 text-[10px] text-neutral-300 font-mono">
-                10 chars
-              </span>
-            </div>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Election Commission of India (EPIC) alphanumeric verification. Provides instant single-voting
-              check-in at polling booths to mathematically prevent double-vote abuse.
-            </p>
-            <div className="rounded-2xl bg-white/[0.03] p-3.5 border border-white/5 space-y-2 text-[11px]">
-              <span className="text-neutral-400 font-medium block">Selective Claims Available:</span>
-              <div className="flex flex-wrap gap-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Assembly Constituency</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Polling Booth</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Single-Checkin Token</span>
-              </div>
-            </div>
-          </div>
+          <DocumentFeatureCard
+            title="Voter ID (EPIC)"
+            description="Keep your voter ID details safe for voting and identity verification."
+            badgeText="VOTER ID"
+            icon={<User className="h-6 w-6 stroke-[1.9]" />}
+            theme="emerald"
+            targetHref={vaultLink}
+            pills={[
+              { label: "EPIC Number", icon: <CreditCard className="h-3.5 w-3.5" /> },
+              { label: "Constituency", icon: <Users className="h-3.5 w-3.5" /> },
+              { label: "Polling Booth", icon: <Landmark className="h-3.5 w-3.5" /> },
+              { label: "Issue Date", icon: <Calendar className="h-3.5 w-3.5" /> },
+            ]}
+          />
 
-          {/* 4. Ration Card Widget */}
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/25 hover:translate-y-[-2px] transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white shadow-sm">
-                  <ShoppingBag className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">Ration Card</h3>
-                  <span className="text-[11px] text-neutral-400 font-medium">Category: Food & Public Distribution</span>
-                </div>
-              </div>
-              <span className="rounded-full glass-ios-pill px-3 py-0.5 text-[10px] text-neutral-300 font-mono">
-                8-18 chars
-              </span>
-            </div>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Department of Food & Civil Supplies schema with NFSA scheme tracking. Connects directly
-              to Fair Price Shop (FPS) depots with real-time atomic quota deduction.
-            </p>
-            <div className="rounded-2xl bg-white/[0.03] p-3.5 border border-white/5 space-y-2 text-[11px]">
-              <span className="text-neutral-400 font-medium block">Selective Claims Available:</span>
-              <div className="flex flex-wrap gap-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">NFSA Scheme (PHH/AAY)</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">FPS Depot ID</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-200 border border-white/10">Monthly Rice & Wheat Quota</span>
-              </div>
-            </div>
-          </div>
+          <DocumentFeatureCard
+            title="Ration Card"
+            description="Store your ration card details for subsidized food and welfare benefits."
+            badgeText="RATION"
+            icon={<Wheat className="h-6 w-6 stroke-[1.9]" />}
+            theme="amber"
+            targetHref={vaultLink}
+            pills={[
+              { label: "Card Number", icon: <CreditCard className="h-3.5 w-3.5" /> },
+              { label: "Head of Family", icon: <User className="h-3.5 w-3.5" /> },
+              { label: "Family Members", icon: <Users className="h-3.5 w-3.5" /> },
+              { label: "Category", icon: <LayoutGrid className="h-3.5 w-3.5" /> },
+            ]}
+          />
         </div>
       </section>
 
       {/* 4. Section: How It Works */}
-      <section id="how-it-works" className="scroll-mt-28 space-y-8 max-w-5xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-            Simple 3-Step Flow
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            How White Card Works
+      <section id="how-it-works" className="scroll-mt-28 space-y-8 sm:space-y-9 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center space-y-2.5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] border border-white/10 px-4 py-1.5 text-[10px] sm:text-[11px] font-bold tracking-[0.14em] text-neutral-300 uppercase backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#2f86ff] shadow-[0_0_8px_#2f86ff]" />
+            <span>SIMPLE 3-STEP FLOW</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-white tracking-tight leading-tight">
+            How <span className="text-[#38bdf8]">White Card</span> Works
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-lg mx-auto">
-            From encryption to verification, control every byte of data you share.
+          <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto leading-relaxed">
+            Store your documents, choose what to share, and create a secure proof.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-[24px] glass-ios-card p-6 space-y-3 relative hover:border-white/20 hover:translate-y-[-2px] transition-all">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black font-bold text-sm shadow-md">
-              1
-            </div>
-            <h3 className="text-base font-bold text-white">Link & Client Encrypt</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Add your document numbers. A unique Data Encryption Key (DEK) encrypts your data in your
-              browser with AES-256-GCM before it ever leaves your machine.
-            </p>
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 lg:gap-3.5 justify-between">
+          {/* Card 01: Add Your Documents */}
+          <HowItWorksStepCard
+            stepNumber="01"
+            title={<>Add Your<br />Documents</>}
+            description="Add your Driving License, PAN Card, Voter ID, and Ration Card to your White Card wallet. Your documents are securely protected."
+            graphic={
+              <div className="relative flex items-center justify-center">
+                <svg
+                  className="w-12 h-12 sm:w-13 sm:h-13 text-neutral-200"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                {/* Plus badge overlapping bottom-right corner */}
+                <div className="absolute -bottom-1 -right-1 h-5.5 w-5.5 rounded-full bg-[#161822] border border-white/25 flex items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                  <Plus className="h-3.5 w-3.5 stroke-[2.8]" />
+                </div>
+              </div>
+            }
+          />
+
+          {/* Desktop Arrow 1 */}
+          <div className="hidden lg:flex shrink-0 h-9 w-9 rounded-full bg-white/[0.04] border border-white/10 items-center justify-center text-white/50 shadow-sm backdrop-blur-md">
+            <ArrowRight className="h-4 w-4" />
+          </div>
+          {/* Mobile Arrow 1 */}
+          <div className="flex lg:hidden items-center justify-center text-white/30 py-0.5">
+            <ArrowRight className="h-4 w-4 rotate-90" />
           </div>
 
-          <div className="rounded-[24px] glass-ios-card p-6 space-y-3 relative hover:border-white/20 hover:translate-y-[-2px] transition-all">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black font-bold text-sm shadow-md">
-              2
-            </div>
-            <h3 className="text-base font-bold text-white">Select What to Disclose</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Pick the audience and select only the claims needed (e.g. over 18, organ donor, voter booth).
-              Set expiration from 5 minutes to 24 hours.
-            </p>
+          {/* Card 02: Choose What to Share */}
+          <HowItWorksStepCard
+            stepNumber="02"
+            title={<>Choose<br />What to Share</>}
+            description="Select only the information you want to share. You can choose what the other person can see and how long it stays valid."
+            graphic={<StepToggleGraphic />}
+          />
+
+          {/* Desktop Arrow 2 */}
+          <div className="hidden lg:flex shrink-0 h-9 w-9 rounded-full bg-white/[0.04] border border-white/10 items-center justify-center text-white/50 shadow-sm backdrop-blur-md">
+            <ArrowRight className="h-4 w-4" />
+          </div>
+          {/* Mobile Arrow 2 */}
+          <div className="flex lg:hidden items-center justify-center text-white/30 py-0.5">
+            <ArrowRight className="h-4 w-4 rotate-90" />
           </div>
 
-          <div className="rounded-[24px] glass-ios-card p-6 space-y-3 relative hover:border-white/20 hover:translate-y-[-2px] transition-all">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black font-bold text-sm shadow-md">
-              3
-            </div>
-            <h3 className="text-base font-bold text-white">Instant Offline Proof</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              The recipient verifies your dynamic QR code offline or online. The Ed25519 signature confirms authenticity
-              instantly without centralized tracking pings.
-            </p>
-          </div>
+          {/* Card 03: Share & Verify */}
+          <HowItWorksStepCard
+            stepNumber="03"
+            title={<>Share &amp;<br />Verify</>}
+            description="Create a secure QR code and share it. The receiver can scan the QR code and verify the selected information."
+            graphic={
+              <div className="relative flex items-center justify-center">
+                <QrCode className="w-12 h-12 sm:w-13 sm:h-13 text-neutral-200 stroke-[1.6]" />
+                <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-lg bg-[#161822] border border-white/30 flex items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                  <ShieldCheck className="h-3.5 w-3.5 text-white stroke-[2.2]" />
+                </div>
+              </div>
+            }
+          />
         </div>
       </section>
 
-      {/* 5. Section: Security & Architecture (Apple Bento Grid Style) */}
-      <section id="features" className="scroll-mt-28 space-y-8 max-w-5xl mx-auto">
-        <div className="text-center space-y-2">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-            Enterprise Cryptography
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Security by Architecture, Not Policy
+      {/* 5. Section: Features (Everyday Privacy) */}
+      <section id="features" className="scroll-mt-24 relative z-10 bg-black py-12 sm:py-16 my-4 sm:my-6 space-y-5 sm:space-y-6 max-w-[1100px] mx-auto px-4 sm:px-6">
+        <div className="text-center space-y-2.5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.05] border border-white/[0.12] px-4 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-neutral-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-xl">
+            <span className="h-2 w-2 rounded-full bg-[#2997FF]" />
+            <span>EVERYDAY PRIVACY POWERS</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-bold text-white tracking-tight leading-tight">
+            Share what matters. <span className="text-[#2997FF]">Keep the rest private.</span>
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto">
-            Engineered under the principle of zero trust. We cannot read your credentials even under subpoena.
+          <p className="text-sm sm:text-[14.5px] text-[#8B9099] max-w-lg mx-auto leading-relaxed font-normal">
+            White Card lets you share only the information you need,
+            <br className="hidden sm:inline" /> with temporary access you control.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-3 hover:border-white/20 hover:translate-y-[-2px] transition-all">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white">
-              <Lock className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-semibold text-white">Envelope AES-256-GCM</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Every document is encrypted with a unique per-user Data Encryption Key (DEK). Plaintext
-              document numbers, addresses, and DOBs never touch the database or server logs.
-            </p>
-          </div>
+        {/* 2 Master Bento Cards (Exact Reference Match) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-4.5 items-stretch">
+          <SelectiveDisclosureFeatureCard />
+          <SelfDestructQRFeatureCard />
+        </div>
 
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-3 hover:border-white/20 hover:translate-y-[-2px] transition-all">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white">
-              <EyeOff className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-semibold text-white">Blind Indexing (HKDF)</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Duplicate document discovery uses irreversible HMAC-SHA256 blind indexes derived from your
-              normalized numbers. No plaintext searchability exists in the database.
-            </p>
-          </div>
-
-          <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-3 hover:border-white/20 hover:translate-y-[-2px] transition-all">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.08] border border-white/15 text-white">
-              <History className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-semibold text-white">Tamper-Evident Audit Chain</h3>
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              Every token issue, document link, and scan writes to a cryptographically linked SHA-256
-              hash chain. Tampering with any log is mathematically detectable in seconds.
-            </p>
-          </div>
+        {/* Bottom Row: 3 Equal Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-4.5 items-stretch">
+          <PasswordlessAuthFeatureCard />
+          <InstantRevokeFeatureCard />
+          <LiveAuditLogFeatureCard />
         </div>
       </section>
 
-      {/* 6. Section: DPDP Act 2023 Principles */}
-      <section id="security" className="scroll-mt-28 rounded-[32px] glass-ios p-6 sm:p-8 space-y-6 max-w-5xl mx-auto border border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-white/[0.08] border border-white/15 flex items-center justify-center text-white">
-            <FileKey2 className="h-5 w-5" />
+      {/* 6. Section: Security (Silicon Sealed Architecture) */}
+      <section id="security" className="scroll-mt-28 space-y-8 sm:space-y-9 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <div className="text-center space-y-2.5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] border border-white/10 px-4 py-1.5 text-[10px] sm:text-[11px] font-bold tracking-[0.14em] text-neutral-300 uppercase backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]" />
+            <span>FORTRESS-GRADE ARCHITECTURE</span>
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-white">DPDP Act 2023 Principles</h3>
-            <p className="text-xs text-neutral-400">Built from the ground up for personal privacy</p>
-          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-white tracking-tight leading-tight">
+            Sealed in Silicon. <span className="text-[#10b981]">Owned by You.</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto leading-relaxed font-normal">
+            Your cryptographic keys never touch cloud servers in plaintext. If our servers vanished tomorrow, your documents remain impenetrable.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs text-neutral-300">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 hover:bg-white/[0.06] transition">
-            <strong className="text-white block font-medium">1. Explicit Consent</strong>
-            <span>Every share request presents a consent screen listing exact claims, duration, and audience.</span>
-          </div>
+        {/* Top Row: 2 Architectural Master Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
+          <SecurityEnclaveMasterCard />
+          <SecurityProofSealCard />
+        </div>
 
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 hover:bg-white/[0.06] transition">
-            <strong className="text-white block font-medium">2. Purpose Limitation</strong>
-            <span>Tokens specify purpose and audience. Verifiers receive only purpose-bound claims.</span>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 hover:bg-white/[0.06] transition">
-            <strong className="text-white block font-medium">3. Data Minimization</strong>
-            <span>Blind indexes prevent duplicate discovery; single-use tokens auto-expire on access.</span>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 hover:bg-white/[0.06] transition">
-            <strong className="text-white block font-medium">4. Right to Erasure</strong>
-            <span>Export complete decrypted wallet JSON and irreversibly erase all personal data in one click.</span>
-          </div>
+        {/* Bottom Row: 3 Security Pillar Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+          <SecurityShredderCard />
+          <SecurityAntiReplayCard />
+          <SecurityZeroTrackersCard />
         </div>
       </section>
     </div>

@@ -42,12 +42,6 @@ async function main() {
     await users.createIndex({ email: 1 }, { unique: true });
     await users.createIndex({ walletId: 1 }, { unique: true });
 
-    // 2. credentials (WebAuthn passkeys)
-    console.log("Creating indexes for: credentials");
-    const credentials = db.collection("credentials");
-    await credentials.createIndex({ credentialId: 1 }, { unique: true });
-    await credentials.createIndex({ userId: 1 });
-
     // 3. sessions
     console.log("Creating indexes for: sessions");
     const sessions = db.collection("sessions");

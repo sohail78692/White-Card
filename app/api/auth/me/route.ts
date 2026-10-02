@@ -37,22 +37,25 @@ export async function GET() {
       ts: { $gte: startOfDay },
     });
 
-    stats = {
-      linkedDocs,
-      verificationsToday,
-      auditEntries,
-    };
+    return NextResponse.json({
+      user: {
+        userId: user.userId,
+        email: user.email,
+        name: user.name,
+        walletId: user.walletId,
+      },
+      stats,
+    });
   } catch {
     // If DB stats query fails, return default 0s
+    return NextResponse.json({
+      user: {
+        userId: user.userId,
+        email: user.email,
+        name: user.name,
+        walletId: user.walletId,
+      },
+      stats,
+    });
   }
-
-  return NextResponse.json({
-    user: {
-      userId: user.userId,
-      email: user.email,
-      name: user.name,
-      walletId: user.walletId,
-    },
-    stats,
-  });
 }

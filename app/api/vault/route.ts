@@ -11,6 +11,7 @@ import {
   validateDocumentNumber,
   maskDocumentNumber,
   DocumentType,
+  sanitizeDetailsForType,
 } from "@/lib/validators/documents";
 import { recordAuditLog } from "@/lib/audit";
 import { logger } from "@/lib/logger";
@@ -33,23 +34,29 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .toArray();
 
-    // Get attachment counts
+    // Get attachment counts and primary preview image IDs
     const attachments = await db
       .collection("attachments")
       .find({ userId: userObjId })
       .toArray();
 
-    const attachmentCountMap = new Map<string, number>();
+    const attachmentInfoMap = new Map<string, { count: number; primaryId?: string }>();
     for (const att of attachments) {
       const docIdStr = att.documentId.toString();
-      attachmentCountMap.set(docIdStr, (attachmentCountMap.get(docIdStr) || 0) + 1);
+      const current = attachmentInfoMap.get(docIdStr) || { count: 0 };
+      current.count += 1;
+      const isImg = att.mime?.startsWith("image/") || att.filename?.toLowerCase().match(/\.(jpg|jpeg|png|webp)$/);
+      if (isImg && (!current.primaryId || att.filename?.includes("FRONT"))) {
+        current.primaryId = att._id.toString();
+      }
+      attachmentInfoMap.set(docIdStr, current);
     }
 
     const decryptedList = docs.map((doc) => {
       let details: Record<string, unknown> = {};
       try {
         const rawJson = decryptField(user.dek, doc.detailsEnc, `${user.userId}:details`);
-        details = JSON.parse(rawJson);
+        details = sanitizeDetailsForType(doc.type as DocumentType, JSON.parse(rawJson));
       } catch {
         details = {};
       }
@@ -60,6 +67,8 @@ export async function GET() {
         status = "expired";
       }
 
+      const attInfo = attachmentInfoMap.get(doc._id.toString());
+
       return {
         id: doc._id.toString(),
         type: doc.type,
@@ -69,7 +78,8 @@ export async function GET() {
         expiry: doc.expiry,
         status,
         details,
-        attachmentCount: attachmentCountMap.get(doc._id.toString()) || 0,
+        attachmentCount: attInfo?.count || 0,
+        primaryAttachmentId: attInfo?.primaryId || null,
         createdAt: doc.createdAt,
       };
     });
@@ -134,9 +144,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Sanitize details strictly for this document type
+    const sanitizedDetails = sanitizeDetailsForType(type as DocumentType, details || {});
+
     // Encrypt sensitive fields with user DEK
     const numberEnc = encryptField(user.dek, normalizedNumber, `${user.userId}:number`);
-    const detailsEnc = encryptField(user.dek, JSON.stringify(details || {}), `${user.userId}:details`);
+    const detailsEnc = encryptField(user.dek, JSON.stringify(sanitizedDetails), `${user.userId}:details`);
 
     const docId = new ObjectId();
     const now = new Date();
@@ -192,6 +205,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      documentId: docId.toString(),
       document: {
         id: docId.toString(),
         type,
@@ -200,7 +214,7 @@ export async function POST(req: NextRequest) {
         issuer,
         expiry,
         status: "self_declared",
-        details,
+        details: sanitizedDetails,
         createdAt: now,
       },
     });

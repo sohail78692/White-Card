@@ -29,8 +29,9 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# IDE files
+# IDE and build cache
 .idea/
 .vscode/
 *.swp
 *.swo
+*.tsbuildinfo

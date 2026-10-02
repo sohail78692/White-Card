@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { KeyRound, ArrowLeft, ShieldCheck, Lock, Zap } from "lucide-react";
+import { KeyRound, ArrowLeft, ShieldCheck, Lock, Zap, Sparkles } from "lucide-react";
 import { AuthForm } from "@/components/AuthForm";
 
 export default function SignInPage() {
@@ -14,46 +14,43 @@ export default function SignInPage() {
           href="/"
           className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-white transition group"
         >
-          <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
+          <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Home</span>
         </Link>
 
         {/* Header */}
-        <div className="space-y-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06] border border-white/[0.08] text-white">
-            <KeyRound className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Access Your Wallet
-            </h1>
-            <p className="text-sm text-neutral-400 mt-1.5">
-              Sign in using a passwordless 6-digit email OTP or biometric WebAuthn passkey.
-            </p>
-          </div>
+        <div className="space-y-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3.5 py-1 text-xs font-semibold text-neutral-300">
+            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+            <span>Fast &amp; Passwordless</span>
+          </span>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            Sign in to <span className="text-[#60a5fa]">White Card</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-neutral-400">
+            Enter your email address to receive a secure 6-digit one-time verification code.
+          </p>
         </div>
 
-        {/* Auth Form Card */}
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-5 sm:p-6">
+        {/* Auth Form Card (Apple iOS Glass) */}
+        <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
           <AuthForm />
         </div>
 
         {/* Trust Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] text-neutral-500 pt-2">
-          <div className="flex items-center gap-1.5">
-            <Lock className="h-3.5 w-3.5" />
-            <span>Client Encrypted</span>
-          </div>
-          <span className="text-white/10">|</span>
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            <span>Zero PII Leakage</span>
-          </div>
-          <span className="text-white/10">|</span>
-          <div className="flex items-center gap-1.5">
-            <Zap className="h-3.5 w-3.5" />
-            <span>Passwordless</span>
-          </div>
+        <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] text-neutral-400 pt-1">
+          <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3 py-1">
+            <Lock className="h-3 w-3 text-blue-400" />
+            <span>Encrypted on Device</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3 py-1">
+            <ShieldCheck className="h-3 w-3 text-emerald-400" />
+            <span>Zero Data Leakage</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full glass-ios-pill px-3 py-1">
+            <Zap className="h-3 w-3 text-amber-400" />
+            <span>No Passwords</span>
+          </span>
         </div>
       </div>
     </div>

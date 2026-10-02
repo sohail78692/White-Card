@@ -168,22 +168,28 @@ export function Header() {
             </nav>
           )}
 
-          {/* Center Live Counters (Authenticated Only) */}
+          {/* Center Dock Navigation (Authenticated) */}
           {user && (
-            <div className="hidden md:flex items-center gap-2 text-xs">
-              <div className="flex items-center gap-1.5 rounded-full bg-white/[0.05] px-3 py-1 border border-white/10 text-neutral-300 shadow-sm">
-                <CreditCard className="h-3.5 w-3.5 text-neutral-300" />
-                <span>Linked: <strong className="text-white font-mono">{stats.linkedDocs}</strong></span>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-white/[0.05] px-3 py-1 border border-white/10 text-neutral-300 shadow-sm">
-                <FileCheck2 className="h-3.5 w-3.5 text-neutral-300" />
-                <span>Verifications: <strong className="text-white font-mono">{stats.verificationsToday}</strong></span>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-white/[0.05] px-3 py-1 border border-white/10 text-neutral-300 shadow-sm">
-                <Activity className="h-3.5 w-3.5 text-neutral-300" />
-                <span>Audit: <strong className="text-white font-mono">{stats.auditEntries}</strong></span>
-              </div>
-            </div>
+            <nav className="hidden md:flex items-center gap-1 rounded-full bg-white/[0.04] p-1 border border-white/5">
+              {authNavLinks.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 ${
+                      isActive
+                        ? "bg-blue-600/35 text-white shadow-[0_0_14px_rgba(59,130,246,0.4)] border border-blue-400/40"
+                        : "text-neutral-300 hover:text-white hover:bg-white/10 font-medium"
+                    }`}
+                  >
+                    <Icon className={`h-3.5 w-3.5 ${isActive ? "text-blue-300" : "text-neutral-400"}`} />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
           )}
 
           {/* 3. Right Side Controls */}
@@ -268,10 +274,10 @@ export function Header() {
           </div>
         )}
 
-        {/* Authenticated Floating Sub-bar */}
+        {/* Authenticated Floating Sub-bar (Mobile Only) */}
         {user && (
-          <div className="mt-2 flex justify-center">
-            <nav className="inline-flex items-center gap-1.5 rounded-full bg-slate-950/80 backdrop-blur-xl border border-white/10 p-1 shadow-lg overflow-x-auto no-scrollbar max-w-full">
+          <div className="mt-2 flex md:hidden justify-center">
+            <nav className="inline-flex items-center gap-1.5 rounded-full bg-[#0a0f1d]/90 backdrop-blur-xl border border-white/10 p-1 shadow-lg overflow-x-auto no-scrollbar max-w-full">
               {authNavLinks.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -279,13 +285,13 @@ export function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex shrink-0 items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all ${
+                    className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                       isActive
-                        ? "bg-indigo-600/30 text-indigo-200 border border-indigo-500/40 shadow-sm"
-                        : "text-slate-400 hover:bg-white/10 hover:text-white"
+                        ? "bg-blue-600/35 text-white border border-blue-400/40 shadow-sm"
+                        : "text-neutral-400 hover:bg-white/10 hover:text-white"
                     }`}
                   >
-                    <Icon className={`h-3.5 w-3.5 ${isActive ? "text-indigo-400" : ""}`} />
+                    <Icon className={`h-3.5 w-3.5 ${isActive ? "text-blue-300" : ""}`} />
                     <span>{item.label}</span>
                   </Link>
                 );

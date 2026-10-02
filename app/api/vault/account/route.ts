@@ -23,7 +23,6 @@ export async function DELETE(req: NextRequest) {
     // Irreversible deletion of all user data across collections
     await Promise.all([
       db.collection("users").deleteOne({ _id: userObjId }),
-      db.collection("credentials").deleteMany({ userId: userObjId }),
       db.collection("sessions").deleteMany({ userId: userObjId }),
       db.collection("documents").deleteMany({ userId: userObjId }),
       db.collection("attachments").deleteMany({ userId: userObjId }),
