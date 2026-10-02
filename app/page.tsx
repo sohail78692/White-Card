@@ -390,37 +390,50 @@ function SelectiveDisclosureFeatureCard() {
   };
 
   return (
-    <div className="relative group rounded-[22px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
-      {/* Subtle Glass Specular Sheen Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[22px]" />
+    <div className="relative group rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[310px]">
+      {/* Subtle ambient glass tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
+
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      <img
+        src="/privacy/share-only.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header: Icon + Titles on left, Pill on right */}
       <div className="relative z-10 flex items-start justify-between gap-3">
-        <div className="flex items-start gap-2.5 sm:gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] flex items-center justify-center shrink-0 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
-            <EyeOff className="w-4 h-4 stroke-[1.8]" />
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+            <EyeOff className="w-4 h-4 stroke-[2]" />
           </div>
           <div>
-            <h3 className="text-[15px] sm:text-[17px] font-bold text-[#F5F5F7] tracking-tight">
+            <h3 className="text-base sm:text-[17px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
               Share Only What You Need
             </h3>
-            <p className="text-[11.5px] sm:text-xs text-[#8B9099] mt-0.5 leading-normal">
+            <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] mt-0.5 leading-snug drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
               Prove eligibility without revealing your full identity details.
             </p>
           </div>
         </div>
-        <span className="text-[9.5px] font-bold tracking-wider rounded-full bg-gradient-to-r from-[#2997FF]/15 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] px-2.5 py-0.5 shrink-0 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
+        <span className="text-[9.5px] font-bold tracking-wider rounded-full bg-blue-500/[0.18] border border-blue-500/40 text-[#38bdf8] px-2.5 py-1 shrink-0 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
           SELECTIVE SHARING
         </span>
       </div>
 
-      {/* Information to Share Panel (Inset Glass Tray) */}
-      <div className="relative z-10 rounded-2xl bg-black/50 border border-white/[0.08] p-3 sm:p-3.5 flex-1 flex flex-col justify-between mt-3.5 sm:mt-4 min-h-[205px] shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06),0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+      {/* Information to Share Panel (Transparent Glass Tray with Visible Text) */}
+      <div className="relative z-10 rounded-[16px] bg-white/[0.04] border border-white/[0.12] p-3 flex-1 flex flex-col justify-between mt-3 max-w-[340px] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-xl">
         {/* Panel Header */}
         <div className="flex items-center justify-between px-1 pb-1">
-          <span className="text-[11.5px] text-[#8B9099] font-medium">Information to Share</span>
-          <span className="text-[11.5px] text-[#22C55E] font-medium flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
+          <span className="text-[11px] text-white font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">Information to Share</span>
+          <span className="text-[11px] text-[#00E599] font-medium flex items-center gap-1.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
+            </span>
             <span>You&apos;re in control</span>
           </span>
         </div>
@@ -431,51 +444,43 @@ function SelectiveDisclosureFeatureCard() {
             <div
               key={item.id}
               onClick={() => toggleItem(item.id)}
-              className="flex items-center justify-between p-2 sm:p-2.5 rounded-xl bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.08] hover:border-white/[0.18] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200 cursor-pointer select-none active:scale-[0.99] backdrop-blur-md"
+              className="flex items-center justify-between p-2 rounded-[11px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.18] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-200 cursor-pointer select-none active:scale-[0.99] backdrop-blur-sm"
             >
               <div className="flex items-center gap-2.5">
                 {item.type === "user" && (
-                  <div className="w-8 h-8 rounded-xl bg-[#091D34] border border-[#2997FF]/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-                    <svg className="w-4 h-4 fill-[#2997FF]" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
+                  <div className="w-7 h-7 rounded-[8px] bg-[#0c234b]/90 border border-[#1e4d94] text-[#2997FF] flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(41,151,255,0.3)]">
+                    <User className="w-3.5 h-3.5" />
                   </div>
                 )}
                 {item.type === "car" && (
-                  <div className="w-8 h-8 rounded-xl bg-[#1D1233] border border-[#A78BFA]/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-                    <svg className="w-4 h-4 fill-[#A78BFA]" viewBox="0 0 24 24">
-                      <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z" />
-                      <circle cx="7.5" cy="14.5" r="1.5" className="fill-[#1D1233]" />
-                      <circle cx="16.5" cy="14.5" r="1.5" className="fill-[#1D1233]" />
-                    </svg>
+                  <div className="w-7 h-7 rounded-[8px] bg-[#221340]/90 border border-[#5b21b6] text-[#c084fc] flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(192,132,252,0.3)]">
+                    <Car className="w-3.5 h-3.5" />
                   </div>
                 )}
                 {item.type === "address" && (
-                  <div className="w-8 h-8 rounded-xl bg-[#2A1B08] border border-[#F59E0B]/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-                    <svg className="w-4 h-4 fill-[#F59E0B]" viewBox="0 0 24 24">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                    </svg>
+                  <div className="w-7 h-7 rounded-[8px] bg-[#331c08]/90 border border-[#b45309] text-[#f59e0b] flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(245,158,11,0.3)]">
+                    <MapPin className="w-3.5 h-3.5" />
                   </div>
                 )}
                 <div className="text-left">
-                  <div className="text-xs sm:text-[12px] font-bold text-[#F5F5F7]">{item.label}</div>
-                  <div className="text-[10px] text-[#8B9099]">{item.sub}</div>
+                  <div className="text-[12px] font-bold text-white leading-tight drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]">{item.label}</div>
+                  <div className="text-[10px] text-[#CBD5E1] mt-0.5 leading-none font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">{item.sub}</div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 {item.status === "verified" ? (
-                  <span className="rounded-full bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/12 border border-[#2997FF]/40 text-[#2997FF] px-2 py-0.5 text-[10px] font-semibold flex items-center gap-1.5 shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
-                    <CheckCircle2 className="w-3 h-3 fill-[#2997FF] text-[#080E1B]" />
+                  <span className="rounded-full bg-blue-500/[0.22] border border-blue-500/50 text-[#38bdf8] px-2 py-0.5 text-[9.5px] font-bold flex items-center gap-1 shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-md">
+                    <CheckCircle2 className="w-2.5 h-2.5 fill-[#38bdf8] text-[#080d19]" />
                     <span>Verified</span>
                   </span>
                 ) : (
-                  <span className="rounded-full bg-white/[0.06] border border-white/[0.12] text-[#A1A1AA] px-2 py-0.5 text-[10px] font-medium flex items-center gap-1.5 shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md">
-                    <EyeOff className="w-3 h-3 stroke-[2]" />
+                  <span className="rounded-full bg-white/[0.08] border border-white/20 text-[#E2E8F0] px-2 py-0.5 text-[9.5px] font-semibold flex items-center gap-1 shrink-0 backdrop-blur-md">
+                    <EyeOff className="w-2.5 h-2.5 stroke-[2]" />
                     <span>Hidden</span>
                   </span>
                 )}
-                <ChevronRight className="w-3.5 h-3.5 text-[#8B9099]" />
+                <ChevronRight className="w-3 h-3 text-[#CBD5E1]/70" />
               </div>
             </div>
           ))}
@@ -486,7 +491,7 @@ function SelectiveDisclosureFeatureCard() {
 }
 
 function SelfDestructQRFeatureCard() {
-  const [timeLeft, setTimeLeft] = React.useState(284); // 284s = 04:44
+  const [timeLeft, setTimeLeft] = React.useState(120); // 02:00
   const [qrUrl, setQrUrl] = React.useState<string>("");
 
   const generateQr = React.useCallback(async () => {
@@ -509,99 +514,105 @@ function SelfDestructQRFeatureCard() {
   React.useEffect(() => {
     generateQr();
     const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 284));
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 120));
     }, 1000);
     return () => clearInterval(timer);
   }, [generateQr]);
 
   const handleGenerateNewQr = () => {
     sound.playPop();
-    setTimeLeft(284); // reset to 04:44
+    setTimeLeft(120); // reset to 02:00
     generateQr();
   };
 
   const mins = Math.floor(timeLeft / 60);
   const secs = timeLeft % 60;
-  const formattedTime = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  const formattedTime = `${String(mins).padStart(2, "0")} : ${String(secs).padStart(2, "0")}`;
 
   return (
-    <div className="relative group rounded-[22px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
-      {/* Subtle Glass Specular Sheen Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[22px]" />
+    <div className="relative group rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[310px]">
+      {/* Subtle ambient glass tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
+
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      <img
+        src="/privacy/temporary-qr.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header: Icon + Titles on left, Pill on right */}
       <div className="relative z-10 flex items-start justify-between gap-3">
-        <div className="flex items-start gap-2.5 sm:gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] flex items-center justify-center shrink-0 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
-            <Zap className="w-4 h-4 stroke-[1.8]" />
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+            <Zap className="w-4 h-4 stroke-[2]" />
           </div>
           <div>
-            <h3 className="text-[15px] sm:text-[17px] font-bold text-[#F5F5F7] tracking-tight">
+            <h3 className="text-base sm:text-[17px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
               Temporary QR Sharing
             </h3>
-            <p className="text-[11.5px] sm:text-xs text-[#8B9099] mt-0.5 leading-normal">
+            <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] mt-0.5 leading-snug drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
               Create a QR code that expires automatically after a short time.
             </p>
           </div>
         </div>
-        <span className="text-[9.5px] font-bold tracking-wider rounded-full bg-gradient-to-r from-[#2997FF]/15 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] px-2.5 py-0.5 shrink-0 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
+        <span className="text-[9.5px] font-bold tracking-wider rounded-full bg-blue-500/[0.18] border border-blue-500/40 text-[#38bdf8] px-2.5 py-1 shrink-0 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md">
           AUTO-EXPIRING ACCESS
         </span>
       </div>
 
-      {/* QR & Verification Panel (Inset Glass Tray) */}
-      <div className="relative z-10 rounded-2xl bg-black/50 border border-white/[0.08] p-3 sm:p-3.5 mt-3.5 sm:mt-4 flex-1 flex flex-col justify-center min-h-[205px] shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06),0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl">
-        <div className="flex flex-col sm:flex-row items-center gap-4.5 sm:gap-5">
-          {/* Left: QR Code with Clean Thin Blue Corner Markers */}
-          <div className="relative p-1.5 shrink-0 flex items-center justify-center">
-            {/* Thin Blue Corner Markers with subtle contrast */}
-            <div className="absolute inset-0 pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
-              <span className="absolute top-0 left-0 w-4 h-4 border-t-[2px] border-l-[2px] border-[#2997FF] rounded-tl-lg" />
-              <span className="absolute top-0 right-0 w-4 h-4 border-t-[2px] border-r-[2px] border-[#2997FF] rounded-tr-lg" />
-              <span className="absolute bottom-0 left-0 w-4 h-4 border-b-[2px] border-l-[2px] border-[#2997FF] rounded-bl-lg" />
-              <span className="absolute bottom-0 right-0 w-4 h-4 border-b-[2px] border-r-[2px] border-[#2997FF] rounded-br-lg" />
-            </div>
-
-            {/* QR Pattern Frame */}
-            <div className="w-24 h-24 sm:w-26 sm:h-26 rounded-xl bg-black/85 border border-white/[0.1] p-1.5 flex items-center justify-center overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_20px_rgba(0,0,0,0.6)] backdrop-blur-md">
-              {qrUrl ? (
-                <img
-                  src={qrUrl}
-                  alt="Temporary Sharing QR Code"
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <QrCode className="w-full h-full text-white/90" />
-              )}
-            </div>
+      {/* QR & Verification Panel */}
+      <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 mt-3 max-w-[340px]">
+        {/* Left: QR Code with Cyan Bracket Glow */}
+        <div className="relative p-2 shrink-0 flex items-center justify-center">
+          {/* Corner Brackets */}
+          <div className="absolute inset-0 pointer-events-none drop-shadow-[0_0_8px_rgba(41,151,255,0.7)]">
+            <span className="absolute top-0 left-0 w-3.5 h-3.5 border-t-[2.5px] border-l-[2.5px] border-[#2997FF] rounded-tl-md" />
+            <span className="absolute top-0 right-0 w-3.5 h-3.5 border-t-[2.5px] border-r-[2.5px] border-[#2997FF] rounded-tr-md" />
+            <span className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b-[2.5px] border-l-[2.5px] border-[#2997FF] rounded-bl-md" />
+            <span className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b-[2.5px] border-r-[2.5px] border-[#2997FF] rounded-br-md" />
           </div>
 
-          {/* Right Side: Active, Countdown, Description, Button */}
-          <div className="flex-1 w-full space-y-1.5 text-left">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
-              <span className="text-xs font-semibold text-[#22C55E]">Active</span>
-            </div>
+          <div className="w-[84px] h-[84px] rounded-xl bg-black/90 border border-white/[0.14] p-1.5 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-md">
+            {qrUrl ? (
+              <img src={qrUrl} alt="Temporary Sharing QR Code" className="w-full h-full object-contain" />
+            ) : (
+              <QrCode className="w-full h-full text-white/90" />
+            )}
+          </div>
+        </div>
 
-            <div>
-              <div className="text-[10.5px] text-[#8B9099] font-medium">Expires in</div>
-              <div className="text-2xl sm:text-[26px] font-extrabold text-[#F5F5F7] tracking-wider font-mono my-0.5 tabular-nums leading-none">
-                {formattedTime}
-              </div>
-              <p className="text-[11px] text-[#8B9099] leading-tight mt-1">
-                This QR code will expire automatically.
-              </p>
-            </div>
+        {/* Right Side: Active, Countdown, Description, Button */}
+        <div className="flex-1 w-full space-y-1 text-left">
+          <div className="flex items-center gap-1.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
+            </span>
+            <span className="text-[11.5px] font-bold text-[#00E599]">Active</span>
+          </div>
 
-            <div className="pt-1">
-              <button
-                onClick={handleGenerateNewQr}
-                className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-b from-[#38bdf8] via-[#2997FF] to-[#1D7AD9] hover:brightness-105 text-white text-xs font-semibold py-2 px-3 shadow-[0_2px_8px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
-              >
-                <Clock className="w-3.5 h-3.5 text-white" />
-                <span>Generate New QR</span>
-              </button>
+          <div>
+            <div className="text-[10px] text-[#94A3B8] font-bold uppercase tracking-wider">Expires in</div>
+            <div className="text-[24px] font-extrabold text-white tracking-wider font-mono my-0.5 tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              {formattedTime}
             </div>
+            <p className="text-[11px] text-[#CBD5E1] leading-tight font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+              This QR code will expire automatically.
+            </p>
+          </div>
+
+          <div className="pt-1">
+            <button
+              onClick={handleGenerateNewQr}
+              className="w-full flex items-center justify-center gap-1.5 rounded-[10px] bg-gradient-to-r from-[#2997FF] to-[#0071e3] hover:from-[#38bdf8] hover:to-[#2997FF] text-white text-[10.5px] font-semibold py-1.5 px-3 shadow-[0_4px_16px_rgba(41,151,255,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            >
+              <Clock className="w-3 h-3 text-white" />
+              <span>Generate New QR</span>
+            </button>
           </div>
         </div>
       </div>
@@ -623,37 +634,53 @@ function PasswordlessAuthFeatureCard() {
   };
 
   return (
-    <div className="relative group rounded-[20px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-3.5 sm:p-4.5 pt-3.5 pb-3.5 sm:pt-4 sm:pb-4 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
-      {/* Subtle Glass Specular Sheen */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[20px]" />
+    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[240px] sm:min-h-[260px]">
+      {/* Subtle ambient glass tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[18px]" />
 
-      <div className="relative z-10">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#2997FF]/25 to-[#2997FF]/08 border border-[#2997FF]/35 text-[#2997FF] flex items-center justify-center shrink-0 mb-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
-          <Key className="w-4 h-4 stroke-[1.8]" />
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      <img
+        src="/privacy/passwordless-otp.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
+
+      {/* Top Header Badge */}
+      <div className="relative z-10 flex items-start gap-2.5">
+        <div className="w-8 h-8 rounded-xl bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+          <Key className="w-4 h-4 stroke-[2]" />
         </div>
-        <h3 className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F5F5F7] tracking-tight">
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 space-y-1.5 text-left max-w-[195px] sm:max-w-[215px]">
+        <h3 className="text-[15px] sm:text-[16px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
           Passwordless Email OTP
         </h3>
-        <p className="text-[11.5px] text-[#8B9099] leading-relaxed mt-1 font-normal">
+        <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           No passwords to forget, steal, or leak. Your wallet authenticates with hardware-random one-time verification tokens.
         </p>
       </div>
 
-      <div className="relative z-10 rounded-xl bg-black/50 border border-white/[0.08] p-2 sm:p-2.5 flex items-center justify-between gap-2 mt-3 sm:mt-3.5 shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+      {/* Bottom Tray */}
+      <div className="relative z-10 rounded-[12px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.12] hover:border-white/[0.2] p-2 sm:p-2.5 flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300">
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white/80 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <div className="w-7 h-7 rounded-[8px] bg-[#0c234b]/80 border border-[#1e4d94] text-[#2997FF] flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(41,151,255,0.25)]">
             <Mail className="w-3.5 h-3.5" />
           </div>
           <div className="min-w-0 pr-1">
-            <div className="text-[11.5px] font-bold text-[#F5F5F7] truncate">Secure 6-Digit OTP</div>
-            <div className="text-[9.5px] text-[#8B9099] truncate">Cryptographic Verification</div>
+            <div className="text-[11px] font-bold text-white truncate leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Secure 6-Digit OTP</div>
+            <div className="text-[9.5px] text-[#CBD5E1] truncate mt-0.5 font-medium">Cryptographic Verification</div>
           </div>
         </div>
 
         <button
           onClick={handleSimulateAuth}
           disabled={authState !== "idle"}
-          className="bg-gradient-to-b from-[#38bdf8] via-[#2997FF] to-[#1D7AD9] hover:brightness-105 text-white text-[10.5px] font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg shadow-[0_2px_6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-200 active:scale-95 shrink-0 cursor-pointer disabled:opacity-75 whitespace-nowrap"
+          className="rounded-[10px] bg-gradient-to-r from-[#2997FF] to-[#0071e3] hover:from-[#38bdf8] hover:to-[#2997FF] text-white text-[10px] font-semibold px-2.5 sm:px-3 py-1.5 shadow-[0_4px_14px_rgba(41,151,255,0.4)] transition-all duration-200 active:scale-95 shrink-0 cursor-pointer disabled:opacity-75 whitespace-nowrap"
         >
           {authState === "idle" ? "Simulate OTP →" : authState === "sending" ? "Sending..." : "Verified ✓"}
         </button>
@@ -666,26 +693,48 @@ function InstantRevokeFeatureCard() {
   const [isRevoked, setIsRevoked] = React.useState(false);
 
   return (
-    <div className="relative group rounded-[20px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-3.5 sm:p-4.5 pt-3.5 pb-3.5 sm:pt-4 sm:pb-4 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
-      {/* Subtle Glass Specular Sheen */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[20px]" />
+    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.15)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[240px] sm:min-h-[260px]">
+      {/* Subtle ambient glass red tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.05] via-transparent to-red-500/[0.02] pointer-events-none rounded-[18px]" />
 
-      <div className="relative z-10">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#FF3B5C]/25 to-[#FF3B5C]/08 border border-[#FF3B5C]/35 text-[#FF3B5C] flex items-center justify-center shrink-0 mb-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
-          <Lock className="w-4 h-4 stroke-[1.8]" />
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      <img
+        src="/privacy/instant-revocation.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
+
+      {/* Top Header Badge */}
+      <div className="relative z-10 flex items-start gap-2.5">
+        <div className="w-8 h-8 rounded-xl bg-red-500/[0.15] border border-red-500/35 text-[#FF3B5C] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(255,59,92,0.4)] transition-shadow duration-300">
+          <Lock className="w-4 h-4 stroke-[2]" />
         </div>
-        <h3 className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F5F5F7] tracking-tight">
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 space-y-1.5 text-left max-w-[195px] sm:max-w-[215px]">
+        <h3 className="text-[15px] sm:text-[16px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
           Instant 1-Tap Access Revocation
         </h3>
-        <p className="text-[11.5px] text-[#8B9099] leading-relaxed mt-1 font-normal">
+        <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           Changed your mind after showing an ID? Kill the token remotely in real time. Verifiers immediately see an invalidated claim notice.
         </p>
       </div>
 
-      <div className="relative z-10 rounded-xl bg-black/50 border border-white/[0.08] p-2 sm:p-2.5 flex items-center justify-between gap-2 mt-3 sm:mt-3.5 shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+      {/* Bottom Tray */}
+      <div className="relative z-10 rounded-[12px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.12] hover:border-white/[0.2] p-2 sm:p-2.5 flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300">
         <div>
-          <div className="text-[9.5px] text-[#8B9099] font-medium">Token Status</div>
-          <div className={`text-[11.5px] font-bold mt-0.5 ${isRevoked ? "text-[#FF3B5C]" : "text-[#22C55E]"}`}>
+          <div className="text-[9.5px] text-[#94A3B8] font-semibold leading-none uppercase tracking-wide">Token Status</div>
+          <div className={`text-[11px] font-bold mt-1 flex items-center gap-1.5 ${isRevoked ? "text-[#FF3B5C]" : "text-[#00E599]"}`}>
+            {!isRevoked && (
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
+              </span>
+            )}
             {isRevoked ? "Terminated ✕" : "Active & Authorised"}
           </div>
         </div>
@@ -695,10 +744,10 @@ function InstantRevokeFeatureCard() {
             sound.playPop();
             setIsRevoked(!isRevoked);
           }}
-          className={`text-white text-[10.5px] font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all duration-200 active:scale-95 shrink-0 cursor-pointer whitespace-nowrap ${
+          className={`text-white text-[10px] font-semibold px-2.5 sm:px-3 py-1.5 rounded-[10px] flex items-center gap-1.5 transition-all duration-200 active:scale-95 shrink-0 cursor-pointer whitespace-nowrap ${
             isRevoked
-              ? "bg-white/[0.08] hover:bg-white/[0.14] text-neutral-300 border border-white/10"
-              : "bg-gradient-to-b from-[#FF526F] via-[#FF3B5C] to-[#D92D4A] hover:brightness-105 shadow-[0_2px_6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.25)]"
+              ? "bg-white/[0.1] hover:bg-white/[0.16] text-white border border-white/20"
+              : "bg-gradient-to-r from-[#e11d48] to-[#be123c] hover:from-[#f43f5e] hover:to-[#e11d48] shadow-[0_4px_16px_rgba(225,29,72,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]"
           }`}
         >
           <Trash2 className="w-3 h-3" />
@@ -711,41 +760,57 @@ function InstantRevokeFeatureCard() {
 
 function LiveAuditLogFeatureCard() {
   const [logs] = React.useState([
-    { id: 1, action: "Driving License age proof shared", time: "Just now", dot: "bg-[#22C55E]" },
+    { id: 1, action: "Driving License age proof shared", time: "Just now", dot: "bg-[#00E599]" },
     { id: 2, action: "PAN Card masked copy generated", time: "18m ago", dot: "bg-[#2997FF]" },
-    { id: 3, action: "Voter ID token expired and cleared", time: "1h ago", dot: "bg-[#3B82F6]" },
+    { id: 3, action: "Voter ID token expired and cleared", time: "1h ago", dot: "bg-[#38bdf8]" },
   ]);
 
   return (
-    <div className="relative group rounded-[20px] bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent bg-[#0a0d14]/75 border border-white/[0.12] hover:border-white/[0.22] backdrop-blur-2xl shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.6)] p-3.5 sm:p-4.5 pt-3.5 pb-3.5 sm:pt-4 sm:pb-4 flex flex-col justify-between h-full transition-all duration-300 overflow-hidden">
-      {/* Subtle Glass Specular Sheen */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] via-white/[0.01] to-transparent pointer-events-none rounded-[20px]" />
+    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.15)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[240px] sm:min-h-[260px]">
+      {/* Subtle ambient glass emerald tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.05] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[18px]" />
 
-      <div className="relative z-10">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-[#22C55E]/25 to-[#22C55E]/08 border border-[#22C55E]/35 text-[#22C55E] flex items-center justify-center shrink-0 mb-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(0,0,0,0.4)]">
-          <FileText className="w-4 h-4 stroke-[1.8]" />
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      <img
+        src="/privacy/verification-log.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
+
+      {/* Top Header Badge */}
+      <div className="relative z-10 flex items-start gap-2.5">
+        <div className="w-8 h-8 rounded-xl bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(0,229,153,0.4)] transition-shadow duration-300">
+          <FileText className="w-4 h-4 stroke-[2]" />
         </div>
-        <h3 className="text-[14.5px] sm:text-[15.5px] font-bold text-[#F5F5F7] tracking-tight">
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 space-y-1.5 text-left max-w-[195px] sm:max-w-[215px]">
+        <h3 className="text-[15px] sm:text-[16px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
           Real-Time Verification Log
         </h3>
-        <p className="text-[11.5px] text-[#8B9099] leading-relaxed mt-1 font-normal">
+        <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           Every scan, share, or download writes to your local private ledger. You always know who inspected your credentials and when.
         </p>
       </div>
 
-      <div className="relative z-10 rounded-xl bg-black/50 border border-white/[0.08] p-2 sm:p-2.5 space-y-1 mt-3 sm:mt-3.5 shadow-[inset_0_1.5px_1px_rgba(0,0,0,0.8),inset_0_-1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+      {/* Bottom Tray */}
+      <div className="relative z-10 rounded-[12px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.12] hover:border-white/[0.2] p-2.5 space-y-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300">
         {logs.map((item) => (
           <div
             key={item.id}
-            className="flex items-center justify-between text-xs py-0.5 text-[#8B9099] hover:text-white transition cursor-pointer select-none"
+            className="flex items-center justify-between text-xs py-0.5 text-neutral-400 hover:text-white transition cursor-pointer select-none"
           >
             <div className="flex items-center gap-2 truncate pr-2">
-              <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0`} />
-              <span className="truncate text-[#F5F5F7] text-[10.5px] font-medium">{item.action}</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0 shadow-[0_0_6px_currentColor]`} />
+              <span className="truncate text-white text-[11px] font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">{item.action}</span>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <span className="text-[9.5px] text-[#8B9099]">{item.time}</span>
-              <ChevronRight className="w-3 h-3 text-[#8B9099]" />
+              <span className="text-[10px] text-[#CBD5E1] font-medium">{item.time}</span>
+              <ChevronRight className="w-3 h-3 text-[#64748B]" />
             </div>
           </div>
         ))}
@@ -756,24 +821,24 @@ function LiveAuditLogFeatureCard() {
 
 function SecurityEnclaveMasterCard() {
   return (
-    <div className="relative group rounded-[20px] bg-[#080d19]/80 border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_24px_rgba(255,255,255,0.02)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[285px] sm:min-h-[310px] backdrop-blur-2xl">
+    <div className="relative group rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[285px] sm:min-h-[310px]">
       {/* Subtle ambient glass tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
 
-      {/* Background Illustration aligned right with smooth left fade mask & subtle hover float */}
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
       <img
         src="/security/silicon-sealed.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_20%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right */}
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-blue-500/[0.12] border border-blue-500/30 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl group-hover:shadow-[0_0_12px_rgba(41,151,255,0.35)] transition-shadow duration-300">
-          <Cpu className="w-3.5 h-3.5 stroke-[1.8]" />
+        <div className="w-7 h-7 rounded-lg bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+          <Cpu className="w-3.5 h-3.5 stroke-[2]" />
         </div>
         <span className="text-[10px] font-bold tracking-[0.14em] text-[#2997FF] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           HARDWARE ISOLATION
@@ -783,17 +848,17 @@ function SecurityEnclaveMasterCard() {
       {/* Content & Inner Boxes */}
       <div className="relative z-10 mt-auto pt-3 space-y-3.5">
         <div className="text-left space-y-1.5 max-w-[245px] sm:max-w-[270px]">
-          <h3 className="text-xl sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <h3 className="text-xl sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
             Silicon-Sealed<br />Encryption Keys
           </h3>
-          <p className="text-[11.5px] sm:text-[12px] text-[#C4C7D0] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          <p className="text-[11.5px] sm:text-[12px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
             Your cryptographic keys are forged and sealed inside your phone&apos;s Secure Enclave. They never travel over any network and cannot be extracted—even if your device is plugged into a computer.
           </p>
         </div>
 
         {/* Two Inside Boxes Side by Side (Frosted Glass Look) */}
         <div className="grid grid-cols-2 gap-2.5 max-w-[340px]">
-          <div className="rounded-[12px] bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.14] hover:border-white/[0.22] px-3 py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_16px_rgba(0,0,0,0.4)] transition-all duration-300">
+          <div className="rounded-[12px] bg-[#0a0f1d]/92 hover:bg-[#0d1426]/95 border border-white/[0.14] hover:border-white/[0.22] px-3 py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-300">
             <div className="w-8 h-8 rounded-[10px] bg-[#0a1f3d] border border-[#1e4d94]/80 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[0_2px_10px_rgba(41,151,255,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]">
               <svg viewBox="0 0 24 24" fill="none" className="w-[18px] h-[18px]">
                 <path d="M12 2.5L4.5 5.5v6c0 4.8 3.2 8.5 7.5 9.8 4.3-1.3 7.5-5 7.5-9.8v-6L12 2.5z" stroke="#2997FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -801,11 +866,11 @@ function SecurityEnclaveMasterCard() {
               </svg>
             </div>
             <div className="min-w-0">
-              <div className="text-[8.5px] text-[#8B9099] font-medium leading-none truncate">Encryption Standard</div>
+              <div className="text-[8.5px] text-[#94A3B8] font-medium leading-none truncate">Encryption Standard</div>
               <div className="text-[11.5px] font-bold text-white font-mono mt-0.5">AES-256-GCM</div>
             </div>
           </div>
-          <div className="rounded-[12px] bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.14] hover:border-white/[0.22] px-3 py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_16px_rgba(0,0,0,0.4)] transition-all duration-300">
+          <div className="rounded-[12px] bg-[#0a0f1d]/92 hover:bg-[#0d1426]/95 border border-white/[0.14] hover:border-white/[0.22] px-3 py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-300">
             <div className="w-8 h-8 rounded-[10px] bg-[#0a1f3d] border border-[#1e4d94]/80 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[0_2px_10px_rgba(41,151,255,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]">
               <svg viewBox="0 0 24 24" fill="none" className="w-[18px] h-[18px]">
                 <g transform="rotate(-45 12 12)">
@@ -814,7 +879,7 @@ function SecurityEnclaveMasterCard() {
               </svg>
             </div>
             <div className="min-w-0">
-              <div className="text-[8.5px] text-[#8B9099] font-medium leading-none truncate">Key Custody</div>
+              <div className="text-[8.5px] text-[#94A3B8] font-medium leading-none truncate">Key Custody</div>
               <div className="text-[11.5px] font-bold text-[#00E599] mt-0.5 whitespace-nowrap flex items-center gap-1.5">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -842,24 +907,24 @@ function SecurityProofSealCard() {
   };
 
   return (
-    <div className="relative group rounded-[20px] bg-[#080d19]/80 border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_24px_rgba(255,255,255,0.02)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[285px] sm:min-h-[310px] backdrop-blur-2xl">
+    <div className="relative group rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[285px] sm:min-h-[310px]">
       {/* Subtle ambient glass tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
 
-      {/* Background Illustration aligned right with smooth left fade mask & subtle hover float */}
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
       <img
         src="/security/sha256-chain.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_20%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right */}
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-blue-500/[0.12] border border-blue-500/30 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl group-hover:shadow-[0_0_12px_rgba(41,151,255,0.35)] transition-shadow duration-300">
-          <FileText className="w-3.5 h-3.5 stroke-[1.8]" />
+        <div className="w-7 h-7 rounded-lg bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+          <FileText className="w-3.5 h-3.5 stroke-[2]" />
         </div>
         <span className="text-[10px] font-bold tracking-[0.14em] text-[#2997FF] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           CRYPTOGRAPHIC INTEGRITY
@@ -869,23 +934,23 @@ function SecurityProofSealCard() {
       {/* Content & Inside Proof Box */}
       <div className="relative z-10 mt-auto pt-3 space-y-3.5">
         <div className="text-left space-y-1.5 max-w-[245px] sm:max-w-[270px]">
-          <h3 className="text-xl sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <h3 className="text-xl sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
             Tamper-Evident<br />SHA-256 Chain
           </h3>
-          <p className="text-[11.5px] sm:text-[12px] text-[#C4C7D0] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          <p className="text-[11.5px] sm:text-[12px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
             Every document verification is stamped into an immutable cryptographic hash chain. Any attempt to alter or counterfeit credentials is mathematically rejected in milliseconds.
           </p>
         </div>
 
         {/* The Exact Inside Box (Frosted Glass Look) */}
-        <div className="rounded-[12px] bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.14] hover:border-white/[0.22] p-2.5 flex items-center justify-between gap-2 backdrop-blur-xl max-w-[420px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_16px_rgba(0,0,0,0.4)] transition-all duration-300">
+        <div className="rounded-[12px] bg-[#0a0f1d]/92 hover:bg-[#0d1426]/95 border border-white/[0.14] hover:border-white/[0.22] p-2.5 flex items-center justify-between gap-2 backdrop-blur-xl max-w-[420px] shadow-[0_8px_24px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-300">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="w-8 h-8 rounded-[10px] bg-[#0c234b] border border-[#1e4d94] text-[#2997FF] flex items-center justify-center shrink-0 shadow-[0_2px_10px_rgba(41,151,255,0.3),inset_0_1px_0_rgba(255,255,255,0.25)]">
               <FileCheck className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[11.5px] font-bold text-white leading-tight">Cryptographic Seal State</div>
-              <div className="text-[9px] text-[#8B9099] font-medium leading-tight mt-0.5">Merkle Genesis Proof</div>
+              <div className="text-[9px] text-[#94A3B8] font-medium leading-tight mt-0.5">Merkle Genesis Proof</div>
               <div className="text-[8px] sm:text-[8.5px] font-mono text-[#00E599] truncate mt-0.5">
                 {proofHash}
               </div>
@@ -893,7 +958,7 @@ function SecurityProofSealCard() {
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
-            <div className="rounded-full bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1.5 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
+            <div className="rounded-full bg-emerald-500/[0.18] border border-emerald-500/40 text-[#00E599] px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1.5 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
@@ -902,7 +967,7 @@ function SecurityProofSealCard() {
             </div>
             <button
               onClick={handleCopyProof}
-              className="text-[#8B9099] hover:text-white p-1 rounded-md hover:bg-white/[0.08] active:scale-90 transition cursor-pointer"
+              className="text-[#94A3B8] hover:text-white p-1 rounded-md hover:bg-white/[0.08] active:scale-90 transition cursor-pointer"
               title="Copy Merkle Hash"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-[#00E599]" /> : <Copy className="w-3.5 h-3.5" />}
@@ -927,24 +992,24 @@ function SecurityShredderCard() {
   };
 
   return (
-    <div className="relative group rounded-[18px] bg-[#080d19]/80 border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_24px_rgba(255,255,255,0.02)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.15)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[232px] sm:min-h-[250px] backdrop-blur-2xl">
+    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.15)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[232px] sm:min-h-[250px]">
       {/* Subtle ambient glass red tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] via-transparent to-red-500/[0.02] pointer-events-none rounded-[18px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.05] via-transparent to-red-500/[0.02] pointer-events-none rounded-[18px]" />
 
-      {/* Background Illustration aligned right with smooth left fade mask & subtle hover float */}
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
       <img
         src="/security/shredder.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_20%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right */}
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-md bg-red-500/[0.12] border border-red-500/30 text-[#EF4444] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl group-hover:shadow-[0_0_12px_rgba(239,68,68,0.35)] transition-shadow duration-300">
-          <Trash2 className="w-3 h-3 stroke-[1.8]" />
+        <div className="w-6 h-6 rounded-md bg-red-500/[0.15] border border-red-500/35 text-[#EF4444] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(239,68,68,0.4)] transition-shadow duration-300">
+          <Trash2 className="w-3 h-3 stroke-[2]" />
         </div>
         <span className="text-[9px] font-bold tracking-[0.14em] text-[#EF4444] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           INSTANT PROTECTION
@@ -954,17 +1019,17 @@ function SecurityShredderCard() {
       {/* Content & Bottom Inside Boxes */}
       <div className="relative z-10 mt-auto pt-2 space-y-2">
         <div className="text-left space-y-1 max-w-[160px] sm:max-w-[170px]">
-          <h3 className="text-[14px] sm:text-[14.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <h3 className="text-[14px] sm:text-[14.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             1-Tap Cryptographic<br />Shredder
           </h3>
-          <p className="text-[10.5px] text-[#C4C7D0] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          <p className="text-[10.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
             In emergency situations, permanently obliterate your local document cache and cryptographic private keys in one click with zero recovery traces.
           </p>
         </div>
 
         {/* Inside Box & Action Button (Glass Look) */}
         <div className="flex items-stretch gap-2 h-[38px]">
-          <div className="rounded-[11px] bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.14] hover:border-white/[0.22] px-2.5 flex items-center gap-2 backdrop-blur-xl min-w-0 flex-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_16px_rgba(0,0,0,0.4)] h-full transition-all duration-300">
+          <div className="rounded-[11px] bg-[#0a0f1d]/92 hover:bg-[#0d1426]/95 border border-white/[0.14] hover:border-white/[0.22] px-2.5 flex items-center gap-2 backdrop-blur-xl min-w-0 flex-1 shadow-[0_6px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.14)] h-full transition-all duration-300">
             <div className="w-[26px] h-[26px] rounded-[7px] bg-[#0c192c] border border-[#1d3557]/80 text-[#99c2ed] flex items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
               <svg viewBox="0 0 16 16" className="w-[15px] h-[15px]" fill="none">
                 <rect x="1.5" y="2.75" width="13" height="4.5" rx="1.5" stroke="#99c2ed" strokeWidth="1.3" />
@@ -976,7 +1041,7 @@ function SecurityShredderCard() {
               </svg>
             </div>
             <div className="min-w-0 text-left">
-              <div className="text-[7.5px] text-[#8B9099] font-medium leading-none">Emergency Protocol</div>
+              <div className="text-[7.5px] text-[#94A3B8] font-medium leading-none">Emergency Protocol</div>
               <div className="text-[9.5px] font-bold text-white mt-0.5 truncate leading-tight">
                 {isWiped ? "Keys Shredded" : "Local Data Wipe Ready"}
               </div>
@@ -998,24 +1063,24 @@ function SecurityShredderCard() {
 
 function SecurityAntiReplayCard() {
   return (
-    <div className="relative group rounded-[18px] bg-[#080d19]/80 border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_24px_rgba(255,255,255,0.02)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.15)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[232px] sm:min-h-[250px] backdrop-blur-2xl">
+    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.15)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[232px] sm:min-h-[250px]">
       {/* Subtle ambient glass emerald tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[18px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.05] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[18px]" />
 
-      {/* Background Illustration aligned right with smooth left fade mask & subtle hover float */}
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
       <img
         src="/security/anti-screenshot.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_20%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right */}
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-md bg-emerald-500/[0.12] border border-emerald-500/30 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl group-hover:shadow-[0_0_12px_rgba(0,229,153,0.35)] transition-shadow duration-300">
-          <ShieldCheck className="w-3 h-3 stroke-[1.8]" />
+        <div className="w-6 h-6 rounded-md bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(0,229,153,0.4)] transition-shadow duration-300">
+          <ShieldCheck className="w-3 h-3 stroke-[2]" />
         </div>
         <span className="text-[9px] font-bold tracking-[0.14em] text-[#00E599] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           ANTI-SCREENSHOT DEFENSE
@@ -1025,23 +1090,23 @@ function SecurityAntiReplayCard() {
       {/* Content & Bottom Inside Box */}
       <div className="relative z-10 mt-auto pt-2 space-y-2">
         <div className="text-left space-y-1 max-w-[160px] sm:max-w-[170px]">
-          <h3 className="text-[14px] sm:text-[14.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <h3 className="text-[14px] sm:text-[14.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             Anti-Screenshot<br />Replay Guard
           </h3>
-          <p className="text-[10.5px] text-[#C4C7D0] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          <p className="text-[10.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
             Every token includes dynamic recipient-bound nonces. If someone takes a screenshot or recording of your QR, attempting to reuse it triggers an immediate fraud alert.
           </p>
         </div>
 
         {/* Inside Box (Glass Look) */}
-        <div className="h-[38px] rounded-[11px] bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.14] hover:border-white/[0.22] px-2.5 flex items-center justify-between gap-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_16px_rgba(0,0,0,0.4)] transition-all duration-300">
+        <div className="h-[38px] rounded-[11px] bg-[#0a0f1d]/92 hover:bg-[#0d1426]/95 border border-white/[0.14] hover:border-white/[0.22] px-2.5 flex items-center justify-between gap-2 backdrop-blur-xl shadow-[0_6px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-300">
           <div className="flex items-center gap-2 text-white min-w-0">
             <div className="w-[26px] h-[26px] rounded-[7px] bg-[#0c192c] border border-[#1d3557]/80 text-[#99c2ed] flex items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
               <Activity className="w-3.5 h-3.5 stroke-[2] text-[#99c2ed] animate-pulse" />
             </div>
             <span className="text-[10px] font-semibold text-white truncate">Dynamic Nonce Rotating</span>
           </div>
-          <span className="rounded-full bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] px-2.5 py-1 text-[9.5px] font-semibold shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] flex items-center gap-1.5">
+          <span className="rounded-full bg-emerald-500/[0.18] border border-emerald-500/40 text-[#00E599] px-2.5 py-1 text-[9.5px] font-semibold shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] flex items-center gap-1.5">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
@@ -1056,24 +1121,24 @@ function SecurityAntiReplayCard() {
 
 function SecurityZeroTrackersCard() {
   return (
-    <div className="relative group rounded-[18px] bg-[#080d19]/80 border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_24px_rgba(255,255,255,0.02)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[232px] sm:min-h-[250px] backdrop-blur-2xl">
+    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[232px] sm:min-h-[250px]">
       {/* Subtle ambient glass blue tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[18px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[18px]" />
 
-      {/* Background Illustration aligned right with smooth left fade mask & subtle hover float */}
+      {/* Background Illustration filling the box properly with smooth left fade mask */}
       <img
         src="/security/zero-trackers.png"
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_20%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right */}
+      {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-md bg-blue-500/[0.12] border border-blue-500/30 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl group-hover:shadow-[0_0_12px_rgba(41,151,255,0.35)] transition-shadow duration-300">
-          <EyeOff className="w-3 h-3 stroke-[1.8]" />
+        <div className="w-6 h-6 rounded-md bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+          <EyeOff className="w-3 h-3 stroke-[2]" />
         </div>
         <span className="text-[9px] font-bold tracking-[0.14em] text-[#2997FF] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           PRIVACY-FIRST ECOSYSTEM
@@ -1083,23 +1148,23 @@ function SecurityZeroTrackersCard() {
       {/* Content & Bottom Inside Box */}
       <div className="relative z-10 mt-auto pt-2 space-y-2">
         <div className="text-left space-y-1 max-w-[160px] sm:max-w-[170px]">
-          <h3 className="text-[14px] sm:text-[14.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+          <h3 className="text-[14px] sm:text-[14.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             Zero Trackers &amp;<br />Zero Ads
           </h3>
-          <p className="text-[10.5px] text-[#C4C7D0] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          <p className="text-[10.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
             No ad trackers, no third-party SDKs, and zero behavioral telemetry. White Card operates as a pure, privacy-first cryptographic vault on your phone.
           </p>
         </div>
 
         {/* Inside Box (Glass Look) */}
-        <div className="h-[38px] rounded-[11px] bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.14] hover:border-white/[0.22] px-2.5 flex items-center justify-between gap-2 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_6px_16px_rgba(0,0,0,0.4)] transition-all duration-300">
+        <div className="h-[38px] rounded-[11px] bg-[#0a0f1d]/92 hover:bg-[#0d1426]/95 border border-white/[0.14] hover:border-white/[0.22] px-2.5 flex items-center justify-between gap-2 backdrop-blur-xl shadow-[0_6px_16px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-300">
           <div className="flex items-center gap-2 text-white min-w-0">
             <div className="w-[26px] h-[26px] rounded-[7px] bg-[#0c192c] border border-[#1d3557]/80 text-[#99c2ed] flex items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(0,0,0,0.5)]">
               <Code className="w-3.5 h-3.5 stroke-[2] text-[#99c2ed]" />
             </div>
             <span className="text-[10px] font-semibold text-white truncate">Third-Party Scripts</span>
           </div>
-          <div className="group/pill rounded-full bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] px-2.5 py-1 text-[9.5px] font-semibold flex items-center gap-1.5 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
+          <div className="group/pill rounded-full bg-emerald-500/[0.18] border border-emerald-500/40 text-[#00E599] px-2.5 py-1 text-[9.5px] font-semibold flex items-center gap-1.5 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
@@ -1382,7 +1447,7 @@ export default function HomePage() {
         </div>
 
         {/* Bottom Trust Highlights (iOS Glass Squircles with Clean Dividers) */}
-        <div className="pt-8 sm:pt-10 lg:pt-12 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 px-2">
+        <div className="pt-8 sm:pt-10 lg:pt-12 pb-6 sm:pb-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 px-2">
           {/* 1. Client Encrypted */}
           <div className="flex items-center gap-4 flex-1">
             <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
@@ -1425,7 +1490,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. Documents Section: All Your Important Documents, Together. */}
-      <section id="documents" className="scroll-mt-28 space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-0 !mt-2 sm:!mt-3 overflow-hidden">
+      <section id="documents" className="scroll-mt-28 space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-6 sm:pt-8 mt-6 sm:mt-8 overflow-hidden">
         {/* Section Header: Pill, Headline, Subtitle */}
         <div className="space-y-4 max-w-3xl text-left">
           {/* Pill Tag */}
@@ -1600,7 +1665,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. Section: Features (Everyday Privacy) */}
-      <section id="features" className="scroll-mt-24 relative z-10 bg-black py-12 sm:py-16 my-4 sm:my-6 space-y-5 sm:space-y-6 max-w-[1100px] mx-auto px-4 sm:px-6">
+      <section id="features" className="scroll-mt-24 relative z-10 bg-black pt-8 sm:pt-12 pb-2 sm:pb-3 space-y-5 sm:space-y-6 max-w-[1100px] mx-auto px-4 sm:px-6">
         <div className="text-center space-y-2.5">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.05] border border-white/[0.12] px-4 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-neutral-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-xl">
             <span className="h-2 w-2 rounded-full bg-[#2997FF]" />
@@ -1630,7 +1695,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Section: Security (Silicon Sealed Architecture) */}
-      <section id="security" className="scroll-mt-24 relative z-10 bg-black py-11 sm:py-16 my-3 sm:my-4 space-y-5 sm:space-y-6 max-w-[1080px] mx-auto px-4 sm:px-6">
+      <section id="security" className="scroll-mt-24 relative z-10 bg-black pt-2 sm:pt-4 pb-12 sm:pb-16 space-y-5 sm:space-y-6 max-w-[1080px] mx-auto px-4 sm:px-6">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-[#0d1527]/80 border border-[#1d2d47] px-3.5 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#cbd5e1] uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]" />
