@@ -398,6 +398,8 @@ function SelectiveDisclosureFeatureCard() {
       <img
         src="/privacy/share-only.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -537,6 +539,8 @@ function SelfDestructQRFeatureCard() {
       <img
         src="/privacy/temporary-qr.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -641,6 +645,8 @@ function PasswordlessAuthFeatureCard() {
       <img
         src="/privacy/passwordless-otp.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -700,6 +706,8 @@ function InstantRevokeFeatureCard() {
       <img
         src="/privacy/instant-revocation.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -773,6 +781,8 @@ function LiveAuditLogFeatureCard() {
       <img
         src="/privacy/verification-log.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -828,6 +838,8 @@ function SecurityEnclaveMasterCard() {
       <img
         src="/security/silicon-sealed.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -914,6 +926,8 @@ function SecurityProofSealCard() {
       <img
         src="/security/sha256-chain.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -999,6 +1013,8 @@ function SecurityShredderCard() {
       <img
         src="/security/shredder.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -1070,6 +1086,8 @@ function SecurityAntiReplayCard() {
       <img
         src="/security/anti-screenshot.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -1128,6 +1146,8 @@ function SecurityZeroTrackersCard() {
       <img
         src="/security/zero-trackers.png"
         alt=""
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left, fading smoothly right for text readability */}
@@ -1664,7 +1684,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. Section: Features (Everyday Privacy) */}
-      <section id="features" className="scroll-mt-24 relative z-10 bg-black pt-8 sm:pt-12 pb-2 sm:pb-3 space-y-5 sm:space-y-6 max-w-[1100px] mx-auto px-4 sm:px-6">
+      <section id="features" className="scroll-mt-24 relative z-10 bg-black pt-8 sm:pt-12 pb-2 sm:pb-3 space-y-5 sm:space-y-6 max-w-[1100px] mx-auto px-4 sm:px-6 content-auto">
         <div className="text-center space-y-2.5">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.05] border border-white/[0.12] px-4 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-neutral-200 uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-xl">
             <span className="h-2 w-2 rounded-full bg-[#2997FF]" />
@@ -1694,7 +1714,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Section: Security (Silicon Sealed Architecture) */}
-      <section id="security" className="scroll-mt-24 relative z-10 bg-black pt-2 sm:pt-4 pb-12 sm:pb-16 space-y-5 sm:space-y-6 max-w-[1080px] mx-auto px-4 sm:px-6">
+      <section id="security" className="scroll-mt-24 relative z-10 bg-black pt-2 sm:pt-4 pb-12 sm:pb-16 space-y-5 sm:space-y-6 max-w-[1080px] mx-auto px-4 sm:px-6 content-auto">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-[#0d1527]/80 border border-[#1d2d47] px-3.5 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#cbd5e1] uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]" />

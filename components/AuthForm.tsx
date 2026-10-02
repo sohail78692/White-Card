@@ -1,18 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { sound } from "@/lib/sound";
-import { Mail, KeyRound, ArrowRight, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, KeyRound, ArrowRight, Loader2, CheckCircle2, AlertCircle, RefreshCw, ShieldCheck } from "lucide-react";
 
 export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+  const [digits, setDigits] = useState<string[]>(["", "", "", "", "", ""]);
   const [step, setStep] = useState<"email" | "code">("email");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
-  React.useEffect(() => {
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem("wc_last_email");
       if (saved) {
@@ -23,9 +26,31 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
     }
   }, []);
 
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
+  // Cooldown timer for resend
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [resendCooldown]);
+
+  // Focus first digit when switching to "code" step
+  useEffect(() => {
+    if (step === "code") {
+      setTimeout(() => {
+        inputRefs.current[0]?.focus();
+      }, 150);
+    }
+  }, [step]);
+
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!email || !email.includes("@")) {
+      setError("Please enter a valid email address.");
+      sound.playError();
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -35,7 +60,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
       const res = await fetch("/api/auth/otp/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
       });
 
       const data = await res.json();
@@ -44,21 +69,82 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
         setError(data.error || "Failed to send code");
       } else {
         sound.playSuccess();
-        setSuccessMsg("Verification code sent! Please check your inbox.");
+        setSuccessMsg("Verification code dispatched to your inbox.");
         setStep("code");
+        setDigits(["", "", "", "", "", ""]);
+        setResendCooldown(30);
       }
     } catch {
       sound.playError();
-      setError("Network error. Please try again.");
+      setError("Network error. Please check your connection.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
+  const handleDigitChange = (index: number, value: string) => {
+    // Only accept numeric digit
+    const cleaned = value.replace(/\D/g, "");
+    if (!cleaned) {
+      const newDigits = [...digits];
+      newDigits[index] = "";
+      setDigits(newDigits);
+      return;
+    }
+
+    sound.playPop();
+    const lastChar = cleaned[cleaned.length - 1];
+    const newDigits = [...digits];
+    newDigits[index] = lastChar;
+    setDigits(newDigits);
+
+    // Auto-advance to next input
+    if (index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    // Auto-verify if all 6 digits are filled
+    const fullCode = newDigits.join("");
+    if (fullCode.length === 6 && !newDigits.includes("")) {
+      verifyCode(fullCode);
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !digits[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pasted) return;
+
+    sound.playPop();
+    const newDigits = [...digits];
+    for (let i = 0; i < 6; i++) {
+      newDigits[i] = pasted[i] || "";
+    }
+    setDigits(newDigits);
+
+    if (pasted.length === 6) {
+      inputRefs.current[5]?.focus();
+      verifyCode(pasted);
+    } else {
+      inputRefs.current[Math.min(pasted.length, 5)]?.focus();
+    }
+  };
+
+  const verifyCode = async (codeToVerify?: string) => {
+    const code = codeToVerify || digits.join("");
     if (!code || code.length !== 6) {
-      setError("Please enter the 6-digit code.");
+      setError("Please enter the complete 6-digit security code.");
+      sound.playError();
       return;
     }
 
@@ -69,18 +155,20 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
       const res = await fetch("/api/auth/otp/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), code: code.trim() }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), code: code.trim() }),
       });
 
       const data = await res.json();
       if (!res.ok) {
         sound.playError();
-        setError(data.error || "Verification failed");
+        setError(data.error || "Invalid or expired code. Please try again.");
       } else {
         sound.playSuccess();
         try {
-          localStorage.setItem("wc_last_email", email.trim());
-        } catch {}
+          localStorage.setItem("wc_last_email", email.trim().toLowerCase());
+        } catch {
+          // Ignore
+        }
         if (onSuccess) {
           onSuccess();
         } else {
@@ -91,7 +179,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
       }
     } catch {
       sound.playError();
-      setError("Network error. Please try again.");
+      setError("Verification service unreachable. Please retry.");
     } finally {
       setLoading(false);
     }
@@ -99,98 +187,141 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      {/* Error & Success Alerts */}
+      {/* Dynamic Alerts with GPU Fade In */}
       {error && (
-        <div className="mb-4 flex items-start gap-2.5 rounded-lg border border-red-500/20 bg-red-950/40 p-3 text-xs text-red-300">
-          <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
-          <span>{error}</span>
+        <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-red-500/25 bg-red-950/40 p-3 text-xs text-red-300 shadow-[0_4px_16px_rgba(225,29,72,0.15)] animate-fadeIn">
+          <AlertCircle className="h-4 w-4 text-[#FF3B5C] shrink-0 mt-0.5" />
+          <span className="font-medium leading-relaxed">{error}</span>
         </div>
       )}
 
       {successMsg && (
-        <div className="mb-4 flex items-start gap-2.5 rounded-lg border border-emerald-500/20 bg-emerald-950/40 p-3 text-xs text-emerald-300">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
-          <span>{successMsg}</span>
+        <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-emerald-500/25 bg-emerald-950/40 p-3 text-xs text-emerald-300 shadow-[0_4px_16px_rgba(16,185,129,0.15)] animate-fadeIn">
+          <CheckCircle2 className="h-4 w-4 text-[#00E599] shrink-0 mt-0.5" />
+          <span className="font-medium leading-relaxed">{successMsg}</span>
         </div>
       )}
 
-      {/* Email OTP Flow */}
-      <div>
-        {step === "email" ? (
-          <form onSubmit={handleSendOtp} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-neutral-300 mb-1.5">
-                Email Address
+      {/* Step 1: Email Address Flow */}
+      {step === "email" ? (
+        <form onSubmit={handleSendOtp} className="space-y-4 animate-fadeIn">
+          <div>
+            <label className="block text-xs font-semibold text-neutral-200 mb-1.5 tracking-wide">
+              Work or Personal Email
+            </label>
+            <div className="relative group">
+              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-neutral-400 group-focus-within:text-[#2997FF] transition-colors duration-200" />
+              <input
+                type="email"
+                required
+                autoFocus
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@company.com"
+                className="w-full rounded-xl border border-white/15 bg-white/[0.04] pl-10 pr-4 py-3 text-sm text-white placeholder-neutral-500 focus:border-[#2997FF] focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-[#2997FF]/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-200"
+              />
+            </div>
+            <p className="mt-1.5 text-[11px] text-neutral-400 leading-normal flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <span>We never store plain credentials. One-time code valid for 10 minutes.</span>
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || !email}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2997FF] via-[#0071e3] to-[#2997FF] bg-[length:200%_auto] hover:bg-right text-white py-3 px-4 text-sm font-semibold shadow-[0_4px_20px_rgba(41,151,255,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            ) : (
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            )}
+            <span>{loading ? "Sending One-Time Token..." : "Send Verification Code"}</span>
+          </button>
+        </form>
+      ) : (
+        /* Step 2: 6-Digit OTP Flow with Individual Inputs */
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            verifyCode();
+          }}
+          className="space-y-5 animate-fadeIn"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-semibold text-neutral-200 tracking-wide">
+                Security Verification Code
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-3 h-4 w-4 text-neutral-500" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full rounded-xl border border-white/10 bg-black/80 pl-10 pr-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
-                />
-              </div>
-              <p className="mt-1.5 text-[11px] text-neutral-400">
-                We&apos;ll send a 6-digit one-time code to authenticate your wallet.
-              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playPop();
+                  setStep("email");
+                }}
+                className="text-[11px] text-blue-400 hover:text-blue-300 font-medium transition cursor-pointer"
+              >
+                Change Email
+              </button>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading || !email}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-neutral-200 text-black px-4 py-2.5 text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 transition cursor-pointer"
-            >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-              <span>Send Verification Code</span>
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleVerifyOtp} className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-medium text-neutral-300">
-                  6-Digit Security Code
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setStep("email")}
-                  className="text-[11px] text-neutral-300 hover:text-white underline cursor-pointer"
-                >
-                  Change Email
-                </button>
-              </div>
-              <div className="relative">
-                <KeyRound className="absolute left-3.5 top-3 h-4 w-4 text-neutral-500" />
+            {/* 6 Individual Digit Boxes */}
+            <div className="flex items-center justify-between gap-2 sm:gap-2.5">
+              {digits.map((digit, idx) => (
                 <input
+                  key={idx}
+                  ref={(el) => {
+                    inputRefs.current[idx] = el;
+                  }}
                   type="text"
-                  required
-                  maxLength={6}
-                  pattern="[0-9]{6}"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                  placeholder="123456"
-                  className="w-full rounded-xl border border-white/10 bg-black/80 pl-10 pr-4 py-2.5 text-center text-lg font-mono tracking-widest text-white placeholder-neutral-600 focus:border-white focus:outline-none focus:ring-1 focus:ring-white"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleDigitChange(idx, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(idx, e)}
+                  onPaste={idx === 0 ? handlePaste : undefined}
+                  className={`w-11 sm:w-12 h-13 sm:h-14 rounded-xl text-center font-mono text-xl sm:text-2xl font-bold transition-all duration-200 border ${
+                    digit
+                      ? "border-[#2997FF] bg-blue-500/[0.12] text-white shadow-[0_0_12px_rgba(41,151,255,0.4)]"
+                      : "border-white/15 bg-white/[0.04] text-white hover:border-white/30"
+                  } focus:border-[#2997FF] focus:bg-blue-500/[0.15] focus:outline-none focus:ring-2 focus:ring-[#2997FF]/30`}
                 />
-              </div>
-              <p className="mt-1.5 text-[11px] text-neutral-400">
-                Sent to <strong className="text-white">{email}</strong>. Valid for 10 minutes.
-              </p>
+              ))}
             </div>
 
-            <button
-              type="submit"
-              disabled={loading || code.length !== 6}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-neutral-200 text-black px-4 py-2.5 text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50 transition cursor-pointer"
-            >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-              <span>Verify & Open Wallet</span>
-            </button>
-          </form>
-        )}
-      </div>
+            <div className="flex items-center justify-between mt-2.5 text-[11px] text-neutral-400">
+              <span className="truncate pr-2">
+                Sent to <strong className="text-white font-medium">{email}</strong>
+              </span>
+              <button
+                type="button"
+                disabled={resendCooldown > 0 || loading}
+                onClick={() => handleSendOtp()}
+                className="text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shrink-0"
+              >
+                <RefreshCw className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
+                <span>{resendCooldown > 0 ? `Resend (${resendCooldown}s)` : "Resend Code"}</span>
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || digits.some((d) => !d)}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2997FF] via-[#0071e3] to-[#2997FF] bg-[length:200%_auto] hover:bg-right text-white py-3 px-4 text-sm font-semibold shadow-[0_4px_20px_rgba(41,151,255,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            ) : (
+              <CheckCircle2 className="h-4 w-4 text-white" />
+            )}
+            <span>{loading ? "Verifying Cryptographic Proof..." : "Verify & Open Wallet"}</span>
+          </button>
+        </form>
+      )}
     </div>
   );
 }

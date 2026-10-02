@@ -192,6 +192,47 @@ body {
     drop-shadow(10px 10px 24px rgba(0, 0, 0, 0.9));
 }
 
+/* Lenis Smooth Scroll Configuration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* GPU Hardware Acceleration & Smooth Frame Rendering */
+.gpu-accelerate {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Fluid Apple Physics Easing */
+.ease-fluid {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Optimize heavy offscreen content rendering */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   * {

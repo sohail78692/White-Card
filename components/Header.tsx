@@ -116,6 +116,44 @@ export function Header() {
     { href: "/privacy", label: "Privacy Center", icon: Shield },
   ];
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, sectionId?: string) => {
+    sound.playPop();
+    if (pathname === "/" && sectionId) {
+      e.preventDefault();
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string | number | HTMLElement, opts?: { offset?: number; duration?: number }) => void } }).__lenis;
+      if (lenis) {
+        if (sectionId === "hero") {
+          lenis.scrollTo(0, { duration: 1.1 });
+        } else {
+          lenis.scrollTo(`#${sectionId}`, { offset: -85, duration: 1.1 });
+        }
+      } else {
+        if (sectionId === "hero") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          const el = document.getElementById(sectionId);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+      setActiveSection(sectionId);
+      setMobileMenuOpen(false);
+    }
+  };
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    sound.playPop();
+    if (pathname === "/") {
+      e.preventDefault();
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 1.1 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      setActiveSection("hero");
+    }
+  };
+
   return (
     <header className="fixed top-2 sm:top-3 left-0 right-0 z-50 w-full px-2 sm:px-4 md:px-6 transition-all duration-300 pointer-events-none">
       <div className="mx-auto max-w-7xl pointer-events-auto">
@@ -125,6 +163,7 @@ export function Header() {
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             <Link
               href="/"
+              onClick={handleLogoClick}
               className="flex items-center gap-2 sm:gap-2.5 group transition-all"
               aria-label="White Card Wallet Home"
             >
@@ -154,6 +193,7 @@ export function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href, item.sectionId)}
                     className={`flex items-center gap-2 rounded-full px-3.5 xl:px-4 py-1.5 text-xs transition-all duration-200 ${
                       isActive
                         ? "bg-blue-600/35 text-white font-semibold shadow-[0_0_16px_rgba(59,130,246,0.45)] border border-blue-400/50"
@@ -259,7 +299,7 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, item.href, item.sectionId)}
                   className={`flex items-center gap-2.5 rounded-xl px-4 py-2 text-xs transition ${
                     isActive
                       ? "bg-blue-600/35 text-white font-semibold border border-blue-400/50 shadow-[0_0_12px_rgba(59,130,246,0.4)]"
