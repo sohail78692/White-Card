@@ -506,7 +506,7 @@ function SelfDestructQRFeatureCard() {
 
   const generateQr = React.useCallback(async () => {
     try {
-      const livePayload = `https://whitecard.internal/v/proof-${Date.now().toString(36)}`;
+      const livePayload = "https://github.com/sohail78692";
       const url = await QRCode.toDataURL(livePayload, {
         width: 320,
         margin: 0,
@@ -587,15 +587,21 @@ function SelfDestructQRFeatureCard() {
             <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#2997FF] rounded-br-sm" />
           </div>
 
-          <div className="relative w-[94px] h-[94px] sm:w-[98px] sm:h-[98px] rounded-xl bg-white p-2 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.7)]">
+          <a
+            href="https://github.com/sohail78692"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Scan or click to open GitHub Profile (sohail78692)"
+            className="relative w-[94px] h-[94px] sm:w-[98px] sm:h-[98px] rounded-xl bg-white p-2 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.7)] cursor-pointer group/qr"
+          >
             {qrUrl ? (
-              <img src={qrUrl} alt="Temporary Sharing QR Code" className="w-full h-full object-contain" />
+              <img src={qrUrl} alt="Temporary Sharing QR Code - Scan to open GitHub" className="w-full h-full object-contain" />
             ) : (
               <QrCode className="w-full h-full text-[#070b14]" />
             )}
             {/* Cyber Scanning Laser Beam */}
             <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#2997FF] to-transparent shadow-[0_0_8px_#2997FF] animate-scan-beam pointer-events-none" />
-          </div>
+          </a>
         </div>
 
         {/* Right Side: Active, Countdown, Description, Button */}
@@ -1313,10 +1319,10 @@ export default function HomePage() {
       />
 
       {/* Floating Aurora Ambient Light Mesh */}
-      <div className="pointer-events-none absolute -top-36 left-1/4 w-[600px] h-[600px] rounded-full bg-blue-600/[0.07] blur-[140px] animate-aurora-1" />
-      <div className="pointer-events-none absolute top-[28%] -right-24 w-[520px] h-[520px] rounded-full bg-cyan-500/[0.05] blur-[150px] animate-aurora-2" />
-      <div className="pointer-events-none absolute top-[60%] -left-24 w-[560px] h-[560px] rounded-full bg-indigo-600/[0.045] blur-[150px] animate-aurora-1" />
-      <div className="pointer-events-none absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full bg-emerald-500/[0.035] blur-[130px] animate-aurora-2" />
+      <div className="pointer-events-none absolute -top-36 left-1/4 w-[600px] h-[600px] rounded-full bg-blue-600/[0.07] blur-[140px] animate-aurora-1 gpu-accelerate" />
+      <div className="pointer-events-none absolute top-[28%] -right-24 w-[520px] h-[520px] rounded-full bg-cyan-500/[0.05] blur-[150px] animate-aurora-2 gpu-accelerate" />
+      <div className="pointer-events-none absolute top-[60%] -left-24 w-[560px] h-[560px] rounded-full bg-indigo-600/[0.045] blur-[150px] animate-aurora-1 gpu-accelerate" />
+      <div className="pointer-events-none absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full bg-emerald-500/[0.035] blur-[130px] animate-aurora-2 gpu-accelerate" />
 
       {/* Subtle Cyber Grid with Radial Soft Fade */}
       <div className="pointer-events-none absolute inset-0 bg-grid-cyber opacity-[0.32] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_85%)]" />

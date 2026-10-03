@@ -240,7 +240,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
 
             <p className="mt-1 text-[11.5px] text-neutral-400 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-              <span>We never store plain credentials. One-time code valid for 10 minutes.</span>
+              <span>We never store plain credentials. One-time code valid for 5 minutes.</span>
             </p>
           </div>
 

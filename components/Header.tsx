@@ -156,9 +156,9 @@ export function Header() {
       const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string | number | HTMLElement, opts?: { offset?: number; duration?: number }) => void } }).__lenis;
       if (lenis) {
         if (sectionId === "hero") {
-          lenis.scrollTo(0, { duration: 1.1 });
+          lenis.scrollTo(0, { duration: 0.85 });
         } else {
-          lenis.scrollTo(`#${sectionId}`, { offset: -85, duration: 1.1 });
+          lenis.scrollTo(`#${sectionId}`, { offset: -85, duration: 0.85 });
         }
       } else {
         if (sectionId === "hero") {
@@ -179,7 +179,7 @@ export function Header() {
       e.preventDefault();
       const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts?: { duration?: number }) => void } }).__lenis;
       if (lenis) {
-        lenis.scrollTo(0, { duration: 1.1 });
+        lenis.scrollTo(0, { duration: 0.85 });
       } else {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }

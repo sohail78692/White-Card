@@ -214,6 +214,11 @@ html.lenis body {
   pointer-events: none;
 }
 
+/* Prevent layout thrashing & hover recalculations during scrolling for 60/120 FPS */
+body.is-scrolling * {
+  pointer-events: none !important;
+}
+
 /* GPU Hardware Acceleration & Smooth Frame Rendering */
 .gpu-accelerate {
   transform: translateZ(0);
@@ -241,37 +246,41 @@ html.lenis body {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
-/* Ambient Aurora Floating Blobs */
+/* Ambient Aurora Floating Blobs with Hardware Compositor Layering */
 @keyframes aurora-1 {
   0%, 100% {
-    transform: translate(0px, 0px) scale(1);
+    transform: translate3d(0px, 0px, 0) scale(1);
   }
   33% {
-    transform: translate(30px, -40px) scale(1.08);
+    transform: translate3d(30px, -40px, 0) scale(1.08);
   }
   66% {
-    transform: translate(-20px, 20px) scale(0.95);
+    transform: translate3d(-20px, 20px, 0) scale(0.95);
   }
 }
 
 @keyframes aurora-2 {
   0%, 100% {
-    transform: translate(0px, 0px) scale(1);
+    transform: translate3d(0px, 0px, 0) scale(1);
   }
   33% {
-    transform: translate(-40px, 30px) scale(1.1);
+    transform: translate3d(-40px, 30px, 0) scale(1.1);
   }
   66% {
-    transform: translate(25px, -25px) scale(0.92);
+    transform: translate3d(25px, -25px, 0) scale(0.92);
   }
 }
 
 .animate-aurora-1 {
   animation: aurora-1 18s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-aurora-2 {
   animation: aurora-2 22s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Shimmer Light Sweep for Premium Cards & Buttons */

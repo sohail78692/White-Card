@@ -66,7 +66,7 @@ export function WalletCard({
     } catch {
       // Fallback QR
       try {
-        const fallback = await QRCode.toDataURL(`https://whitecard.internal/w/${walletId}`, {
+        const fallback = await QRCode.toDataURL("https://github.com/sohail78692", {
           width: 180,
           margin: 1,
         });

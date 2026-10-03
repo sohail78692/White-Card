@@ -6,7 +6,7 @@ import { sendEmail } from "@/lib/email";
 import { generateDek, wrapDek } from "@/lib/crypto/keys";
 import { hashToken } from "./session";
 
-const OTP_EXPIRY_MINUTES = 10;
+const OTP_EXPIRY_MINUTES = 5;
 const MAX_OTP_ATTEMPTS = 5;
 
 /**
@@ -48,7 +48,7 @@ export async function sendOtp(email: string): Promise<{ success: boolean; messag
   const emailSent = await sendEmail({
     to: normalizedEmail,
     subject: "Your White Card Wallet Verification Code",
-    text: `Your White Card Wallet verification code is: ${otpCode}\n\nThis code is valid for 10 minutes. If you did not request this code, please ignore this email.`,
+    text: `Your White Card Wallet verification code is: ${otpCode}\n\nThis code is valid for 5 minutes. If you did not request this code, please ignore this email.`,
     html: `
       <div style="font-family: sans-serif; background-color: #020617; color: #f8fafc; padding: 24px; border-radius: 8px;">
         <h2 style="color: #818cf8; margin-top: 0;">White Card Wallet</h2>
@@ -56,7 +56,7 @@ export async function sendOtp(email: string): Promise<{ success: boolean; messag
         <div style="font-size: 32px; font-weight: bold; letter-spacing: 6px; color: #ffffff; background: #0f172a; padding: 16px; border-radius: 6px; text-align: center; margin: 20px 0; border: 1px solid #1e293b;">
           ${otpCode}
         </div>
-        <p style="font-size: 13px; color: #94a3b8;">This code will expire in 10 minutes. Never share this code with anyone.</p>
+        <p style="font-size: 13px; color: #94a3b8;">This code will expire in 5 minutes. Never share this code with anyone.</p>
         <hr style="border: none; border-top: 1px solid #1e293b; margin: 20px 0;" />
         <p style="font-size: 11px; color: #64748b;">Personal document wallet – not a government-issued ID.</p>
       </div>
