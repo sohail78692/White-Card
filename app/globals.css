@@ -498,13 +498,28 @@ body.is-scrolling * {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), filter 0.45s ease;
   backface-visibility: hidden;
   will-change: transform;
 }
 
+/* Ambient Floating Idle Motion when closed and not hovered */
+@keyframes folderFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0.4deg);
+  }
+}
+
+.folder-card:not(:hover):not(:has(.folder-toggle:checked)) .folder-container {
+  animation: folderFloat 4.8s ease-in-out infinite;
+}
+
 .folder-toggle:checked ~ .folder-container {
   transform: rotateX(8deg);
+  animation: none !important;
 }
 
 .folder-back {
@@ -512,6 +527,11 @@ body.is-scrolling * {
   bottom: 0;
   width: 100%;
   filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
+  transition: filter 0.4s ease;
+}
+
+.folder-card:hover .folder-back {
+  filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.75));
 }
 
 .folder-front-wrapper {
@@ -520,13 +540,26 @@ body.is-scrolling * {
   width: 100%;
   z-index: 90;
   transform-origin: bottom;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease;
   border-radius: 12px;
+}
+
+/* On hover while closed: front flap flexes forward and teases open */
+.folder-card:hover:not(:has(.folder-toggle:checked)) .folder-front-wrapper {
+  transform: rotateX(-15deg) translateY(-2px);
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+
+/* On hover while closed: cards peek up from inside the pocket */
+.folder-card:hover:not(:has(.folder-toggle:checked)) .folder-file {
+  transform: translateY(-16px) scale(0.995);
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 .folder-front {
   width: 100%;
-  filter: drop-shadow(0 8px 18px rgba(0, 86, 179, 0.35));
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
+  transition: filter 0.3s ease;
 }
 
 /* Centered Floating Search Bar (Only visible when folder is open) */
@@ -690,90 +723,116 @@ body.is-scrolling * {
 
 /* Open State Flap */
 .folder-toggle:checked ~ .folder-container .folder-front-wrapper {
-  transform: rotateX(-45deg);
+  transform: rotateX(-46deg);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
+  filter: drop-shadow(0 22px 35px rgba(0, 0, 0, 0.7));
+}
+
+/* Card hover glow and lift when folder is open */
+.folder-toggle:checked ~ .folder-container .folder-file {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+.folder-toggle:checked ~ .folder-container .folder-file:hover {
+  filter: brightness(1.15) !important;
+  box-shadow: 0 25px 45px -8px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.3) !important;
+  z-index: 55 !important;
+}
+
+/* Card hover triggers shine sweep */
+.folder-toggle:checked ~ .folder-container .folder-file:hover .folder-shine {
+  left: 150%;
+  transition: left 0.75s ease-in-out;
+}
+
+/* Dim non-hovered siblings when any card is hovered for depth of field focus */
+.folder-toggle:checked ~ .folder-container:has(.folder-file:hover) .folder-file:not(:hover) {
+  opacity: 0.65;
+  filter: brightness(0.85);
+  transform: scale(0.97);
 }
 
 /* ============================================================== */
 /* DYNAMIC CARD FANNING RULES ACCORDING TO DOCUMENT COUNT          */
 /* ============================================================== */
 
-/* 1 Document */
+/* 1 Document / Empty card */
 .folder-toggle:checked ~ .folder-container .file-count-1.file-idx-0 {
-  transform: translateY(-76px) rotate(-2deg) translateZ(15px);
+  transform: translateY(-84px) rotate(-1.5deg) translateZ(15px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-1.file-idx-0:hover {
-  transform: translateY(-88px) rotate(-2deg) translateZ(25px) scale(1.03);
+  transform: translateY(-102px) rotate(0deg) translateZ(35px) scale(1.05);
 }
 
 /* 2 Documents */
 .folder-toggle:checked ~ .folder-container .file-count-2.file-idx-0 {
-  transform: translateY(-80px) rotate(-8deg) translateX(-18px) translateZ(20px);
+  transform: translateY(-84px) rotate(-8deg) translateX(-18px) translateZ(20px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-2.file-idx-0:hover {
-  transform: translateY(-92px) rotate(-8deg) translateX(-18px) translateZ(30px) scale(1.03);
+  transform: translateY(-104px) rotate(-4deg) translateX(-20px) translateZ(40px) scale(1.05);
 }
 .folder-toggle:checked ~ .folder-container .file-count-2.file-idx-1 {
-  transform: translateY(-56px) rotate(6deg) translateX(18px) translateZ(10px);
+  transform: translateY(-58px) rotate(6deg) translateX(18px) translateZ(10px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-2.file-idx-1:hover {
-  transform: translateY(-68px) rotate(6deg) translateX(18px) translateZ(20px) scale(1.03);
+  transform: translateY(-80px) rotate(2deg) translateX(20px) translateZ(30px) scale(1.05);
 }
 
 /* 3 Documents */
 .folder-toggle:checked ~ .folder-container .file-count-3.file-idx-0 {
-  transform: translateY(-82px) rotate(-11deg) translateX(-22px) translateZ(25px);
+  transform: translateY(-86px) rotate(-11deg) translateX(-22px) translateZ(25px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-3.file-idx-0:hover {
-  transform: translateY(-94px) rotate(-11deg) translateX(-22px) translateZ(35px) scale(1.03);
+  transform: translateY(-106px) rotate(-6deg) translateX(-24px) translateZ(45px) scale(1.05);
 }
 .folder-toggle:checked ~ .folder-container .file-count-3.file-idx-1 {
-  transform: translateY(-60px) rotate(0deg) translateX(0px) translateZ(15px);
+  transform: translateY(-64px) rotate(0deg) translateX(0px) translateZ(15px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-3.file-idx-1:hover {
-  transform: translateY(-72px) rotate(0deg) translateX(0px) translateZ(25px) scale(1.03);
+  transform: translateY(-84px) rotate(0deg) translateX(0px) translateZ(35px) scale(1.05);
 }
 .folder-toggle:checked ~ .folder-container .file-count-3.file-idx-2 {
-  transform: translateY(-40px) rotate(10deg) translateX(20px) translateZ(8px);
+  transform: translateY(-42px) rotate(10deg) translateX(20px) translateZ(8px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-3.file-idx-2:hover {
-  transform: translateY(-52px) rotate(10deg) translateX(20px) translateZ(18px) scale(1.03);
+  transform: translateY(-64px) rotate(5deg) translateX(22px) translateZ(28px) scale(1.05);
 }
 
 /* 4 or more Documents */
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-0,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-0 {
-  transform: translateY(-86px) rotate(-12deg) translateX(-26px) translateZ(30px);
+  transform: translateY(-88px) rotate(-12deg) translateX(-26px) translateZ(30px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-0:hover,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-0:hover {
-  transform: translateY(-98px) rotate(-12deg) translateX(-26px) translateZ(40px) scale(1.03);
+  transform: translateY(-110px) rotate(-7deg) translateX(-28px) translateZ(50px) scale(1.05);
 }
 
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-1,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-1 {
-  transform: translateY(-68px) rotate(-4deg) translateX(-8px) translateZ(20px);
+  transform: translateY(-70px) rotate(-4deg) translateX(-8px) translateZ(20px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-1:hover,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-1:hover {
-  transform: translateY(-80px) rotate(-4deg) translateX(-8px) translateZ(30px) scale(1.03);
+  transform: translateY(-92px) rotate(-2deg) translateX(-8px) translateZ(40px) scale(1.05);
 }
 
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-2,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-2 {
-  transform: translateY(-48px) rotate(5deg) translateX(10px) translateZ(12px);
+  transform: translateY(-50px) rotate(5deg) translateX(10px) translateZ(12px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-2:hover,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-2:hover {
-  transform: translateY(-60px) rotate(5deg) translateX(10px) translateZ(22px) scale(1.03);
+  transform: translateY(-72px) rotate(3deg) translateX(12px) translateZ(32px) scale(1.05);
 }
 
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-3,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-3 {
-  transform: translateY(-30px) rotate(13deg) translateX(26px) translateZ(5px);
+  transform: translateY(-32px) rotate(13deg) translateX(26px) translateZ(5px);
 }
 .folder-toggle:checked ~ .folder-container .file-count-4.file-idx-3:hover,
 .folder-toggle:checked ~ .folder-container .file-count-many.file-idx-3:hover {
-  transform: translateY(-42px) rotate(13deg) translateX(26px) translateZ(15px) scale(1.03);
+  transform: translateY(-54px) rotate(8deg) translateX(28px) translateZ(25px) scale(1.05);
 }
 
 /* Reduced motion preference */

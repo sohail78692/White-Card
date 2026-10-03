@@ -135,6 +135,49 @@ export function WalletCard({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // 3D Parallax Mouse Tracking State
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    if (isOpen) {
+      // Gentle 3D perspective tilt while open
+      const rotX = 8 + ((y - centerY) / centerY) * -5;
+      const rotY = ((x - centerX) / centerX) * 8;
+      setRotateX(rotX);
+      setRotateY(rotY);
+    } else {
+      const rotX = ((y - centerY) / centerY) * -12;
+      const rotY = ((x - centerX) / centerX) * 14;
+      setRotateX(rotX);
+      setRotateY(rotY);
+    }
+    setGlarePos({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      opacity: isOpen ? 0.35 : 0.65,
+    });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    sound.playTone(580, "sine", 0.04);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotateX(isOpen ? 8 : 0);
+    setRotateY(0);
+    setGlarePos((prev) => ({ ...prev, opacity: 0 }));
+  };
+
   const filteredDocs = useMemo(() => {
     const rawQuery = searchQuery.trim().toLowerCase();
     if (!rawQuery) return documents;
@@ -155,7 +198,10 @@ export function WalletCard({
 
   const handleToggle = () => {
     sound.playPop();
-    setIsOpen(!isOpen);
+    const nextOpen = !isOpen;
+    setIsOpen(nextOpen);
+    setRotateX(nextOpen ? 8 : 0);
+    setRotateY(0);
   };
 
   const getCountClass = (total: number) => {
@@ -168,8 +214,13 @@ export function WalletCard({
 
   return (
     <div className="folder-card-wrapper pt-16 pb-8 sm:pt-20 sm:pb-10 px-4 sm:px-8">
-      {/* 3D Interactive Folder Label Wrapper */}
-      <div className="folder-card">
+      {/* 3D Interactive Folder Label Wrapper with Parallax Tilt */}
+      <div
+        className="folder-card group"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {/* Hidden toggle input bound to state */}
         <input
           type="checkbox"
@@ -180,7 +231,16 @@ export function WalletCard({
         />
 
         {/* 3D Folder Container */}
-        <div className="folder-container">
+        <div
+          className="folder-container"
+          style={{
+            transform: isOpen
+              ? `rotateX(${rotateX || 8}deg) rotateY(${rotateY}deg) scale(1.02)`
+              : isHovered
+              ? `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.04)`
+              : undefined,
+          }}
+        >
           {/* Floating Search Bar (Appears when open) */}
           <div className="folder-search" onClick={(e) => e.stopPropagation()}>
             <Search className="folder-search-icon text-white/90" />
@@ -226,23 +286,31 @@ export function WalletCard({
             documents.length === 0 ? (
               /* Empty State Card if 0 documents linked in entire wallet */
               <div
-                className="folder-file file-count-1 file-idx-0 border border-dashed border-sky-400/50"
+                className="folder-file file-count-1 file-idx-0 border border-dashed border-sky-400/40 hover:border-sky-400 group/card transition-all duration-300 shadow-xl"
                 style={{
-                  background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+                  background: "linear-gradient(135deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%)",
                   zIndex: 25,
                 }}
+                onMouseEnter={() => sound.playTone(620, "sine", 0.03)}
                 onClick={() => {
                   sound.playPop();
                   if (onAddDocument) onAddDocument();
                 }}
               >
                 <div className="folder-shine" />
-                <Plus className="folder-file-icon text-sky-400" />
-                <div className="folder-file-text">
-                  <div>+ Link First Document</div>
-                  <div className="folder-file-subtext text-sky-300">Tap to add ID</div>
+                <div className="h-7 w-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-300 absolute top-3.5 right-3.5 group-hover/card:scale-110 group-hover/card:bg-sky-500/30 transition-all duration-300 shadow-sm">
+                  <Plus className="h-4 w-4" />
                 </div>
-                <div className="folder-file-tag">EMPTY • + ADD</div>
+                <div className="folder-file-text">
+                  <div className="text-white group-hover/card:text-sky-300 transition-colors font-bold">+ Link First Document</div>
+                  <div className="folder-file-subtext text-sky-400/90 flex items-center gap-1 mt-0.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping" />
+                    <span>Tap to add ID</span>
+                  </div>
+                </div>
+                <div className="folder-file-tag bg-sky-950/80 border border-sky-500/30 text-sky-200">
+                  EMPTY • + ADD
+                </div>
               </div>
             ) : (
               /* Search yielded 0 results */
@@ -292,6 +360,7 @@ export function WalletCard({
                     zIndex,
                     transitionDelay: `${idx * 0.03}s`,
                   }}
+                  onMouseEnter={() => sound.playTone(560 + idx * 45, "sine", 0.02)}
                   onClick={(e) => {
                     e.stopPropagation();
                     sound.playFlip();
@@ -317,30 +386,74 @@ export function WalletCard({
 
           {/* Folder Front Flap Wrapper (Frosted Apple Acrylic Glass) */}
           <div
-            className="folder-front-wrapper cursor-pointer"
+            className="folder-front-wrapper cursor-pointer overflow-hidden"
             onClick={handleToggle}
             title={isOpen ? "Click to close folder" : "Click to open folder"}
           >
+            {/* Holographic Laser Light Sweep across front surface on hover */}
+            <div
+              className={`absolute top-0 -left-[140%] w-[90%] h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-25deg] pointer-events-none transition-all duration-1000 z-20 ${
+                isHovered && !isOpen ? "left-[160%]" : ""
+              }`}
+            />
+
+            {/* Specular Interactive Mouse Glare tracking */}
+            <div
+              className="absolute inset-0 rounded-[12px] pointer-events-none transition-opacity duration-200 overflow-hidden mix-blend-overlay z-20"
+              style={{
+                background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.7) 0%, rgba(147, 197, 253, 0.3) 35%, transparent 65%)`,
+                opacity: isHovered && !isOpen ? glarePos.opacity : 0,
+              }}
+            />
+
             <svg className="folder-front" viewBox="0 0 50 34" fill="none">
+              <defs>
+                <linearGradient id="folder-front-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#0077fa" stopOpacity="0.86" />
+                  <stop offset="100%" stopColor="#0052cc" stopOpacity="0.94" />
+                </linearGradient>
+                <linearGradient id="folder-border-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
+                  <stop offset="50%" stopColor="rgba(255,255,255,0.15)" />
+                  <stop offset="100%" stopColor="rgba(255,255,255,0.45)" />
+                </linearGradient>
+              </defs>
               <path
                 d="M0 4C0 1.79086 1.79086 0 4 0H46C48.2091 0 50 1.79086 50 4V30C50 32.2091 48.2091 34 46 34H4C1.79086 34 0 32.2091 0 30V4Z"
-                fill="rgba(0, 102, 230, 0.72)"
+                fill="url(#folder-front-grad)"
+                stroke="url(#folder-border-grad)"
+                strokeWidth="0.6"
               />
             </svg>
 
+            {/* Subtle Guilloche / Geometric Security Border Pattern inside front pocket */}
+            <div className="absolute inset-2 rounded-lg border border-dashed border-white/20 pointer-events-none opacity-30" />
+
             {/* Folder Front Face Information Overlay */}
             <div className="absolute inset-0 p-3 flex items-start justify-between pointer-events-none select-none z-10 text-white">
-              {/* Brand Label */}
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20">
-                <Lock className="h-2.5 w-2.5 text-sky-200" />
-                <span className="text-[8.5px] font-bold tracking-wider uppercase text-white/90">
+              {/* Brand Label with live padlock and shimmer */}
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-[0_2px_10px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.45)] transition-transform group-hover:scale-105">
+                <Lock className={`h-2.5 w-2.5 text-sky-200 ${isHovered ? "animate-pulse" : ""}`} />
+                <span className="text-[8.5px] font-bold tracking-wider uppercase text-white drop-shadow">
                   White Card
                 </span>
               </div>
-              {/* Card Count Tag */}
-              <span className="text-[8.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-black/25 backdrop-blur-md text-sky-200 border border-white/10">
-                {docCount} {docCount === 1 ? "CARD" : "CARDS"}
-              </span>
+            </div>
+
+            {/* Hint label on hover when closed */}
+            <div
+              className={`absolute bottom-3.5 left-0 right-0 flex justify-center transition-all duration-300 pointer-events-none z-10 ${
+                isHovered && !isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-95"
+              }`}
+            >
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.18] backdrop-blur-xl border border-white/30 text-white shadow-[0_4px_16px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.45)]">
+                <span className="text-[10px] font-semibold text-white tracking-wide">
+                  Open Wallet
+                </span>
+                <span className="text-sky-200 text-xs font-bold transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              </div>
             </div>
           </div>
         </div>
