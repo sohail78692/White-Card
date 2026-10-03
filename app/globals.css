@@ -402,6 +402,34 @@ html.lenis body {
   animation: border-beam-spin 3.5s linear infinite;
 }
 
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+@keyframes laser-sweep {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 200%;
+  }
+}
+
+.animate-laser-sweep {
+  animation: laser-sweep 3s ease-in-out infinite;
+}
+
 
 
 

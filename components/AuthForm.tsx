@@ -205,12 +205,13 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
       {/* Step 1: Email Address Flow */}
       {step === "email" ? (
         <form onSubmit={handleSendOtp} className="space-y-4 animate-fadeIn">
-          <div>
-            <label className="block text-xs font-semibold text-neutral-200 mb-1.5 tracking-wide">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-medium text-neutral-300">
               Work or Personal Email
             </label>
-            <div className="relative group">
-              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-neutral-400 group-focus-within:text-[#2997FF] transition-colors duration-200" />
+
+            <div className="relative flex items-center group">
+              <Mail className="absolute left-3.5 h-4 w-4 text-neutral-400 group-focus-within:text-[#2997ff] transition-colors duration-200 pointer-events-none" />
               <input
                 type="email"
                 required
@@ -219,27 +220,52 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@company.com"
-                className="w-full rounded-xl border border-white/15 bg-white/[0.04] pl-10 pr-4 py-3 text-sm text-white placeholder-neutral-500 focus:border-[#2997FF] focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-[#2997FF]/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-200"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-9 py-3 text-sm text-white placeholder-neutral-500 focus:border-[#2997ff] focus:bg-white/[0.07] focus:outline-none focus:ring-1 focus:ring-[#2997ff] transition-all duration-200"
               />
+
+              {email && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("");
+                    sound.playPop();
+                  }}
+                  className="absolute right-3 p-1 rounded text-neutral-400 hover:text-white transition-colors cursor-pointer text-xs"
+                  title="Clear email"
+                >
+                  ✕
+                </button>
+              )}
             </div>
-            <p className="mt-1.5 text-[11px] text-neutral-400 leading-normal flex items-center gap-1.5">
+
+            <p className="mt-1 text-[11.5px] text-neutral-400 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-400 shrink-0" />
               <span>We never store plain credentials. One-time code valid for 10 minutes.</span>
             </p>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading || !email}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2997FF] via-[#0071e3] to-[#2997FF] bg-[length:200%_auto] hover:bg-right text-white py-3 px-4 text-sm font-semibold shadow-[0_4px_20px_rgba(41,151,255,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-white" />
-            ) : (
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            )}
-            <span>{loading ? "Sending One-Time Token..." : "Send Verification Code"}</span>
-          </button>
+          <div className="pt-1">
+            <button
+              type="submit"
+              disabled={loading || !email}
+              className="group relative w-full overflow-hidden flex items-center justify-center gap-2 rounded-xl bg-[#0071e3] hover:bg-[#0077ed] text-white py-3 px-4 text-sm font-semibold shadow-[0_4px_16px_rgba(0,113,227,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            >
+              {/* Subtle Elegant Light Sweep on Hover */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] pointer-events-none transition-transform" />
+
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-white" />
+                  <span>Sending code...</span>
+                </>
+              ) : (
+                <>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <span>Send Verification Code</span>
+                </>
+              )}
+            </button>
+          </div>
         </form>
       ) : (
         /* Step 2: 6-Digit OTP Flow with Individual Inputs */
@@ -250,9 +276,9 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
           }}
           className="space-y-5 animate-fadeIn"
         >
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs font-semibold text-neutral-200 tracking-wide">
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-medium text-neutral-300">
                 Security Verification Code
               </label>
               <button
@@ -261,7 +287,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
                   sound.playPop();
                   setStep("email");
                 }}
-                className="text-[11px] text-blue-400 hover:text-blue-300 font-medium transition cursor-pointer"
+                className="text-xs text-[#2997ff] hover:text-blue-300 font-medium transition cursor-pointer"
               >
                 Change Email
               </button>
@@ -285,14 +311,14 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
                   onPaste={idx === 0 ? handlePaste : undefined}
                   className={`w-11 sm:w-12 h-13 sm:h-14 rounded-xl text-center font-mono text-xl sm:text-2xl font-bold transition-all duration-200 border ${
                     digit
-                      ? "border-[#2997FF] bg-blue-500/[0.12] text-white shadow-[0_0_12px_rgba(41,151,255,0.4)]"
-                      : "border-white/15 bg-white/[0.04] text-white hover:border-white/30"
-                  } focus:border-[#2997FF] focus:bg-blue-500/[0.15] focus:outline-none focus:ring-2 focus:ring-[#2997FF]/30`}
+                      ? "border-[#2997ff] bg-blue-500/[0.12] text-white shadow-[0_0_12px_rgba(41,151,255,0.35)]"
+                      : "border-white/10 bg-white/[0.04] text-white hover:border-white/25"
+                  } focus:border-[#2997ff] focus:bg-blue-500/[0.15] focus:outline-none focus:ring-1 focus:ring-[#2997ff]`}
                 />
               ))}
             </div>
 
-            <div className="flex items-center justify-between mt-2.5 text-[11px] text-neutral-400">
+            <div className="flex items-center justify-between pt-1 text-[11.5px] text-neutral-400">
               <span className="truncate pr-2">
                 Sent to <strong className="text-white font-medium">{email}</strong>
               </span>
@@ -300,7 +326,7 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
                 type="button"
                 disabled={resendCooldown > 0 || loading}
                 onClick={() => handleSendOtp()}
-                className="text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shrink-0"
+                className="text-[#2997ff] hover:text-blue-300 font-medium flex items-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none cursor-pointer shrink-0 transition-colors"
               >
                 <RefreshCw className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
                 <span>{resendCooldown > 0 ? `Resend (${resendCooldown}s)` : "Resend Code"}</span>
@@ -308,18 +334,27 @@ export function AuthForm({ onSuccess }: { onSuccess?: () => void }) {
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading || digits.some((d) => !d)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2997FF] via-[#0071e3] to-[#2997FF] bg-[length:200%_auto] hover:bg-right text-white py-3 px-4 text-sm font-semibold shadow-[0_4px_20px_rgba(41,151,255,0.4),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin text-white" />
-            ) : (
-              <CheckCircle2 className="h-4 w-4 text-white" />
-            )}
-            <span>{loading ? "Verifying Cryptographic Proof..." : "Verify & Open Wallet"}</span>
-          </button>
+          <div className="pt-1">
+            <button
+              type="submit"
+              disabled={loading || digits.some((d) => !d)}
+              className="group relative w-full overflow-hidden flex items-center justify-center gap-2 rounded-xl bg-[#0071e3] hover:bg-[#0077ed] text-white py-3 px-4 text-sm font-semibold shadow-[0_4px_16px_rgba(0,113,227,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] pointer-events-none transition-transform" />
+
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-white" />
+                  <span>Verifying code...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="h-4 w-4 text-white" />
+                  <span>Verify &amp; Open Wallet</span>
+                </>
+              )}
+            </button>
+          </div>
         </form>
       )}
     </div>
