@@ -10,37 +10,34 @@ declare global {
   var _usingMemoryDbFallback: boolean | undefined;
 }
 
-let clientPromise: Promise<MongoClient> | null = null;
 
 export async function getMongoClient(): Promise<MongoClient> {
   if (global._usingMemoryDbFallback) {
     throw new Error("MongoDB unreachable: running in memory-db fallback mode");
   }
 
-  if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
-    if (!global._mongoClientPromise) {
-      const env = getEnv();
-      const client = new MongoClient(env.MONGODB_URI, {
-        maxPoolSize: 10,
-        serverSelectionTimeoutMS: 2000,
-      });
-      global._mongoClientPromise = client.connect().catch((err) => {
-        logger.warn("⚠️ MongoDB connection failed. Falling back to in-memory store for local testing/development.");
-        global._usingMemoryDbFallback = true;
-        throw err;
-      });
-    }
-    clientPromise = global._mongoClientPromise;
-  } else {
+  if (!global._mongoClientPromise) {
     const env = getEnv();
+    const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
     const client = new MongoClient(env.MONGODB_URI, {
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
+      minPoolSize: 1,
+      maxIdleTimeMS: 60000,
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: isDev ? 2000 : 5000,
     });
-    clientPromise = client.connect();
+
+    global._mongoClientPromise = client.connect().catch((err) => {
+      global._mongoClientPromise = undefined; // Allow auto-retry on subsequent requests
+      if (isDev) {
+        logger.warn("⚠️ MongoDB connection failed. Falling back to in-memory store for local testing/development.");
+        global._usingMemoryDbFallback = true;
+      }
+      throw err;
+    });
   }
 
-  return clientPromise;
+  return global._mongoClientPromise;
 }
 
 export async function getDb(): Promise<Db> {
