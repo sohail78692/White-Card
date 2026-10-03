@@ -53,15 +53,15 @@ interface IdImageSlot {
 function getDefaultTemplate(t: DocumentType): string {
   switch (t) {
     case "DRIVING_LICENSE":
-      return "DL0120220019842";
+      return "DL0120150001234";
     case "PAN":
-      return "FORPA5522R";
+      return "ABCDE1234F";
     case "VOTER_ID":
-      return "XKG3489120";
+      return "ABC1234567";
     case "RATION_CARD":
-      return "RC071098765432";
+      return "RC1234567890";
     case "RANDOM":
-      return "DOC-2026-9842";
+      return "DOC-2026-0001";
   }
 }
 
@@ -138,15 +138,15 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
   const [details, setDetails] = useState<Record<string, any>>(() => {
     switch (initialType) {
       case "PAN":
-        return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", taxpayerCategory: "Individual", aadhaarLinked: "Linked", cardStatus: "Active & Linked" };
+        return { name: "AARAV SHARMA", fatherName: "RAJESH SHARMA", dob: "15/08/1998", taxpayerCategory: "Individual", aadhaarLinked: "Linked", cardStatus: "Active & Linked" };
       case "VOTER_ID":
-        return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", acNumber: "AC-42 New Delhi", pollingBooth: "Booth 12A", partSerial: "24/110", state: "Delhi" };
+        return { name: "AARAV SHARMA", fatherName: "RAJESH SHARMA", dob: "15/08/1998", acNumber: "AC-42 New Delhi", pollingBooth: "Booth 12A", partSerial: "24/110", state: "Delhi" };
       case "RATION_CARD":
-        return { name: "SOHAIL AKHTAR", category: "NFSA-BPL", scheme: "Priority Household (PHH)", fpsDepotId: "FPS-9842", familyMembersCount: 4, monthlyRiceQuotaKg: 20, monthlyWheatQuotaKg: 15, state: "Delhi" };
+        return { name: "AARAV SHARMA", category: "NFSA-BPL", scheme: "Priority Household (PHH)", fpsDepotId: "FPS-9842", familyMembersCount: 4, monthlyRiceQuotaKg: 20, monthlyWheatQuotaKg: 15, state: "Delhi" };
       case "RANDOM":
-        return { name: "SOHAIL AKHTAR", category: "General", notes: "Sovereign Encrypted ID" };
+        return { name: "AARAV SHARMA", category: "General", notes: "Sovereign Encrypted ID" };
       default:
-        return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", vehicleClasses: ["MCWG", "LMV"], organDonor: true, rto: "DL-01", bloodGroup: "O+", state: "Delhi" };
+        return { name: "AARAV SHARMA", fatherName: "RAJESH SHARMA", dob: "15/08/1998", vehicleClasses: ["MCWG", "LMV"], organDonor: true, rto: "DL-01", bloodGroup: "B+", state: "Delhi" };
     }
   });
 
@@ -247,7 +247,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
         setIssuer("Universal Issuer");
         setCustomTitle("Custom Document");
         setDetails({
-          name: "SOHAIL AKHTAR",
+          name: "AARAV SHARMA",
           category: "General",
           notes: "Encrypted Personal ID",
         });
@@ -325,7 +325,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
 
   // Automated Document Data Extraction via server OCR and PDF parsing + Client OCR fallback
   const extractDataFromFile = async (file: File | Blob, filename: string) => {
-    // 1. Instant client-side check from filename (e.g., in.gov.pan-PANCR-FORPA5522R.pdf or photo named with ID)
+    // 1. Instant client-side check from filename (e.g., in.gov.pan-PANCR-ABCDE1234F.pdf or photo named with ID)
     const panFilenameMatch = filename.match(/\b([A-Z]{5}[0-9]{4}[A-Z])\b/i);
     if (panFilenameMatch && type === "PAN" && panFilenameMatch[1].toUpperCase() !== "ABCDE1234F") {
       const panNum = panFilenameMatch[1].toUpperCase();
@@ -1296,17 +1296,17 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                 type="text"
                 value={number}
                 onChange={(e) => setNumber(type === "RANDOM" ? e.target.value : e.target.value.toUpperCase())}
-                placeholder={type === "RANDOM" ? "e.g. DOC-9842 or ID-2026-X" : "e.g. FORPA5522R"}
+                placeholder={type === "RANDOM" ? "e.g. DOC-9842 or ID-2026-X" : "e.g. ABCDE1234F"}
                 className="flex-1 font-mono text-sm sm:text-base font-bold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-3 py-2 text-white uppercase tracking-wider outline-none transition"
               />
             </div>
             {/* Quick Sample Button */}
             <div className="flex items-center justify-between pt-1">
               <span className="text-[10px] text-neutral-400 font-mono">
-                {type === "DRIVING_LICENSE" && "Format: DL0120220019842 (State + RTO + Year + 7 digits)"}
-                {type === "PAN" && "Format: 5 letters, 4 numbers, 1 letter (e.g. FORPA5522R)"}
-                {type === "VOTER_ID" && "Format: 3 letters, 7 numbers (e.g. XKG3489120)"}
-                {type === "RATION_CARD" && "Format: 10-14 alphanumeric digits (e.g. RC071098765432)"}
+                {type === "DRIVING_LICENSE" && "Format: DL0120150001234 (State + RTO + Year + 7 digits)"}
+                {type === "PAN" && "Format: 5 letters, 4 numbers, 1 letter (e.g. ABCDE1234F)"}
+                {type === "VOTER_ID" && "Format: 3 letters, 7 numbers (e.g. ABC1234567)"}
+                {type === "RATION_CARD" && "Format: 10-14 alphanumeric digits (e.g. RC1234567890)"}
                 {type === "RANDOM" && "Format: Any custom ID, card number, or identifier"}
               </span>
               <button
@@ -1314,38 +1314,38 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                 onClick={() => {
                   sound.playPop();
                   if (type === "DRIVING_LICENSE") {
-                    setNumber("DL0120220019842");
+                    setNumber("DL0120150001234");
                     setIssuer("Ministry of Road Transport & Highways");
                     setExpiry("2042-10-18");
                     setDetails({
-                      name: "SOHAIL AKHTAR",
-                      fatherName: "SAHIMUDDIN ANSARI",
-                      dob: "10/01/2006",
+                      name: "AARAV SHARMA",
+                      fatherName: "RAJESH SHARMA",
+                      dob: "15/08/1998",
                       vehicleClasses: ["MCWG", "LMV"],
                       organDonor: true,
-                      bloodGroup: "O+",
+                      bloodGroup: "B+",
                       rto: "DL-01",
                       state: "Delhi",
                       issueState: "Delhi",
                     });
                   } else if (type === "PAN") {
-                    setNumber("FORPA5522R");
+                    setNumber("ABCDE1234F");
                     setIssuer("Income Tax Department");
                     setDetails({
-                      name: "SOHAIL AKHTAR",
-                      fatherName: "SAHIMUDDIN ANSARI",
-                      dob: "10/01/2006",
+                      name: "AARAV SHARMA",
+                      fatherName: "RAJESH SHARMA",
+                      dob: "15/08/1998",
                       taxpayerCategory: "Individual",
                       aadhaarLinked: "Linked",
                       cardStatus: "Active & Linked",
                     });
                   } else if (type === "VOTER_ID") {
-                    setNumber("XKG3489120");
+                    setNumber("ABC1234567");
                     setIssuer("Election Commission of India");
                     setDetails({
-                      name: "SOHAIL AKHTAR",
-                      fatherName: "SAHIMUDDIN ANSARI",
-                      dob: "10/01/2006",
+                      name: "AARAV SHARMA",
+                      fatherName: "RAJESH SHARMA",
+                      dob: "15/08/1998",
                       gender: "Male",
                       acNumber: "AC-42 New Delhi",
                       parliamentaryConstituency: "04 New Delhi",
@@ -1354,10 +1354,10 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                       state: "Delhi",
                     });
                   } else if (type === "RATION_CARD") {
-                    setNumber("RC071098765432");
+                    setNumber("RC1234567890");
                     setIssuer("Department of Food and Civil Supplies");
                     setDetails({
-                      name: "SOHAIL AKHTAR",
+                      name: "AARAV SHARMA",
                       category: "NFSA-BPL",
                       scheme: "Priority Household (PHH)",
                       fpsDepotId: "FPS-9842",
@@ -1367,12 +1367,12 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                       state: "Delhi",
                     });
                   } else if (type === "RANDOM") {
-                    setNumber("DOC-2026-9842");
+                    setNumber("DOC-2026-0001");
                     setCustomTitle("Sovereign Membership ID");
                     setIssuer("Global Sovereign Network");
                     setExpiry("2035-12-31");
                     setDetails({
-                      name: "SOHAIL AKHTAR",
+                      name: "AARAV SHARMA",
                       category: "Verified Member",
                       notes: "Universal Sovereign Credential",
                     });
@@ -1412,7 +1412,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                     type="text"
                     value={details?.name || ""}
                     onChange={(e) => setDetails((prev: any) => ({ ...prev, name: e.target.value.toUpperCase() }))}
-                    placeholder="e.g. SOHAIL AKHTAR"
+                    placeholder="e.g. AARAV SHARMA"
                     className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white uppercase outline-none transition"
                   />
                 </div>
@@ -1425,7 +1425,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                     type="text"
                     value={details?.fatherName || ""}
                     onChange={(e) => setDetails((prev: any) => ({ ...prev, fatherName: e.target.value.toUpperCase() }))}
-                    placeholder="e.g. SAHIMUDDIN ANSARI"
+                    placeholder="e.g. RAJESH SHARMA"
                     className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white uppercase outline-none transition"
                   />
                 </div>

@@ -210,7 +210,7 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
     setExtractingAttId(att.id);
     setError(null);
     try {
-      // 1. Immediate match on filename (e.g., in.gov.pan-PANCR-FORPA5522R.pdf)
+      // 1. Immediate match on filename (e.g., in.gov.pan-PANCR-ABCDE1234F.pdf)
       const panFilenameMatch = att.filename.match(/\b([A-Z]{5}[0-9]{4}[A-Z])\b/i);
       const dlFilenameMatch = att.filename.match(/\b([A-Z]{2}[0-9]{13,15})\b/i);
       const voterFilenameMatch = att.filename.match(/\b([A-Z]{3}[0-9]{7})\b/i);
@@ -610,7 +610,7 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
                       type="text"
                       value={editNumber}
                       onChange={(e) => setEditNumber(e.target.value.toUpperCase())}
-                      placeholder="e.g. FORPA5522R"
+                      placeholder="e.g. ABCDE1234F"
                       className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-2 text-sm font-mono font-bold text-white focus:outline-none focus:border-sky-400"
                     />
                   </div>

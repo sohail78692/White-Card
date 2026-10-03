@@ -165,10 +165,10 @@ export function PhysicalIdCardView({
   };
 
   const cardholderName =
-    name || details.name || details.fullName || details.cardholderName || "SOHAIL AKHTAR";
-  const fatherName = details.fatherName || details.fathersName || "SAHIMUDDIN ANSARI";
-  const dob = details.dob || details.dateOfBirth || "10/01/2006";
-  const bloodGroup = details.bloodGroup || "O+";
+    name || details.name || details.fullName || details.cardholderName || "AARAV SHARMA";
+  const fatherName = details.fatherName || details.fathersName || "RAJESH SHARMA";
+  const dob = details.dob || details.dateOfBirth || "15/08/1998";
+  const bloodGroup = details.bloodGroup || "B+";
   const organDonor = details.organDonor ?? true;
   const stateName = details.state || details.issueState || (type === "DRIVING_LICENSE" ? "Delhi" : "New Delhi");
   const rtoCode = details.rto || (number.length >= 4 ? number.slice(0, 4) : "DL-01");

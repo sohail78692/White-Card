@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       issuer: null,
     };
 
-    // 1. FAST CHECK: Extract from filename (e.g. in.gov.pan-PANCR-FORPA5522R.pdf)
+    // 1. FAST CHECK: Extract from filename (e.g. in.gov.pan-PANCR-ABCDE1234F.pdf)
     const panFilenameMatch = filename.match(/\b([A-Z]{5}[0-9]{4}[A-Z])\b/i);
     const dlFilenameMatch = filename.match(/\b([A-Z]{2}[0-9]{13,15})\b/i);
     const voterFilenameMatch = filename.match(/\b([A-Z]{3}[0-9]{7})\b/i);
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
         result.issuer = "Income Tax Department";
       }
 
-      // 2. Tolerance for OCR artifact / S-5 doubling (e.g. FORPAS5522R -> FORPA5522R)
+      // 2. Tolerance for OCR artifact / S-5 doubling (e.g. ABCDES1234F -> ABCDE1234F)
       if (!result.number) {
         const fuzzyMatches = Array.from(extractedText.matchAll(/\b([A-Z]{5})[A-Z0-9]?([0-9]{4}[A-Z])\b/g)).map((m) => (m[1] + m[2]).toUpperCase());
         const validFuzzy = fuzzyMatches.find((m) => !isPlaceholder(m));
