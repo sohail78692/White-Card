@@ -640,57 +640,59 @@ function PasswordlessAuthFeatureCard() {
   };
 
   return (
-    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.15)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[240px] sm:min-h-[260px]">
+    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[235px] sm:min-h-[255px]">
       {/* Subtle ambient glass tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[18px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[22px]" />
 
-      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      {/* Background Illustration */}
       <img
         src="/privacy/passwordless-otp.png"
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
-      {/* Top Header Badge */}
-      <div className="relative z-10 flex items-start gap-2.5">
-        <div className="w-8 h-8 rounded-xl bg-blue-500/[0.15] border border-blue-500/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
-          <Key className="w-4 h-4 stroke-[2]" />
+      {/* Top Header Icon */}
+      <div className="relative z-10 flex items-center">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-[9px] sm:rounded-[10px] bg-blue-500/[0.12] border border-blue-400/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+          <Mail className="w-4 h-4 stroke-[2]" />
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 space-y-1.5 text-left max-w-[195px] sm:max-w-[215px]">
-        <h3 className="text-[15px] sm:text-[16px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-          Passwordless Email OTP
+      {/* Main Content */}
+      <div className="relative z-10 mt-3 sm:mt-3.5 space-y-1 max-w-[170px] sm:max-w-[195px] text-left">
+        <h3 className="text-[17px] sm:text-[19px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+          Passwordless<br />Email <span className="text-[#38bdf8]">OTP</span>
         </h3>
-        <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-          No passwords to forget, steal, or leak. Your wallet authenticates with hardware-random one-time verification tokens.
+        <p className="text-[10.5px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          Secure login with<br className="hidden sm:inline" /> one-time email OTP.
         </p>
       </div>
 
       {/* Bottom Tray */}
-      <div className="relative z-10 rounded-[12px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.12] hover:border-white/[0.2] p-2 sm:p-2.5 flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300">
-        <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-7 h-7 rounded-[8px] bg-[#0c234b]/80 border border-[#1e4d94] text-[#2997FF] flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(41,151,255,0.25)]">
-            <Mail className="w-3.5 h-3.5" />
+      <div className="relative z-10 mt-auto pt-3 flex items-center gap-1.5 sm:gap-2">
+        {/* Chip 1: Email OTP Sent instantly */}
+        <div className="rounded-[11px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2 sm:px-2.5 py-1.5 flex items-center gap-1.5 backdrop-blur-xl min-w-0 flex-1 shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5 h-5 rounded-[5px] bg-[#0c234b] border border-[#1e4d94] text-[#2997FF] flex items-center justify-center shrink-0">
+            <Mail className="w-2.5 h-2.5 stroke-[2.2]" />
           </div>
-          <div className="min-w-0 pr-1">
-            <div className="text-[11px] font-bold text-white truncate leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Secure 6-Digit OTP</div>
-            <div className="text-[9.5px] text-[#CBD5E1] truncate mt-0.5 font-medium">Cryptographic Verification</div>
+          <div className="min-w-0 text-left">
+            <div className="text-[7px] sm:text-[7.5px] text-[#94A3B8] font-medium leading-none">Email OTP</div>
+            <div className="text-[9.5px] sm:text-[10px] font-bold text-white mt-0.5 truncate leading-tight">Sent instantly</div>
           </div>
         </div>
 
+        {/* Chip 2: Send OTP Button */}
         <button
           onClick={handleSimulateAuth}
           disabled={authState !== "idle"}
-          className="rounded-[10px] bg-gradient-to-r from-[#2997FF] to-[#0071e3] hover:from-[#38bdf8] hover:to-[#2997FF] text-white text-[10px] font-semibold px-2.5 sm:px-3 py-1.5 shadow-[0_4px_14px_rgba(41,151,255,0.4)] transition-all duration-200 active:scale-95 shrink-0 cursor-pointer disabled:opacity-75 whitespace-nowrap"
+          className="rounded-[11px] bg-gradient-to-r from-[#0066ff] to-[#0052cc] hover:from-[#1a75ff] hover:to-[#0066ff] text-white text-[10px] sm:text-[10.5px] font-bold px-2.5 sm:px-3 py-1.5 flex items-center gap-1 shrink-0 whitespace-nowrap active:scale-95 transition-all cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_16px_rgba(0,102,255,0.4)] hover:shadow-[0_0_24px_rgba(0,102,255,0.65)] hover:scale-[1.02] border border-white/20 backdrop-blur-md"
         >
-          {authState === "idle" ? "Simulate OTP →" : authState === "sending" ? "Sending..." : "Verified ✓"}
+          <span>{authState === "idle" ? "Send OTP →" : authState === "sending" ? "Sending..." : "Sent! ✓"}</span>
         </button>
       </div>
     </div>
@@ -700,64 +702,73 @@ function PasswordlessAuthFeatureCard() {
 function InstantRevokeFeatureCard() {
   const [isRevoked, setIsRevoked] = React.useState(false);
 
-  return (
-    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.15)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[240px] sm:min-h-[260px]">
-      {/* Subtle ambient glass red tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.05] via-transparent to-red-500/[0.02] pointer-events-none rounded-[18px]" />
+  const handleToggleRevoke = () => {
+    sound.playPop();
+    setIsRevoked(!isRevoked);
+    if (!isRevoked) {
+      setTimeout(() => sound.playSuccess(), 250);
+    }
+  };
 
-      {/* Background Illustration filling the box properly with smooth left fade mask */}
+  return (
+    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[235px] sm:min-h-[255px]">
+      {/* Subtle ambient glass red tint */}
+      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] via-transparent to-red-500/[0.02] pointer-events-none rounded-[22px]" />
+
+      {/* Background Illustration */}
       <img
         src="/privacy/instant-revocation.png"
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
-      {/* Top Header Badge */}
-      <div className="relative z-10 flex items-start gap-2.5">
-        <div className="w-8 h-8 rounded-xl bg-red-500/[0.15] border border-red-500/35 text-[#FF3B5C] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(255,59,92,0.4)] transition-shadow duration-300">
-          <Lock className="w-4 h-4 stroke-[2]" />
+      {/* Top Header Icon */}
+      <div className="relative z-10 flex items-center">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-[9px] sm:rounded-[10px] bg-red-500/[0.12] border border-red-500/35 text-[#EF4444] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(239,68,68,0.4)] transition-shadow duration-300">
+          <Trash2 className="w-4 h-4 stroke-[2]" />
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 space-y-1.5 text-left max-w-[195px] sm:max-w-[215px]">
-        <h3 className="text-[15px] sm:text-[16px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-          Instant 1-Tap Access Revocation
+      {/* Main Content */}
+      <div className="relative z-10 mt-3 sm:mt-3.5 space-y-1 max-w-[170px] sm:max-w-[195px] text-left">
+        <h3 className="text-[17px] sm:text-[19px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+          Instant 1-Tap<br />Access Revocation
         </h3>
-        <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-          Changed your mind after showing an ID? Kill the token remotely in real time. Verifiers immediately see an invalidated claim notice.
+        <p className="text-[10.5px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          Remove stored documents<br className="hidden sm:inline" /> and keys anytime.
         </p>
       </div>
 
       {/* Bottom Tray */}
-      <div className="relative z-10 rounded-[12px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.12] hover:border-white/[0.2] p-2 sm:p-2.5 flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300">
-        <div>
-          <div className="text-[9.5px] text-[#94A3B8] font-semibold leading-none uppercase tracking-wide">Token Status</div>
-          <div className={`text-[11px] font-bold mt-1 flex items-center gap-1.5 ${isRevoked ? "text-[#FF3B5C]" : "text-[#00E599]"}`}>
+      <div className="relative z-10 mt-auto pt-3 flex items-center gap-1.5 sm:gap-2">
+        {/* Chip 1: Access Status Active & Protected */}
+        <div className="rounded-[11px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2 sm:px-2.5 py-1.5 flex items-center gap-1.5 backdrop-blur-xl min-w-0 flex-1 shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="relative flex h-2 w-2 shrink-0">
             {!isRevoked && (
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
-              </span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             )}
-            {isRevoked ? "Terminated ✕" : "Active & Authorised"}
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${isRevoked ? "bg-red-400" : "bg-[#00E599]"}`}></span>
+          </div>
+          <div className="min-w-0 text-left">
+            <div className="text-[7px] sm:text-[7.5px] text-[#94A3B8] font-medium leading-none">Access Status</div>
+            <div className={`text-[9.5px] sm:text-[10px] font-bold mt-0.5 truncate leading-tight ${isRevoked ? "text-red-400" : "text-[#00E599]"}`}>
+              {isRevoked ? "Revoked ✕" : "Active & Protected"}
+            </div>
           </div>
         </div>
 
+        {/* Chip 2: Revoke Access Button */}
         <button
-          onClick={() => {
-            sound.playPop();
-            setIsRevoked(!isRevoked);
-          }}
-          className={`text-white text-[10px] font-semibold px-2.5 sm:px-3 py-1.5 rounded-[10px] flex items-center gap-1.5 transition-all duration-200 active:scale-95 shrink-0 cursor-pointer whitespace-nowrap ${
+          onClick={handleToggleRevoke}
+          className={`rounded-[11px] text-white text-[10px] sm:text-[10.5px] font-bold px-2.5 sm:px-3 py-1.5 flex items-center gap-1 shrink-0 whitespace-nowrap active:scale-95 transition-all cursor-pointer border border-white/20 backdrop-blur-md ${
             isRevoked
-              ? "bg-white/[0.1] hover:bg-white/[0.16] text-white border border-white/20"
-              : "bg-gradient-to-r from-[#e11d48] to-[#be123c] hover:from-[#f43f5e] hover:to-[#e11d48] shadow-[0_4px_16px_rgba(225,29,72,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]"
+              ? "bg-white/[0.1] hover:bg-white/[0.16] shadow-[0_0_14px_rgba(255,255,255,0.15)]"
+              : "bg-gradient-to-r from-[#e11d48] to-[#be123c] hover:from-[#f43f5e] hover:to-[#e11d48] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_16px_rgba(225,29,72,0.4)] hover:shadow-[0_0_24px_rgba(225,29,72,0.65)] hover:scale-[1.02]"
           }`}
         >
           <Trash2 className="w-3 h-3" />
@@ -769,63 +780,61 @@ function InstantRevokeFeatureCard() {
 }
 
 function LiveAuditLogFeatureCard() {
-  const [logs] = React.useState([
-    { id: 1, action: "Driving License age proof shared", time: "Just now", dot: "bg-[#00E599]" },
-    { id: 2, action: "PAN Card masked copy generated", time: "18m ago", dot: "bg-[#2997FF]" },
-    { id: 3, action: "Voter ID token expired and cleared", time: "1h ago", dot: "bg-[#38bdf8]" },
-  ]);
-
   return (
-    <div className="relative group rounded-[18px] bg-[#070b14] border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.18)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.15)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[240px] sm:min-h-[260px]">
+    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[235px] sm:min-h-[255px]">
       {/* Subtle ambient glass emerald tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.05] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[18px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[22px]" />
 
-      {/* Background Illustration filling the box properly with smooth left fade mask */}
+      {/* Background Illustration */}
       <img
         src="/privacy/verification-log.png"
         alt=""
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
-      {/* Dark protective shield on left, fading smoothly right for text readability */}
+      {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
-      {/* Top Header Badge */}
-      <div className="relative z-10 flex items-start gap-2.5">
-        <div className="w-8 h-8 rounded-xl bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(0,229,153,0.4)] transition-shadow duration-300">
+      {/* Top Header Icon */}
+      <div className="relative z-10 flex items-center">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-[9px] sm:rounded-[10px] bg-emerald-500/[0.12] border border-emerald-500/35 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(0,229,153,0.4)] transition-shadow duration-300">
           <FileText className="w-4 h-4 stroke-[2]" />
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 space-y-1.5 text-left max-w-[195px] sm:max-w-[215px]">
-        <h3 className="text-[15px] sm:text-[16px] font-bold text-white tracking-tight leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-          Real-Time Verification Log
+      {/* Main Content */}
+      <div className="relative z-10 mt-3 sm:mt-3.5 space-y-1 max-w-[170px] sm:max-w-[195px] text-left">
+        <h3 className="text-[17px] sm:text-[19px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+          Real-Time<br />Verification Log
         </h3>
-        <p className="text-[11px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-          Every scan, share, or download writes to your local private ledger. You always know who inspected your credentials and when.
+        <p className="text-[10.5px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+          See every access, verification<br className="hidden sm:inline" /> and activity in real time.
         </p>
       </div>
 
-      {/* Bottom Tray */}
-      <div className="relative z-10 rounded-[12px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.12] hover:border-white/[0.2] p-2.5 space-y-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300">
-        {logs.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center justify-between text-xs py-0.5 text-neutral-400 hover:text-white transition cursor-pointer select-none"
-          >
-            <div className="flex items-center gap-2 truncate pr-2">
-              <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0 shadow-[0_0_6px_currentColor]`} />
-              <span className="truncate text-white text-[11px] font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">{item.action}</span>
+      {/* Bottom Tray: 2 Row Log List exactly matching reference image */}
+      <div className="relative z-10 mt-auto pt-3">
+        <div className="rounded-[11px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] p-2 space-y-1 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          {/* Row 1 */}
+          <div className="flex items-center justify-between text-[10px] sm:text-[10.5px]">
+            <div className="flex items-center gap-1.5 min-w-0 pr-2">
+              <span className="w-2 h-2 rounded-full bg-[#00E599] shrink-0 shadow-[0_0_6px_#00E599]" />
+              <span className="font-semibold text-white truncate">Aadhaar verified</span>
             </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <span className="text-[10px] text-[#CBD5E1] font-medium">{item.time}</span>
-              <ChevronRight className="w-3 h-3 text-[#64748B]" />
-            </div>
+            <span className="text-[9px] text-[#94A3B8] shrink-0 font-medium">Just now</span>
           </div>
-        ))}
+
+          {/* Row 2 */}
+          <div className="flex items-center justify-between text-[10px] sm:text-[10.5px]">
+            <div className="flex items-center gap-1.5 min-w-0 pr-2">
+              <span className="w-2 h-2 rounded-full bg-[#64748B] shrink-0" />
+              <span className="font-medium text-[#CBD5E1] truncate">Driving License accessed</span>
+            </div>
+            <span className="text-[9px] text-[#94A3B8] shrink-0 font-medium">2 min ago</span>
+          </div>
+        </div>
       </div>
     </div>
   );
