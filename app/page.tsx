@@ -1205,7 +1205,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative space-y-10 sm:space-y-12 pt-0 pb-12 overflow-hidden bg-black">
+    <div className="relative space-y-10 sm:space-y-12 pt-0 pb-0 overflow-hidden bg-black">
       {/* 1. Hero Section (Two-Column Layout with 3D Glass Wallet Mockup) */}
       <section id="hero" className="relative max-w-7xl mx-auto pt-6 sm:pt-8 lg:pt-10 pb-0 sm:pb-1 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* 2-Column Hero Grid */}
@@ -1691,7 +1691,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Section: Security (Silicon Sealed Architecture) */}
-      <section id="security" className="scroll-mt-24 relative z-10 bg-black pt-2 sm:pt-4 pb-12 sm:pb-16 space-y-5 sm:space-y-6 max-w-[1080px] mx-auto px-4 sm:px-6 content-auto">
+      <section id="security" className="scroll-mt-24 relative z-10 bg-black pt-2 sm:pt-4 pb-0 space-y-5 sm:space-y-6 max-w-[1080px] mx-auto px-4 sm:px-6 content-auto">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-[#0d1527]/80 border border-[#1d2d47] px-3.5 py-1 text-[10px] font-semibold tracking-[0.12em] text-[#cbd5e1] uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]" />
