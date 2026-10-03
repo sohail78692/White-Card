@@ -1557,44 +1557,62 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Bottom Trust Highlights (iOS Glass Squircles with Clean Dividers & Micro-Interactions) */}
-        <div className="pt-8 sm:pt-10 lg:pt-12 pb-6 sm:pb-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-3 px-2">
+        {/* Bottom Trust Highlights (Luxury Glass Capsules with Kinetic Micro-Animations & Glow) */}
+        <div className="pt-8 sm:pt-10 lg:pt-12 pb-6 sm:pb-8 max-w-5xl mx-auto flex flex-col md:flex-row items-stretch justify-between gap-3 md:gap-4 px-2">
           {/* 1. Client Encrypted */}
-          <div className="group flex items-center gap-4 flex-1 p-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300 cursor-default">
-            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-cyan-400/40 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_18px_rgba(56,189,248,0.35)] group-hover:scale-110 transition-all duration-300">
-              <Lock className="h-4.5 w-4.5 group-hover:text-cyan-400 transition-colors" />
+          <div
+            onMouseEnter={() => sound.playPop()}
+            className="group relative overflow-hidden flex items-center gap-3.5 flex-1 px-4 py-3 rounded-2xl border border-white/[0.06] hover:border-cyan-500/30 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.5),0_0_24px_rgba(56,189,248,0.12)] cursor-default"
+          >
+            {/* Specular Shimmer Sheen Sweep */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-700 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent skew-x-[-20deg] pointer-events-none transition-transform" />
+
+            <div className="h-11 w-11 rounded-xl bg-white/[0.04] border border-white/10 group-hover:border-cyan-400/50 group-hover:bg-cyan-500/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_20px_rgba(56,189,248,0.35)] group-hover:scale-105 transition-all duration-300">
+              <Lock className="h-4.5 w-4.5 group-hover:text-cyan-400 group-hover:-translate-y-0.5 group-hover:rotate-[-6deg] transition-all duration-300" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white group-hover:text-cyan-100 transition-colors leading-tight">Client Encrypted</div>
-              <div className="text-xs text-neutral-400 leading-normal mt-0.5">Your data, your control</div>
+              <div className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors leading-tight">Client Encrypted</div>
+              <div className="text-xs text-neutral-400 group-hover:text-neutral-300 leading-normal mt-0.5 transition-colors">Your data, your control</div>
             </div>
           </div>
 
           {/* Divider 1 */}
-          <div className="hidden md:block h-9 w-px bg-white/10 shrink-0" aria-hidden="true" />
+          <div className="hidden md:block h-8 w-px bg-white/10 my-auto shrink-0" aria-hidden="true" />
 
           {/* 2. Zero PII Leakage */}
-          <div className="group flex items-center gap-4 flex-1 md:justify-center p-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300 cursor-default">
-            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-emerald-400/40 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)] group-hover:scale-110 transition-all duration-300">
-              <ShieldCheck className="h-4.5 w-4.5 group-hover:text-emerald-400 transition-colors" />
+          <div
+            onMouseEnter={() => sound.playPop()}
+            className="group relative overflow-hidden flex items-center gap-3.5 flex-1 px-4 py-3 rounded-2xl border border-white/[0.06] hover:border-emerald-500/30 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.5),0_0_24px_rgba(16,185,129,0.12)] cursor-default"
+          >
+            {/* Specular Shimmer Sheen Sweep */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-700 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent skew-x-[-20deg] pointer-events-none transition-transform" />
+
+            <div className="h-11 w-11 rounded-xl bg-white/[0.04] border border-white/10 group-hover:border-emerald-400/50 group-hover:bg-emerald-500/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:scale-105 transition-all duration-300">
+              <ShieldCheck className="h-4.5 w-4.5 group-hover:text-emerald-400 group-hover:scale-110 group-hover:rotate-[6deg] transition-all duration-300" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white group-hover:text-emerald-100 transition-colors leading-tight">Zero PII Leakage</div>
-              <div className="text-xs text-neutral-400 leading-normal mt-0.5">Share only what&apos;s needed</div>
+              <div className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors leading-tight">Zero PII Leakage</div>
+              <div className="text-xs text-neutral-400 group-hover:text-neutral-300 leading-normal mt-0.5 transition-colors">Share only what&apos;s needed</div>
             </div>
           </div>
 
           {/* Divider 2 */}
-          <div className="hidden md:block h-9 w-px bg-white/10 shrink-0" aria-hidden="true" />
+          <div className="hidden md:block h-8 w-px bg-white/10 my-auto shrink-0" aria-hidden="true" />
 
           {/* 3. Fast & Secure */}
-          <div className="group flex items-center gap-4 flex-1 md:justify-end p-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300 cursor-default">
-            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-amber-400/40 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_18px_rgba(245,158,11,0.35)] group-hover:scale-110 transition-all duration-300">
-              <Zap className="h-4.5 w-4.5 group-hover:text-amber-400 transition-colors" />
+          <div
+            onMouseEnter={() => sound.playPop()}
+            className="group relative overflow-hidden flex items-center gap-3.5 flex-1 px-4 py-3 rounded-2xl border border-white/[0.06] hover:border-amber-500/30 bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.5),0_0_24px_rgba(245,158,11,0.12)] cursor-default"
+          >
+            {/* Specular Shimmer Sheen Sweep */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-700 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent skew-x-[-20deg] pointer-events-none transition-transform" />
+
+            <div className="h-11 w-11 rounded-xl bg-white/[0.04] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-500/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_20px_rgba(245,158,11,0.35)] group-hover:scale-105 transition-all duration-300">
+              <Zap className="h-4.5 w-4.5 group-hover:text-amber-400 group-hover:scale-110 group-hover:rotate-[-12deg] transition-all duration-300" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white group-hover:text-amber-100 transition-colors leading-tight">Fast & Secure</div>
-              <div className="text-xs text-neutral-400 leading-normal mt-0.5">Instant, verifiable tokens</div>
+              <div className="text-sm font-bold text-white group-hover:text-amber-200 transition-colors leading-tight">Fast &amp; Secure</div>
+              <div className="text-xs text-neutral-400 group-hover:text-neutral-300 leading-normal mt-0.5 transition-colors">Instant, verifiable tokens</div>
             </div>
           </div>
         </div>
