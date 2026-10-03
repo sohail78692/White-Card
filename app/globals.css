@@ -340,6 +340,70 @@ html.lenis body {
   animation: scan-beam 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* Fluid Water Flow & Wave Animations */
+@keyframes water-drift-1 {
+  0% {
+    transform: translateX(-40%) translateY(0px) scaleY(1);
+  }
+  50% {
+    transform: translateX(0%) translateY(-3px) scaleY(1.2);
+  }
+  100% {
+    transform: translateX(-40%) translateY(0px) scaleY(1);
+  }
+}
+
+@keyframes water-drift-2 {
+  0% {
+    transform: translateX(0%) translateY(-2px) scaleY(1.15);
+  }
+  50% {
+    transform: translateX(-35%) translateY(1px) scaleY(0.9);
+  }
+  100% {
+    transform: translateX(0%) translateY(-2px) scaleY(1.15);
+  }
+}
+
+.animate-water-flow-1 {
+  animation: water-drift-1 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.animate-water-flow-2 {
+  animation: water-drift-2 3.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes water-ripple-pulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.03);
+  }
+}
+
+.animate-water-pulse {
+  animation: water-ripple-pulse 3s ease-in-out infinite;
+}
+
+/* Electric Laser Border Beam for Sign In Button */
+@keyframes border-beam-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-beam {
+  animation: border-beam-spin 3.5s linear infinite;
+}
+
+
+
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {

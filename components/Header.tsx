@@ -34,6 +34,39 @@ interface HeaderStats {
   auditEntries: number;
 }
 
+function HeaderSignInButton() {
+  const handleMouseEnter = () => {
+    sound.playPop();
+  };
+
+  return (
+    <Link
+      href="/signin"
+      onMouseEnter={handleMouseEnter}
+      className="relative group overflow-hidden inline-flex items-center gap-2 rounded-full bg-white text-black px-4 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-[0_2px_12px_rgba(255,255,255,0.2),0_1px_4px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_28px_rgba(255,255,255,0.4),0_0_20px_rgba(56,189,248,0.25)] hover:scale-105 active:scale-95 transition-all duration-300 select-none border border-white/90"
+    >
+      {/* Specular Diagonal Crystal Sheen on Hover */}
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-black/[0.08] to-transparent pointer-events-none" />
+
+      {/* User Icon: Magnetic Hop & Tilt */}
+      <div className="relative z-10 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:rotate-12 group-hover:scale-110">
+        <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-black" />
+      </div>
+
+      {/* Button Text with Smooth Letter Tracking */}
+      <span className="relative z-10 tracking-tight group-hover:tracking-wide transition-all duration-300">
+        Sign In
+      </span>
+
+      {/* Double Arrow Portal Pass: Arrow 1 exits right, Arrow 2 seamlessly glides in from left */}
+      <div className="relative z-10 overflow-hidden w-4 h-4 flex items-center justify-center shrink-0">
+        <ArrowRight className="h-3.5 w-3.5 text-black/90 transition-all duration-300 ease-out group-hover:translate-x-5 group-hover:opacity-0" />
+        <ArrowRight className="h-3.5 w-3.5 text-black absolute transition-all duration-300 ease-out -translate-x-5 opacity-0 group-hover:translate-x-0 group-hover:opacity-100" />
+      </div>
+    </Link>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
   const [muted, setMuted] = useState(false);
@@ -266,14 +299,7 @@ export function Header() {
                 </button>
               </div>
             ) : (
-              <Link
-                href="/signin"
-                className="relative flex items-center gap-1.5 sm:gap-2 rounded-full bg-white hover:bg-neutral-100 text-black px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.35)] hover:scale-105 active:scale-95 transition-all duration-200"
-              >
-                <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-black" />
-                <span>Sign In</span>
-                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-black/80" />
-              </Link>
+              <HeaderSignInButton />
             )}
 
             {/* Mobile Menu Toggle (Visible below lg for unauthenticated) */}

@@ -1181,6 +1181,82 @@ function SecurityZeroTrackersCard() {
   );
 }
 
+function HeroOpenWalletButton({ href }: { href: string }) {
+  const [coords, setCoords] = React.useState({ x: 0, y: 0, isHovered: false });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      isHovered: true,
+    });
+  };
+
+  const handleMouseEnter = () => {
+    sound.playPop();
+  };
+
+  const handleMouseLeave = () => {
+    setCoords((prev) => ({ ...prev, isHovered: false }));
+  };
+
+  return (
+    <Link
+      href={href}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative group overflow-hidden inline-flex items-center gap-2.5 rounded-full bg-white text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_4px_20px_rgba(56,189,248,0.25),0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_36px_rgba(56,189,248,0.5),0_0_24px_rgba(0,210,255,0.4)] hover:scale-105 active:scale-[0.96] transition-all duration-300 select-none border border-white/90"
+    >
+      {/* 1. Fluid Water Wave Layer 1 (Aqua Cyan Undulating Wave) */}
+      <div className="absolute inset-x-0 bottom-0 h-full pointer-events-none opacity-25 group-hover:opacity-55 transition-opacity duration-500 overflow-hidden rounded-full">
+        <div className="w-[200%] h-full flex items-end animate-water-flow-1">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-8 sm:h-9 text-cyan-400 fill-current opacity-70">
+            <path d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,60 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* 2. Fluid Water Wave Layer 2 (Deep Blue Undulating Wave) */}
+      <div className="absolute inset-x-0 bottom-0 h-full pointer-events-none opacity-20 group-hover:opacity-45 transition-opacity duration-500 overflow-hidden rounded-full">
+        <div className="w-[200%] h-full flex items-end animate-water-flow-2">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-6 sm:h-7 text-blue-500 fill-current opacity-60">
+            <path d="M0,40 C300,10 450,80 700,20 C950,-30 1100,70 1200,30 L1200,120 L0,120 Z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* 3. Interactive Mouse-Following Water Droplet Ripple Spotlight */}
+      <div
+        className="pointer-events-none absolute inset-0 transition-opacity duration-300 ease-out rounded-full"
+        style={{
+          opacity: coords.isHovered ? 1 : 0,
+          background: `radial-gradient(100px circle at ${coords.x}px ${coords.y}px, rgba(56, 189, 248, 0.4), transparent 70%)`,
+        }}
+      />
+
+      {/* 4. Diagonal Light Sweep Sheen */}
+      <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 group-hover:animate-shimmer-sweep" />
+
+      {/* 5. Wallet Icon with Tilt Down Animation ("wallet icon tittle down") */}
+      <div className="relative z-10 transition-transform duration-300 ease-out group-hover:-rotate-12 group-hover:translate-y-1 group-hover:scale-110">
+        <Wallet className="h-4 w-4 text-black drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]" />
+      </div>
+
+      {/* 6. Button Title with Micro-Expansion */}
+      <span className="relative z-10 font-bold tracking-tight group-hover:tracking-wide transition-all duration-300 text-black">
+        Open Wallet
+      </span>
+
+      {/* 7. Arrow Icon with Diagonal Down-Right Tilt ("arrow go down") */}
+      <div className="relative z-10 transition-transform duration-300 ease-out group-hover:rotate-45 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:scale-110">
+        <ArrowRight className="h-4 w-4 text-black/85 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]" />
+      </div>
+    </Link>
+  );
+}
+
 export default function HomePage() {
   const [tilt, setTilt] = React.useState({ x: 0, y: 0, isHovered: false });
   const [user, setUser] = React.useState<{ email?: string; name?: string } | null>(null);
@@ -1281,16 +1357,7 @@ export default function HomePage() {
 
             {/* Action Buttons with High-End Micro-Animations */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
-              <Link
-                href={walletLink}
-                className="relative group overflow-hidden flex items-center gap-2.5 rounded-full bg-white hover:bg-neutral-100 text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_4px_24px_rgba(255,255,255,0.2),0_2px_6px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_32px_rgba(56,189,248,0.4)] hover:scale-105 active:scale-95 transition-all duration-300"
-              >
-                {/* Shimmer sweep effect on hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-black/[0.08] to-transparent pointer-events-none" />
-                <Wallet className="h-4 w-4 text-black group-hover:scale-110 transition-transform duration-300" />
-                <span>Open Wallet</span>
-                <ArrowRight className="h-4 w-4 text-black/80 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
+              <HeroOpenWalletButton href={walletLink} />
               <a
                 href="#features"
                 className="group flex items-center gap-2.5 rounded-full border border-white/[0.14] hover:border-cyan-400/50 bg-white/[0.04] hover:bg-white/[0.09] hover:text-white px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-neutral-200 active:scale-95 transition-all duration-300 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_0_24px_rgba(56,189,248,0.2)]"
