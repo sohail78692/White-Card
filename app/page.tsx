@@ -833,9 +833,9 @@ function LiveAuditLogFeatureCard() {
 
 function SecurityEnclaveMasterCard() {
   return (
-    <div className="relative group rounded-[22px] sm:rounded-[24px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.18)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[290px] sm:min-h-[315px]">
+    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-blue-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(0,100,255,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[235px] sm:min-h-[255px]">
       {/* Subtle ambient glass tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[24px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration filling right side with smooth left fade mask */}
       <img
@@ -846,50 +846,50 @@ function SecurityEnclaveMasterCard() {
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left for pristine text readability */}
-      <div className="absolute inset-y-0 left-0 w-full sm:w-[65%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[62%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
-      <div className="relative z-10 flex items-center gap-2">
-        <div className="w-7 h-7 rounded-[8px] sm:rounded-[9px] bg-blue-500/[0.15] border border-blue-400/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
-          <Cpu className="w-4 h-4 stroke-[2]" />
+      <div className="relative z-10 flex items-center gap-1.5 sm:gap-2">
+        <div className="w-6.5 h-6.5 sm:w-7 sm:h-7 rounded-[7px] sm:rounded-[8px] bg-blue-500/[0.15] border border-blue-400/35 text-[#2997FF] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(41,151,255,0.4)] transition-shadow duration-300">
+          <Cpu className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2]" />
         </div>
-        <span className="text-[10px] sm:text-[10.5px] font-bold tracking-[0.14em] text-[#2997FF] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+        <span className="text-[9.5px] sm:text-[10px] font-bold tracking-[0.14em] text-[#2997FF] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           HARDWARE SECURITY
         </span>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 my-auto py-2.5 sm:py-3 space-y-1.5 max-w-[260px] sm:max-w-[290px] text-left">
-        <h3 className="text-2xl sm:text-[26px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+      {/* Main Content - Fixed Top Margin for Consistent Horizontal Alignment */}
+      <div className="relative z-10 mt-3 sm:mt-3.5 space-y-1 max-w-[210px] sm:max-w-[230px] text-left">
+        <h3 className="text-xl sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
           Encrypted Keys
         </h3>
-        <p className="text-xs sm:text-[13px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+        <p className="text-[11.5px] sm:text-xs text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           Your keys are securely stored inside your phone&apos;s protected chip.
         </p>
       </div>
 
-      {/* Bottom Chips */}
-      <div className="relative z-10 flex flex-wrap items-center gap-2.5 pt-1">
+      {/* Bottom Chips - mt-auto so both top cards align on bottom */}
+      <div className="relative z-10 mt-auto pt-3 flex flex-wrap items-center gap-2">
         {/* Chip 1: Encryption AES-256 */}
-        <div className="rounded-[13px] sm:rounded-[14px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-3 sm:px-3.5 py-1.5 sm:py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
-          <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-[7px] sm:rounded-[8px] bg-blue-500/[0.15] border border-blue-400/30 text-[#2997FF] flex items-center justify-center shrink-0">
-            <Shield className="w-3.5 h-3.5 stroke-[2.2]" />
+        <div className="rounded-[11px] sm:rounded-[12px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2.5 sm:px-3 py-1.5 flex items-center gap-2 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-blue-500/[0.15] border border-blue-400/30 text-[#2997FF] flex items-center justify-center shrink-0">
+            <Shield className="w-3 h-3 stroke-[2.2]" />
           </div>
           <div className="text-left">
-            <div className="text-[8px] sm:text-[8.5px] text-[#94A3B8] font-medium leading-none">Encryption</div>
-            <div className="text-[11px] sm:text-[11.5px] font-bold text-white font-mono mt-0.5 leading-tight">AES-256</div>
+            <div className="text-[7.5px] sm:text-[8px] text-[#94A3B8] font-medium leading-none">Encryption</div>
+            <div className="text-[10px] sm:text-[10.5px] font-bold text-white font-mono mt-0.5 leading-tight">AES-256</div>
           </div>
         </div>
 
         {/* Chip 2: Key Status On Device */}
-        <div className="rounded-[13px] sm:rounded-[14px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-3 sm:px-3.5 py-1.5 sm:py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
-          <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-[7px] sm:rounded-[8px] bg-blue-500/[0.15] border border-blue-400/30 text-[#2997FF] flex items-center justify-center shrink-0">
-            <Cpu className="w-3.5 h-3.5 stroke-[2.2]" />
+        <div className="rounded-[11px] sm:rounded-[12px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2.5 sm:px-3 py-1.5 flex items-center gap-2 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-blue-500/[0.15] border border-blue-400/30 text-[#2997FF] flex items-center justify-center shrink-0">
+            <Cpu className="w-3 h-3 stroke-[2.2]" />
           </div>
           <div className="text-left">
-            <div className="text-[8px] sm:text-[8.5px] text-[#94A3B8] font-medium leading-none">Key Status</div>
-            <div className="text-[11px] sm:text-[11.5px] font-bold text-[#00E599] mt-0.5 flex items-center gap-1.5 leading-tight whitespace-nowrap">
+            <div className="text-[7.5px] sm:text-[8px] text-[#94A3B8] font-medium leading-none">Key Status</div>
+            <div className="text-[10px] sm:text-[10.5px] font-bold text-[#00E599] mt-0.5 flex items-center gap-1.5 leading-tight whitespace-nowrap">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
@@ -915,9 +915,9 @@ function SecurityProofSealCard() {
   };
 
   return (
-    <div className="relative group rounded-[22px] sm:rounded-[24px] bg-[#070b14] border border-white/[0.12] hover:border-indigo-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.18)] p-5 sm:p-6 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[290px] sm:min-h-[315px]">
+    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-indigo-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[235px] sm:min-h-[255px]">
       {/* Subtle ambient glass tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.06] via-transparent to-indigo-500/[0.02] pointer-events-none rounded-[24px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.06] via-transparent to-indigo-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration filling right side with smooth left fade mask */}
       <img
@@ -928,39 +928,39 @@ function SecurityProofSealCard() {
         className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
       {/* Dark protective shield on left */}
-      <div className="absolute inset-y-0 left-0 w-full sm:w-[65%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-y-0 left-0 w-full sm:w-[62%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
-      <div className="relative z-10 flex items-center gap-2">
-        <div className="w-7 h-7 rounded-[8px] sm:rounded-[9px] bg-indigo-500/[0.15] border border-indigo-400/35 text-[#818cf8] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(129,140,248,0.4)] transition-shadow duration-300">
-          <FileText className="w-4 h-4 stroke-[2]" />
+      <div className="relative z-10 flex items-center gap-1.5 sm:gap-2">
+        <div className="w-6.5 h-6.5 sm:w-7 sm:h-7 rounded-[7px] sm:rounded-[8px] bg-indigo-500/[0.15] border border-indigo-400/35 text-[#818cf8] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(129,140,248,0.4)] transition-shadow duration-300">
+          <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2]" />
         </div>
-        <span className="text-[10px] sm:text-[10.5px] font-bold tracking-[0.14em] text-[#818cf8] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+        <span className="text-[9.5px] sm:text-[10px] font-bold tracking-[0.14em] text-[#818cf8] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           DATA INTEGRITY
         </span>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 my-auto py-2.5 sm:py-3 space-y-1.5 max-w-[260px] sm:max-w-[300px] text-left">
-        <h3 className="text-2xl sm:text-[26px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-          Tamper-Proof SHA-256 Chain
+      {/* Main Content - Fixed Top Margin matching Card 1, cleanly 2 lines */}
+      <div className="relative z-10 mt-3 sm:mt-3.5 space-y-1 max-w-[210px] sm:max-w-[230px] text-left">
+        <h3 className="text-xl sm:text-[22px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+          Tamper-Proof<br />SHA-256 Chain
         </h3>
-        <p className="text-xs sm:text-[13px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+        <p className="text-[11.5px] sm:text-xs text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           Every document check is recorded in a secure hash chain.
         </p>
       </div>
 
-      {/* Bottom Chips */}
-      <div className="relative z-10 flex flex-wrap items-center gap-2.5 pt-1">
+      {/* Bottom Chips - mt-auto matching Card 1 */}
+      <div className="relative z-10 mt-auto pt-3 flex flex-wrap items-center gap-2">
         {/* Chip 1: Hash Algorithm SHA-256 */}
-        <div className="rounded-[13px] sm:rounded-[14px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-3 sm:px-3.5 py-1.5 sm:py-2 flex items-center gap-2.5 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
-          <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-[7px] sm:rounded-[8px] bg-indigo-500/[0.15] border border-indigo-400/30 text-[#818cf8] flex items-center justify-center shrink-0">
-            <Link2 className="w-3.5 h-3.5 stroke-[2.2]" />
+        <div className="rounded-[11px] sm:rounded-[12px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2.5 sm:px-3 py-1.5 flex items-center gap-2 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-indigo-500/[0.15] border border-indigo-400/30 text-[#818cf8] flex items-center justify-center shrink-0">
+            <Link2 className="w-3 h-3 stroke-[2.2]" />
           </div>
           <div className="text-left">
-            <div className="text-[8px] sm:text-[8.5px] text-[#94A3B8] font-medium leading-none">Hash Algorithm</div>
-            <div className="text-[11px] sm:text-[11.5px] font-bold text-white font-mono mt-0.5 leading-tight">SHA-256</div>
+            <div className="text-[7.5px] sm:text-[8px] text-[#94A3B8] font-medium leading-none">Hash Algorithm</div>
+            <div className="text-[10px] sm:text-[10.5px] font-bold text-white font-mono mt-0.5 leading-tight">SHA-256</div>
           </div>
         </div>
 
@@ -968,11 +968,11 @@ function SecurityProofSealCard() {
         <button
           onClick={handleCopyProof}
           title="Click to copy SHA-256 genesis proof"
-          className="rounded-full bg-emerald-500/[0.16] hover:bg-emerald-500/[0.24] border border-emerald-500/40 text-[#00E599] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold flex items-center gap-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_0_14px_rgba(0,229,153,0.15)] active:scale-95 transition-all cursor-pointer"
+          className="rounded-full bg-emerald-500/[0.16] hover:bg-emerald-500/[0.24] border border-emerald-500/40 text-[#00E599] px-2.5 sm:px-3 py-1.5 text-[10px] sm:text-[10.5px] font-semibold flex items-center gap-1.5 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_0_14px_rgba(0,229,153,0.15)] active:scale-95 transition-all cursor-pointer"
         >
-          <span className="relative flex h-2 w-2">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E599]"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#00E599]"></span>
           </span>
           <span className="font-semibold">{copied ? "Hash Copied! ✓" : "Chain Intact"}</span>
         </button>
@@ -994,9 +994,9 @@ function SecurityShredderCard() {
   };
 
   return (
-    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[250px] sm:min-h-[270px]">
+    <div className="relative group rounded-[18px] sm:rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-red-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(225,29,72,0.18)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[205px] sm:min-h-[220px]">
       {/* Subtle ambient glass red tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] via-transparent to-red-500/[0.02] pointer-events-none rounded-[22px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] via-transparent to-red-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration */}
       <img
@@ -1008,38 +1008,38 @@ function SecurityShredderCard() {
       />
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-[7px] sm:rounded-[8px] bg-red-500/[0.15] border border-red-500/35 text-[#EF4444] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(239,68,68,0.4)] transition-shadow duration-300">
-          <Trash2 className="w-3.5 h-3.5 stroke-[2]" />
+        <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-red-500/[0.15] border border-red-500/35 text-[#EF4444] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(239,68,68,0.4)] transition-shadow duration-300">
+          <Trash2 className="w-3 h-3 stroke-[2]" />
         </div>
-        <span className="text-[9.5px] sm:text-[10px] font-bold tracking-[0.14em] text-[#EF4444] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+        <span className="text-[9px] sm:text-[9.5px] font-bold tracking-[0.14em] text-[#EF4444] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           INSTANT PROTECTION
         </span>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 my-auto py-1.5 space-y-1 max-w-[170px] sm:max-w-[195px] text-left">
-        <h3 className="text-[17px] sm:text-[19px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+      {/* Main Content - Consistent Top Margin */}
+      <div className="relative z-10 mt-2.5 sm:mt-3 space-y-1 max-w-[155px] sm:max-w-[170px] text-left">
+        <h3 className="text-[16px] sm:text-[17.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
           1-Tap Shredder
         </h3>
-        <p className="text-[11px] sm:text-[12px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+        <p className="text-[10.5px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           Permanently delete local documents and keys.
         </p>
       </div>
 
-      {/* Bottom Chips / Action Button */}
-      <div className="relative z-10 flex items-center gap-2 pt-1">
+      {/* Bottom Chips / Action Button - mt-auto */}
+      <div className="relative z-10 mt-auto pt-2.5 flex items-center gap-1.5 sm:gap-2">
         {/* Chip 1: Delete Mode Secure Wipe */}
-        <div className="rounded-[12px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2.5 sm:px-3 py-1.5 flex items-center gap-2 backdrop-blur-xl min-w-0 flex-1 shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
-          <div className="w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-[#1a1324] border border-red-500/25 text-[#fca5a5] flex items-center justify-center shrink-0">
-            <HardDrive className="w-3 h-3 stroke-[2.2]" />
+        <div className="rounded-[11px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2 sm:px-2.5 py-1.5 flex items-center gap-1.5 backdrop-blur-xl min-w-0 flex-1 shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5 h-5 rounded-[5px] bg-[#1a1324] border border-red-500/25 text-[#fca5a5] flex items-center justify-center shrink-0">
+            <HardDrive className="w-2.5 h-2.5 stroke-[2.2]" />
           </div>
           <div className="min-w-0 text-left">
-            <div className="text-[7.5px] sm:text-[8px] text-[#94A3B8] font-medium leading-none">Delete Mode</div>
-            <div className="text-[10px] sm:text-[10.5px] font-bold text-white mt-0.5 truncate leading-tight">Secure Wipe</div>
+            <div className="text-[7px] sm:text-[7.5px] text-[#94A3B8] font-medium leading-none">Delete Mode</div>
+            <div className="text-[9.5px] sm:text-[10px] font-bold text-white mt-0.5 truncate leading-tight">Secure Wipe</div>
           </div>
         </div>
 
@@ -1047,9 +1047,9 @@ function SecurityShredderCard() {
         <button
           onClick={handleWipe}
           disabled={isWiped}
-          className="rounded-[12px] bg-gradient-to-r from-[#e11d48] to-[#be123c] hover:from-[#f43f5e] hover:to-[#e11d48] text-white text-[10.5px] sm:text-[11px] font-bold px-2.5 sm:px-3 py-1.5 sm:py-2 flex items-center gap-1.5 shrink-0 whitespace-nowrap active:scale-95 transition-all cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_16px_rgba(225,29,72,0.4)] hover:shadow-[0_0_24px_rgba(225,29,72,0.65)] hover:scale-[1.02] border border-white/20 backdrop-blur-md"
+          className="rounded-[11px] bg-gradient-to-r from-[#e11d48] to-[#be123c] hover:from-[#f43f5e] hover:to-[#e11d48] text-white text-[10px] sm:text-[10.5px] font-bold px-2 sm:px-2.5 py-1.5 flex items-center gap-1 shrink-0 whitespace-nowrap active:scale-95 transition-all cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0_16px_rgba(225,29,72,0.4)] hover:shadow-[0_0_24px_rgba(225,29,72,0.65)] hover:scale-[1.02] border border-white/20 backdrop-blur-md"
         >
-          <Trash2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+          <Trash2 className="w-3 h-3" />
           <span>{isWiped ? "Destroyed ✓" : "Delete Now →"}</span>
         </button>
       </div>
@@ -1059,9 +1059,9 @@ function SecurityShredderCard() {
 
 function SecurityAntiReplayCard() {
   return (
-    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[250px] sm:min-h-[270px]">
+    <div className="relative group rounded-[18px] sm:rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-emerald-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(0,229,153,0.18)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[205px] sm:min-h-[220px]">
       {/* Subtle ambient glass emerald tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[22px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration */}
       <img
@@ -1073,37 +1073,37 @@ function SecurityAntiReplayCard() {
       />
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-[7px] sm:rounded-[8px] bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(0,229,153,0.4)] transition-shadow duration-300">
-          <ShieldCheck className="w-3.5 h-3.5 stroke-[2]" />
+        <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-emerald-500/[0.15] border border-emerald-500/35 text-[#00E599] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(0,229,153,0.4)] transition-shadow duration-300">
+          <ShieldCheck className="w-3 h-3 stroke-[2]" />
         </div>
-        <span className="text-[9.5px] sm:text-[10px] font-bold tracking-[0.14em] text-[#00E599] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+        <span className="text-[9px] sm:text-[9.5px] font-bold tracking-[0.14em] text-[#00E599] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           SCREENSHOT DEFENSE
         </span>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 my-auto py-1.5 space-y-1 max-w-[170px] sm:max-w-[195px] text-left">
-        <h3 className="text-[17px] sm:text-[19px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+      {/* Main Content - Consistent Top Margin matching Card 3 & Card 5 */}
+      <div className="relative z-10 mt-2.5 sm:mt-3 space-y-1 max-w-[155px] sm:max-w-[170px] text-left">
+        <h3 className="text-[16px] sm:text-[17.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
           Anti-Screenshot
         </h3>
-        <p className="text-[11px] sm:text-[12px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+        <p className="text-[10.5px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           Blocks screenshots and recordings automatically.
         </p>
       </div>
 
-      {/* Bottom Chip: Protection Always On */}
-      <div className="relative z-10 pt-1">
-        <div className="rounded-[12px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-3 py-1.5 inline-flex items-center gap-2.5 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
-          <div className="w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-emerald-500/[0.15] border border-emerald-500/30 text-[#00E599] flex items-center justify-center shrink-0">
-            <EyeOff className="w-3 h-3 stroke-[2.2]" />
+      {/* Bottom Chip: Protection Always On - mt-auto */}
+      <div className="relative z-10 mt-auto pt-2.5">
+        <div className="rounded-[11px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2.5 sm:px-3 py-1.5 inline-flex items-center gap-2 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5 h-5 rounded-[5px] bg-emerald-500/[0.15] border border-emerald-500/30 text-[#00E599] flex items-center justify-center shrink-0">
+            <EyeOff className="w-2.5 h-2.5 stroke-[2.2]" />
           </div>
           <div className="text-left">
-            <div className="text-[7.5px] sm:text-[8px] text-[#94A3B8] font-medium leading-none">Protection</div>
-            <div className="text-[10px] sm:text-[10.5px] font-bold text-white mt-0.5 leading-tight">Always On</div>
+            <div className="text-[7px] sm:text-[7.5px] text-[#94A3B8] font-medium leading-none">Protection</div>
+            <div className="text-[9.5px] sm:text-[10px] font-bold text-white mt-0.5 leading-tight">Always On</div>
           </div>
         </div>
       </div>
@@ -1113,9 +1113,9 @@ function SecurityAntiReplayCard() {
 
 function SecurityZeroTrackersCard() {
   return (
-    <div className="relative group rounded-[20px] sm:rounded-[22px] bg-[#070b14] border border-white/[0.12] hover:border-purple-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(168,85,247,0.18)] p-4 sm:p-5 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[250px] sm:min-h-[270px]">
+    <div className="relative group rounded-[18px] sm:rounded-[20px] bg-[#070b14] border border-white/[0.12] hover:border-purple-500/40 shadow-[0_16px_40px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.14)] hover:shadow-[0_20px_50px_rgba(168,85,247,0.18)] p-3.5 sm:p-4 flex flex-col justify-between h-full transition-all duration-500 hover:-translate-y-1 overflow-hidden min-h-[205px] sm:min-h-[220px]">
       {/* Subtle ambient glass purple tint */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/[0.06] via-transparent to-purple-500/[0.02] pointer-events-none rounded-[22px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/[0.06] via-transparent to-purple-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration */}
       <img
@@ -1127,37 +1127,37 @@ function SecurityZeroTrackersCard() {
       />
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
 
       {/* Top Header Badge */}
       <div className="relative z-10 flex items-center gap-1.5">
-        <div className="w-6 h-6 rounded-[7px] sm:rounded-[8px] bg-purple-500/[0.15] border border-purple-500/35 text-[#c084fc] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(192,132,252,0.4)] transition-shadow duration-300">
-          <EyeOff className="w-3.5 h-3.5 stroke-[2]" />
+        <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-purple-500/[0.15] border border-purple-500/35 text-[#c084fc] flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl group-hover:shadow-[0_0_14px_rgba(192,132,252,0.4)] transition-shadow duration-300">
+          <EyeOff className="w-3 h-3 stroke-[2]" />
         </div>
-        <span className="text-[9.5px] sm:text-[10px] font-bold tracking-[0.14em] text-[#c084fc] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+        <span className="text-[9px] sm:text-[9.5px] font-bold tracking-[0.14em] text-[#c084fc] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
           PRIVACY FIRST
         </span>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 my-auto py-1.5 space-y-1 max-w-[170px] sm:max-w-[195px] text-left">
-        <h3 className="text-[17px] sm:text-[19px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+      {/* Main Content - Consistent Top Margin matching Card 3 & Card 4 */}
+      <div className="relative z-10 mt-2.5 sm:mt-3 space-y-1 max-w-[155px] sm:max-w-[170px] text-left">
+        <h3 className="text-[16px] sm:text-[17.5px] font-bold text-white tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
           No Trackers
         </h3>
-        <p className="text-[11px] sm:text-[12px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+        <p className="text-[10.5px] sm:text-[11.5px] text-[#CBD5E1] leading-relaxed font-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
           No ads, no tracking, no third-party SDKs.
         </p>
       </div>
 
-      {/* Bottom Chip: Tracking None */}
-      <div className="relative z-10 pt-1">
-        <div className="rounded-[12px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-3 py-1.5 inline-flex items-center gap-2.5 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
-          <div className="w-5.5 sm:w-6 h-5.5 sm:h-6 rounded-[6px] sm:rounded-[7px] bg-purple-500/[0.15] border border-purple-500/30 text-[#c084fc] flex items-center justify-center shrink-0">
-            <Shield className="w-3 h-3 stroke-[2.2]" />
+      {/* Bottom Chip: Tracking None - mt-auto */}
+      <div className="relative z-10 mt-auto pt-2.5">
+        <div className="rounded-[11px] bg-[#0c1424]/90 hover:bg-[#0f1930]/95 border border-white/[0.12] hover:border-white/[0.22] px-2.5 sm:px-3 py-1.5 inline-flex items-center gap-2 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-300">
+          <div className="w-5 h-5 rounded-[5px] bg-purple-500/[0.15] border border-purple-500/30 text-[#c084fc] flex items-center justify-center shrink-0">
+            <Shield className="w-2.5 h-2.5 stroke-[2.2]" />
           </div>
           <div className="text-left">
-            <div className="text-[7.5px] sm:text-[8px] text-[#94A3B8] font-medium leading-none">Tracking</div>
-            <div className="text-[10px] sm:text-[10.5px] font-bold text-white mt-0.5 leading-tight">None</div>
+            <div className="text-[7px] sm:text-[7.5px] text-[#94A3B8] font-medium leading-none">Tracking</div>
+            <div className="text-[9.5px] sm:text-[10px] font-bold text-white mt-0.5 leading-tight">None</div>
           </div>
         </div>
       </div>
