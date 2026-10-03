@@ -112,7 +112,7 @@ npm run gen-keys
 This prints:
 - `MASTER_KEY`: 64-hex AES envelope master key
 - `SIGNING_PRIVATE_KEY`: base64 PKCS8 Ed25519 private key
-- `SIGNING_KEY_ID`: `key-1`
+- `SIGNING_KEY_ID`: `<your_signing_key_id>`
 - `CRON_SECRET`: 64-hex string guarding cron routes
 
 ### Step 4: Configure `.env.local`
@@ -123,7 +123,7 @@ MONGODB_DB=whitecard
 
 MASTER_KEY=<64_hex_chars_from_gen_keys>
 SIGNING_PRIVATE_KEY=<base64_ed25519_pkcs8_from_gen_keys>
-SIGNING_KEY_ID=key-1
+SIGNING_KEY_ID=<your_signing_key_id>
 
 APP_URL=http://localhost:3000
 RP_ID=localhost

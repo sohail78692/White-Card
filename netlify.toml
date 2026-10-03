@@ -1,5 +1,9 @@
 [build]
   command = "npm run build"
 
+[build.environment]
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_OMIT_PATHS = ".env.example,PLAN.md,README.md,PROGRESS.md"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"

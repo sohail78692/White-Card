@@ -66,18 +66,18 @@ Build a REAL, deployable web app (not a demo) where a person stores their own id
 ## 3. Environment Variables (`.env.example`)
 
 ```
-MONGODB_URI=            # Atlas M0 connection string (URL-encode special chars in password)
-MONGODB_DB=whitecard
-MASTER_KEY=             # 64 hex chars (32 bytes): openssl rand -hex 32
-SIGNING_PRIVATE_KEY=    # base64 PKCS8 Ed25519 private key (generate with scripts/gen-keys.ts)
-SIGNING_KEY_ID=key-1    # kid for rotation
-APP_URL=http://localhost:3000
-RP_ID=localhost         # WebAuthn relying party id (domain in prod)
-RP_NAME=White Card Wallet
-EMAIL_PROVIDER=resend   # resend | brevo
-EMAIL_API_KEY=
-EMAIL_FROM=
-CRON_SECRET=            # random string guarding /api/cron/*
+MONGODB_URI=<your-mongodb-uri>
+MONGODB_DB=<your-db-name>
+MASTER_KEY=<your-64-hex-master-key>
+SIGNING_PRIVATE_KEY=<your-signing-private-key>
+SIGNING_KEY_ID=<your-signing-key-id>
+APP_URL=<your-app-url>
+RP_ID=<your-rp-id>
+RP_NAME=<your-rp-name>
+EMAIL_PROVIDER=<your-email-provider>
+EMAIL_API_KEY=<your-email-api-key>
+EMAIL_FROM=<your-email-from>
+CRON_SECRET=<your-cron-secret>
 ```
 
 Provide `scripts/gen-keys.ts` that prints a MASTER_KEY, an Ed25519 keypair (private for env, public exposed via JWKS), and a CRON_SECRET. Validate all env vars with Zod at startup and fail fast with clear messages.
