@@ -1246,7 +1246,7 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
 
                 <div>
                   <label className="text-[10px] text-neutral-400 block mb-1 font-medium">
-                    Father's Name
+                    Father&apos;s Name
                   </label>
                   <input
                     type="text"

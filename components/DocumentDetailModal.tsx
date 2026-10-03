@@ -584,7 +584,7 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
                     </div>
                     <div>
                       <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
-                        Father's Name
+                        Father&apos;s Name
                       </label>
                       <input
                         type="text"

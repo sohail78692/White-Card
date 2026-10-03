@@ -356,7 +356,7 @@ export function PhysicalIdCardView({
 
               <div>
                 <span className="text-[6.5px] sm:text-[7.5px] uppercase tracking-wider text-slate-500 font-bold block">
-                  पिता का नाम / Father's Name
+                  पिता का नाम / Father&apos;s Name
                 </span>
                 <span className="text-[11px] sm:text-xs font-bold text-slate-800 tracking-wide uppercase truncate block font-sans">
                   {fatherName}
@@ -546,7 +546,7 @@ export function PhysicalIdCardView({
                 </span>
               </div>
               <div>
-                <span className="text-[7.5px] uppercase font-bold text-slate-600 block">Father's Name</span>
+                <span className="text-[7.5px] uppercase font-bold text-slate-600 block">Father&apos;s Name</span>
                 <span className="text-xs font-bold text-slate-800 truncate block">
                   {fatherName}
                 </span>
