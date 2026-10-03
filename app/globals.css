@@ -19,22 +19,41 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
   min-height: 100vh;
   overflow-x: hidden;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
 }
 
-/* Hide scrollbars across all browsers globally */
+/* Elegant iOS-style Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
 * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-::-webkit-scrollbar,
-*::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
   display: none !important;
-  width: 0px !important;
-  height: 0px !important;
-  background: transparent !important;
 }
 
 /* 3D Card Flip styles */

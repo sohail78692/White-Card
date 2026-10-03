@@ -181,8 +181,11 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     setMounted(true);
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
     return () => {
       document.body.style.overflow = originalOverflow;
+      lenis?.start();
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
@@ -760,12 +763,24 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-black/95 backdrop-blur-2xl"
+      className="fixed inset-0 z-[99999] overflow-y-auto bg-black/90 backdrop-blur-2xl overscroll-contain"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-add-title"
+      data-lenis-prevent="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          sound.playPop();
+          onClose();
+        }
+      }}
     >
-      <div className="w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-[32px] glass-ios-card p-5 sm:p-7 shadow-2xl border border-white/15 backdrop-blur-2xl space-y-5">
+      <div className="min-h-full flex items-center justify-center p-3 sm:p-6 py-6 sm:py-10" data-lenis-prevent="true">
+        <div
+          className="w-full max-w-2xl max-h-[86vh] overflow-y-auto rounded-[32px] glass-ios-card p-5 sm:p-7 shadow-2xl border border-white/15 backdrop-blur-2xl space-y-5 my-auto"
+          data-lenis-prevent="true"
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -1647,7 +1662,8 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
           </button>
         </form>
       </div>
-    </div>,
-    document.body
-  );
+    </div>
+  </div>,
+  document.body
+);
 }

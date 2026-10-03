@@ -19,6 +19,15 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       wheelMultiplier: 1.15,
       touchMultiplier: 1.5,
       syncTouch: false,
+      prevent: (node: any) => {
+        if (!node || typeof node.closest !== "function") return false;
+        return (
+          node.closest("[data-lenis-prevent]") !== null ||
+          node.closest('[role="dialog"]') !== null ||
+          node.closest(".overflow-y-auto") !== null ||
+          node.closest(".overflow-auto") !== null
+        );
+      },
     });
 
     let scrollTimeout: NodeJS.Timeout;

@@ -13,6 +13,7 @@ export async function GET() {
 
   let stats = {
     linkedDocs: 0,
+    sharesCreated: 0,
     verificationsToday: 0,
     auditEntries: 0,
   };
@@ -24,10 +25,13 @@ export async function GET() {
     // 1. Linked Documents count
     const linkedDocs = await db.collection("documents").countDocuments({ userId: userObjId });
 
-    // 2. Audit Entries count
+    // 2. Shares count
+    const sharesCreated = await db.collection("shares").countDocuments({ userId: userObjId });
+
+    // 3. Audit Entries count
     const auditEntries = await db.collection("audit_logs").countDocuments({ userId: userObjId });
 
-    // 3. Verifications today
+    // 4. Verifications today
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
 
@@ -36,6 +40,13 @@ export async function GET() {
       action: "verify",
       ts: { $gte: startOfDay },
     });
+
+    stats = {
+      linkedDocs,
+      sharesCreated,
+      verificationsToday,
+      auditEntries,
+    };
 
     return NextResponse.json({
       user: {

@@ -68,6 +68,8 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
     setMounted(true);
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+    lenis?.stop();
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -77,6 +79,7 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = originalOverflow;
+      lenis?.start();
     };
   }, [onClose]);
 
@@ -467,15 +470,25 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-black/95 backdrop-blur-2xl"
+      className="fixed inset-0 z-[99999] overflow-y-auto bg-black/90 backdrop-blur-2xl overscroll-contain"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-doc-title"
+      data-lenis-prevent="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          sound.playPop();
+          onClose();
+        }
+      }}
     >
-      <div
-        ref={modalRef}
-        className="w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-[32px] glass-ios-card p-5 sm:p-8 shadow-2xl border border-white/15 backdrop-blur-2xl space-y-6"
-      >
+      <div className="min-h-full flex items-center justify-center p-3 sm:p-6 py-6 sm:py-10" data-lenis-prevent="true">
+        <div
+          ref={modalRef}
+          className="w-full max-w-xl max-h-[86vh] overflow-y-auto rounded-[32px] glass-ios-card p-5 sm:p-8 shadow-2xl border border-white/15 backdrop-blur-2xl space-y-6 my-auto"
+          data-lenis-prevent="true"
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Header with Document Squircle */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3.5">
@@ -987,7 +1000,8 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
           </div>
         ) : null}
       </div>
-    </div>,
-    document.body
-  );
+    </div>
+  </div>,
+  document.body
+);
 }
