@@ -39,6 +39,7 @@ import { DocScannerCropModal, DocScannerResult } from "@/components/DocScannerCr
 interface AddDocumentModalProps {
   onClose: () => void;
   onAdded: () => void;
+  initialType?: DocumentType;
 }
 
 interface IdImageSlot {
@@ -53,11 +54,11 @@ function getDefaultTemplate(t: DocumentType): string {
     case "DRIVING_LICENSE":
       return "DL0120220019842";
     case "PAN":
-      return "ABCDE1234F";
+      return "FORPA5522R";
     case "VOTER_ID":
-      return "ABC1234567";
+      return "XKG3489120";
     case "RATION_CARD":
-      return "RC1098765432";
+      return "RC071098765432";
   }
 }
 
@@ -106,15 +107,30 @@ const DOCUMENT_THEMES: Record<
   },
 };
 
-export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
-  const [type, setType] = useState<DocumentType>("DRIVING_LICENSE");
-  const [number, setNumber] = useState(getDefaultTemplate("DRIVING_LICENSE"));
-  const [issuer, setIssuer] = useState("Ministry of Road Transport & Highways");
-  const [expiry, setExpiry] = useState("");
-  const [details, setDetails] = useState<Record<string, any>>({
-    vehicleClasses: ["MCWG", "LMV"],
-    organDonor: true,
-    rto: "DL-01",
+export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICENSE" }: AddDocumentModalProps) {
+  const [type, setType] = useState<DocumentType>(initialType);
+  const [number, setNumber] = useState(getDefaultTemplate(initialType));
+  const [issuer, setIssuer] = useState(
+    initialType === "PAN"
+      ? "Income Tax Department"
+      : initialType === "VOTER_ID"
+      ? "Election Commission of India"
+      : initialType === "RATION_CARD"
+      ? "Department of Food and Civil Supplies"
+      : "Ministry of Road Transport & Highways"
+  );
+  const [expiry, setExpiry] = useState(initialType === "DRIVING_LICENSE" ? "2042-10-18" : "");
+  const [details, setDetails] = useState<Record<string, any>>(() => {
+    switch (initialType) {
+      case "PAN":
+        return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", taxpayerCategory: "Individual", aadhaarLinked: "Linked", cardStatus: "Active & Linked" };
+      case "VOTER_ID":
+        return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", acNumber: "AC-42 New Delhi", pollingBooth: "Booth 12A", partSerial: "24/110", state: "Delhi" };
+      case "RATION_CARD":
+        return { name: "SOHAIL AKHTAR", category: "NFSA-BPL", scheme: "Priority Household (PHH)", fpsDepotId: "FPS-9842", familyMembersCount: 4, monthlyRiceQuotaKg: 20, monthlyWheatQuotaKg: 15, state: "Delhi" };
+      default:
+        return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", vehicleClasses: ["MCWG", "LMV"], organDonor: true, rto: "DL-01", bloodGroup: "O+", state: "Delhi" };
+    }
   });
 
   // Images state (Front and Back)
@@ -1219,21 +1235,97 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
                 className="flex-1 font-mono text-sm sm:text-base font-bold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-3 py-2 text-white uppercase tracking-wider outline-none transition"
               />
             </div>
-            {/* Editable Extracted Details Grid */}
-            <div className="pt-2 border-t border-white/10 space-y-2">
+            {/* Quick Sample Button */}
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-[10px] text-neutral-400 font-mono">
+                {type === "DRIVING_LICENSE" && "Format: DL0120220019842 (State + RTO + Year + 7 digits)"}
+                {type === "PAN" && "Format: 5 letters, 4 numbers, 1 letter (e.g. FORPA5522R)"}
+                {type === "VOTER_ID" && "Format: 3 letters, 7 numbers (e.g. XKG3489120)"}
+                {type === "RATION_CARD" && "Format: 10-14 alphanumeric digits (e.g. RC071098765432)"}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playPop();
+                  if (type === "DRIVING_LICENSE") {
+                    setNumber("DL0120220019842");
+                    setIssuer("Ministry of Road Transport & Highways");
+                    setExpiry("2042-10-18");
+                    setDetails({
+                      name: "SOHAIL AKHTAR",
+                      fatherName: "SAHIMUDDIN ANSARI",
+                      dob: "10/01/2006",
+                      vehicleClasses: ["MCWG", "LMV"],
+                      organDonor: true,
+                      bloodGroup: "O+",
+                      rto: "DL-01",
+                      state: "Delhi",
+                      issueState: "Delhi",
+                    });
+                  } else if (type === "PAN") {
+                    setNumber("FORPA5522R");
+                    setIssuer("Income Tax Department");
+                    setDetails({
+                      name: "SOHAIL AKHTAR",
+                      fatherName: "SAHIMUDDIN ANSARI",
+                      dob: "10/01/2006",
+                      taxpayerCategory: "Individual",
+                      aadhaarLinked: "Linked",
+                      cardStatus: "Active & Linked",
+                    });
+                  } else if (type === "VOTER_ID") {
+                    setNumber("XKG3489120");
+                    setIssuer("Election Commission of India");
+                    setDetails({
+                      name: "SOHAIL AKHTAR",
+                      fatherName: "SAHIMUDDIN ANSARI",
+                      dob: "10/01/2006",
+                      gender: "Male",
+                      acNumber: "AC-42 New Delhi",
+                      parliamentaryConstituency: "04 New Delhi",
+                      pollingBooth: "Booth 12A - Govt Sr Sec School",
+                      partSerial: "24/110",
+                      state: "Delhi",
+                    });
+                  } else if (type === "RATION_CARD") {
+                    setNumber("RC071098765432");
+                    setIssuer("Department of Food and Civil Supplies");
+                    setDetails({
+                      name: "SOHAIL AKHTAR",
+                      category: "NFSA-BPL",
+                      scheme: "Priority Household (PHH)",
+                      fpsDepotId: "FPS-9842",
+                      familyMembersCount: 4,
+                      monthlyRiceQuotaKg: 20,
+                      monthlyWheatQuotaKg: 15,
+                      state: "Delhi",
+                    });
+                  }
+                  setExtractionMessage("✓ Sample verified government data loaded!");
+                }}
+                className="inline-flex items-center gap-1 rounded-full bg-white/[0.08] hover:bg-white/[0.16] border border-white/10 px-2.5 py-1 text-[10px] font-bold text-sky-300 transition active:scale-95"
+              >
+                <Sparkles className="h-3 w-3 text-sky-400" />
+                <span>⚡ Auto-Fill Sample {selectedMeta.shortCode}</span>
+              </button>
+            </div>
+
+            {/* Editable Details Grid */}
+            <div className="pt-2 border-t border-white/10 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">
-                  Holder &amp; Metadata Details (Auto-filled &amp; Editable)
+                <span className="text-[10px] uppercase font-bold text-neutral-300 tracking-wider">
+                  Holder &amp; Metadata Details
                 </span>
                 <span className="text-[10px] text-neutral-500">
-                  Tap any field to correct
+                  All fields saved securely under client DEK
                 </span>
               </div>
 
+              {/* Standard Identity Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div>
                   <label className="text-[10px] text-neutral-400 block mb-1 font-medium">
-                    Cardholder Name
+                    {type === "RATION_CARD" ? "Head of Family" : "Cardholder Name"}
                   </label>
                   <input
                     type="text"
@@ -1270,6 +1362,160 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
                   />
                 </div>
               </div>
+
+              {/* Document-Specific Additional Fields */}
+              {type === "DRIVING_LICENSE" && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-white/5 text-xs">
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Vehicle Classes</label>
+                    <input
+                      type="text"
+                      value={Array.isArray(details?.vehicleClasses) ? details.vehicleClasses.join(", ") : "MCWG, LMV"}
+                      onChange={(e) =>
+                        setDetails((prev: any) => ({
+                          ...prev,
+                          vehicleClasses: e.target.value.split(",").map((s) => s.trim().toUpperCase()),
+                        }))
+                      }
+                      placeholder="MCWG, LMV"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Blood Group</label>
+                    <input
+                      type="text"
+                      value={details?.bloodGroup || "O+"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, bloodGroup: e.target.value.toUpperCase() }))}
+                      placeholder="O+"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">RTO Code / State</label>
+                    <input
+                      type="text"
+                      value={details?.rto || "DL-01"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, rto: e.target.value.toUpperCase(), state: "Delhi" }))}
+                      placeholder="DL-01"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Valid Until (Expiry)</label>
+                    <input
+                      type="text"
+                      value={expiry}
+                      onChange={(e) => setExpiry(e.target.value)}
+                      placeholder="YYYY-MM-DD"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {type === "VOTER_ID" && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-white/5 text-xs">
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Assembly Constituency</label>
+                    <input
+                      type="text"
+                      value={details?.acNumber || "AC-42 New Delhi"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, acNumber: e.target.value }))}
+                      placeholder="AC-42"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Polling Booth</label>
+                    <input
+                      type="text"
+                      value={details?.pollingBooth || "Booth 12A"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, pollingBooth: e.target.value }))}
+                      placeholder="Booth 12A"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Part Serial No.</label>
+                    <input
+                      type="text"
+                      value={details?.partSerial || "24/110"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, partSerial: e.target.value }))}
+                      placeholder="24/110"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {type === "RATION_CARD" && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-white/5 text-xs">
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Scheme Category</label>
+                    <input
+                      type="text"
+                      value={details?.category || "NFSA-BPL"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, category: e.target.value.toUpperCase() }))}
+                      placeholder="NFSA-BPL"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">FPS Depot ID</label>
+                    <input
+                      type="text"
+                      value={details?.fpsDepotId || "FPS-9842"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, fpsDepotId: e.target.value.toUpperCase() }))}
+                      placeholder="FPS-9842"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Rice Quota (kg)</label>
+                    <input
+                      type="number"
+                      value={details?.monthlyRiceQuotaKg || 20}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, monthlyRiceQuotaKg: Number(e.target.value) }))}
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Wheat Quota (kg)</label>
+                    <input
+                      type="number"
+                      value={details?.monthlyWheatQuotaKg || 15}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, monthlyWheatQuotaKg: Number(e.target.value) }))}
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {type === "PAN" && (
+                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/5 text-xs">
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Taxpayer Category</label>
+                    <input
+                      type="text"
+                      value={details?.taxpayerCategory || "Individual"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, taxpayerCategory: e.target.value }))}
+                      placeholder="Individual"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">Aadhaar Link Status</label>
+                    <input
+                      type="text"
+                      value={details?.aadhaarLinked || "Linked"}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, aadhaarLinked: e.target.value }))}
+                      placeholder="Linked"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1383,7 +1629,7 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
         <form onSubmit={handleSubmit} className="pt-2">
           <button
             type="submit"
-            disabled={loading || isProcessing || !frontImage}
+            disabled={loading || isProcessing || !number.trim()}
             className="w-full flex items-center justify-center gap-2 rounded-full bg-white hover:bg-neutral-100 py-3.5 text-xs font-bold text-black shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:scale-[1.01] active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
           >
             {loading ? (
@@ -1394,9 +1640,9 @@ export function AddDocumentModal({ onClose, onAdded }: AddDocumentModalProps) {
             <span>
               {uploadStep
                 ? uploadStep
-                : !frontImage
-                  ? "Upload Front ID to Continue"
-                  : "Encrypt & Add to Vault"}
+                : frontImage
+                  ? "Encrypt, Store Real ID & Add to Vault"
+                  : "Encrypt & Add Digital PVC ID to Vault"}
             </span>
           </button>
         </form>

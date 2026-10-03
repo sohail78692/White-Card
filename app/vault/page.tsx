@@ -25,6 +25,7 @@ export default function VaultPage() {
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("All");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [addModalType, setAddModalType] = useState<DocumentType>("DRIVING_LICENSE");
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
 
   const fetchDocs = async () => {
@@ -80,13 +81,14 @@ export default function VaultPage() {
             Document <span className="text-[#60a5fa]">Vault</span>
           </h1>
           <p className="text-xs sm:text-sm text-neutral-400">
-            Your 4 core identity credentials, locked safely on your device.
+            Your 4 core identity credentials, locked safely on your device with unique DEK envelope encryption.
           </p>
         </div>
 
         <button
           onClick={() => {
             sound.playFlip();
+            setAddModalType("DRIVING_LICENSE");
             setShowAddModal(true);
           }}
           className="flex items-center gap-2 rounded-full bg-white hover:bg-neutral-100 px-5 py-2.5 text-xs font-bold text-black shadow-[0_4px_20px_rgba(255,255,255,0.12)] hover:scale-105 active:scale-95 transition-all duration-200 shrink-0"
@@ -94,6 +96,72 @@ export default function VaultPage() {
           <Plus className="h-4 w-4" />
           <span>Add Document</span>
         </button>
+      </div>
+
+      {/* Core 4 Identity Hub (4-Card Linked Status Tray) */}
+      <div className="rounded-[28px] bg-white/[0.02] border border-white/[0.08] p-4 sm:p-5 space-y-3 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-sky-400 animate-pulse" />
+            <span className="text-xs font-bold text-white uppercase tracking-wider">
+              Core 4 Sovereign Identity Hub
+            </span>
+          </div>
+          <span className="text-[11px] text-neutral-400 font-medium">
+            {documents.length}/4 Linked
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          {(["DRIVING_LICENSE", "PAN", "VOTER_ID", "RATION_CARD"] as DocumentType[]).map((docType) => {
+            const meta = DOCUMENT_TYPES[docType];
+            const matchedDoc = documents.find((d) => d.type === docType);
+            const isLinked = !!matchedDoc;
+
+            return (
+              <div
+                key={docType}
+                onClick={() => {
+                  if (isLinked) {
+                    sound.playFlip();
+                    setSelectedDocId(matchedDoc.id);
+                  } else {
+                    sound.playPop();
+                    setAddModalType(docType);
+                    setShowAddModal(true);
+                  }
+                }}
+                className={`rounded-[20px] p-3 sm:p-3.5 border transition-all duration-300 cursor-pointer flex items-center justify-between backdrop-blur-xl group hover:scale-[1.02] active:scale-[0.98] ${
+                  isLinked
+                    ? "bg-white/[0.06] border-white/15 hover:border-white/30 shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+                    : "bg-white/[0.02] border-dashed border-white/10 hover:border-sky-400/40 hover:bg-sky-500/[0.05]"
+                }`}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <DocumentIcon type={docType} size="sm" className="group-hover:scale-110" />
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-white truncate leading-tight group-hover:text-sky-300 transition-colors">
+                      {meta.title}
+                    </div>
+                    <div className="text-[10px] font-mono mt-0.5 truncate text-neutral-400">
+                      {isLinked ? matchedDoc.maskedNumber : "Not Linked"}
+                    </div>
+                  </div>
+                </div>
+
+                <span
+                  className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full shrink-0 border ${
+                    isLinked
+                      ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
+                      : "bg-white/[0.06] border-white/10 text-neutral-400 group-hover:border-sky-400/40 group-hover:text-sky-300"
+                  }`}
+                >
+                  {isLinked ? "✓ Linked" : "+ Add"}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -231,21 +299,37 @@ export default function VaultPage() {
                 {/* Masked Number Styled Card Band */}
                 <div className={`rounded-2xl p-3.5 border flex items-center justify-between shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ${
                   doc.type === "PAN"
-                    ? "bg-gradient-to-r from-sky-950/40 via-blue-900/30 to-indigo-950/40 border-sky-500/20"
-                    : "bg-white/[0.04] border-white/5"
+                    ? "bg-gradient-to-r from-purple-950/40 via-indigo-900/30 to-purple-950/40 border-purple-500/20"
+                    : doc.type === "DRIVING_LICENSE"
+                    ? "bg-gradient-to-r from-blue-950/40 via-sky-900/30 to-blue-950/40 border-blue-500/20"
+                    : doc.type === "VOTER_ID"
+                    ? "bg-gradient-to-r from-emerald-950/40 via-teal-900/30 to-emerald-950/40 border-emerald-500/20"
+                    : "bg-gradient-to-r from-amber-950/40 via-yellow-900/30 to-amber-950/40 border-amber-500/20"
                 }`}>
                   <div className="space-y-0.5">
                     <span className="text-[8px] uppercase tracking-wider text-neutral-400 block font-bold">
-                      {doc.type === "PAN" ? "Permanent Account Number" : "Encrypted Identifier"}
+                      {doc.type === "PAN"
+                        ? "Permanent Account Number"
+                        : doc.type === "DRIVING_LICENSE"
+                        ? "Driving Licence Identifier"
+                        : doc.type === "VOTER_ID"
+                        ? "Elector Photo ID (EPIC)"
+                        : "National Food Security Card"}
                     </span>
                     <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95">
                       {doc.maskedNumber}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    {doc.type === "PAN" && (
-                      <span className="text-[9px] font-bold text-sky-400/80 font-serif">🇮🇳 ITD</span>
-                    )}
+                    <span className="text-[9px] font-bold text-white/80 font-serif">
+                      {doc.type === "PAN"
+                        ? "🇮🇳 ITD"
+                        : doc.type === "DRIVING_LICENSE"
+                        ? "🚗 MoRTH"
+                        : doc.type === "VOTER_ID"
+                        ? "🗳️ ECI"
+                        : "🌾 NFSA"}
+                    </span>
                     <Lock className="h-3.5 w-3.5 text-neutral-400" />
                   </div>
                 </div>
@@ -278,6 +362,7 @@ export default function VaultPage() {
         <AddDocumentModal
           onClose={() => setShowAddModal(false)}
           onAdded={fetchDocs}
+          initialType={addModalType}
         />
       )}
 

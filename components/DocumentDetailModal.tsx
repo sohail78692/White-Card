@@ -52,6 +52,13 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
   const [editName, setEditName] = useState("");
   const [editFatherName, setEditFatherName] = useState("");
   const [editDob, setEditDob] = useState("");
+  const [editVehicleClasses, setEditVehicleClasses] = useState("");
+  const [editRto, setEditRto] = useState("");
+  const [editAcNumber, setEditAcNumber] = useState("");
+  const [editPollingBooth, setEditPollingBooth] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editFpsDepotId, setEditFpsDepotId] = useState("");
+  const [editAadhaarLinked, setEditAadhaarLinked] = useState("Linked");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -91,6 +98,13 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
         setEditName(cleanDetails.name || cleanDetails.fullName || "");
         setEditFatherName(cleanDetails.fatherName || "");
         setEditDob(cleanDetails.dob || "");
+        setEditVehicleClasses(Array.isArray(cleanDetails.vehicleClasses) ? cleanDetails.vehicleClasses.join(", ") : "MCWG, LMV");
+        setEditRto(cleanDetails.rto || "");
+        setEditAcNumber(cleanDetails.acNumber || "");
+        setEditPollingBooth(cleanDetails.pollingBooth || "");
+        setEditCategory(cleanDetails.category || "");
+        setEditFpsDepotId(cleanDetails.fpsDepotId || "");
+        setEditAadhaarLinked(cleanDetails.aadhaarLinked || "Linked");
       } else {
         setError("Failed to load document details");
       }
@@ -137,13 +151,31 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
     setSavingEdit(true);
     setError(null);
     try {
+      const detailsPayload: Record<string, any> = {
+        name: editName.trim(),
+        fatherName: editFatherName.trim(),
+        dob: editDob.trim(),
+      };
+
+      if (doc.type === "DRIVING_LICENSE") {
+        detailsPayload.vehicleClasses = editVehicleClasses.split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
+        detailsPayload.rto = editRto.trim().toUpperCase();
+        detailsPayload.organDonor = true;
+      } else if (doc.type === "PAN") {
+        detailsPayload.taxpayerCategory = "Individual";
+        detailsPayload.aadhaarLinked = editAadhaarLinked.trim();
+        detailsPayload.cardStatus = "Active & Linked";
+      } else if (doc.type === "VOTER_ID") {
+        detailsPayload.acNumber = editAcNumber.trim();
+        detailsPayload.pollingBooth = editPollingBooth.trim();
+      } else if (doc.type === "RATION_CARD") {
+        detailsPayload.category = editCategory.trim().toUpperCase();
+        detailsPayload.fpsDepotId = editFpsDepotId.trim().toUpperCase();
+      }
+
       const updates: Record<string, any> = {
         number: editNumber.trim().toUpperCase(),
-        details: sanitizeDetailsForType(doc.type as DocumentType, {
-          name: editName.trim(),
-          fatherName: editFatherName.trim(),
-          dob: editDob.trim(),
-        }),
+        details: sanitizeDetailsForType(doc.type as DocumentType, detailsPayload),
       };
 
       const res = await fetch(`/api/vault/${docId}`, {
@@ -608,6 +640,109 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
                       className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
                     />
                   </div>
+
+                  {/* Document specific inline edit fields */}
+                  {doc.type === "DRIVING_LICENSE" && (
+                    <div className="grid grid-cols-2 gap-2.5 pt-1">
+                      <div>
+                        <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                          Vehicle Classes
+                        </label>
+                        <input
+                          type="text"
+                          value={editVehicleClasses}
+                          onChange={(e) => setEditVehicleClasses(e.target.value)}
+                          placeholder="MCWG, LMV"
+                          className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                          RTO Code
+                        </label>
+                        <input
+                          type="text"
+                          value={editRto}
+                          onChange={(e) => setEditRto(e.target.value)}
+                          placeholder="DL-01"
+                          className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {doc.type === "VOTER_ID" && (
+                    <div className="grid grid-cols-2 gap-2.5 pt-1">
+                      <div>
+                        <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                          Assembly Constituency
+                        </label>
+                        <input
+                          type="text"
+                          value={editAcNumber}
+                          onChange={(e) => setEditAcNumber(e.target.value)}
+                          placeholder="AC-42 New Delhi"
+                          className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                          Polling Booth
+                        </label>
+                        <input
+                          type="text"
+                          value={editPollingBooth}
+                          onChange={(e) => setEditPollingBooth(e.target.value)}
+                          placeholder="Booth 12A"
+                          className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {doc.type === "RATION_CARD" && (
+                    <div className="grid grid-cols-2 gap-2.5 pt-1">
+                      <div>
+                        <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                          Scheme Category
+                        </label>
+                        <input
+                          type="text"
+                          value={editCategory}
+                          onChange={(e) => setEditCategory(e.target.value)}
+                          placeholder="NFSA-BPL / AAY"
+                          className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                          FPS Depot ID
+                        </label>
+                        <input
+                          type="text"
+                          value={editFpsDepotId}
+                          onChange={(e) => setEditFpsDepotId(e.target.value)}
+                          placeholder="FPS-9842"
+                          className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {doc.type === "PAN" && (
+                    <div className="pt-1">
+                      <label className="text-[10px] text-neutral-400 uppercase font-semibold block mb-1">
+                        Aadhaar Linked Status
+                      </label>
+                      <input
+                        type="text"
+                        value={editAadhaarLinked}
+                        onChange={(e) => setEditAadhaarLinked(e.target.value)}
+                        placeholder="Linked"
+                        className="w-full rounded-xl bg-white/[0.08] border border-white/20 px-3 py-1.5 text-xs text-white focus:outline-none focus:border-sky-400"
+                      />
+                    </div>
+                  )}
 
                   <div className="flex justify-end gap-2 pt-1">
                     <button

@@ -442,6 +442,321 @@ body.is-scrolling * {
 
 
 
+/* ============================================================== */
+/* 3D INTERACTIVE FOLDER CARD HOLDER ANIMATION                   */
+/* ============================================================== */
+
+.folder-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+  width: 100%;
+}
+
+.folder-card {
+  width: 275px;
+  height: 195px;
+  max-width: 90vw;
+  perspective: 1200px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.folder-toggle {
+  display: none;
+}
+
+/* 3D Folder Container */
+.folder-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.folder-toggle:checked ~ .folder-container {
+  transform: rotateX(8deg);
+}
+
+.folder-back {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
+}
+
+.folder-front-wrapper {
+  position: absolute;
+  bottom: -9px;
+  width: 100%;
+  z-index: 90;
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 12px;
+}
+
+.folder-front {
+  width: 100%;
+  filter: drop-shadow(0 8px 18px rgba(0, 86, 179, 0.35));
+}
+
+/* Centered Floating Search Bar (Only visible when folder is open) */
+.folder-search {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  width: 36px;
+  height: 31px;
+  background-color: #2563eb;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.folder-toggle:checked ~ .folder-container .folder-search {
+  opacity: 1;
+  top: -80px;
+  transform: translateX(-50%) scale(1);
+  width: 86%;
+  max-width: 235px;
+  pointer-events: auto;
+}
+
+.folder-search:focus-within {
+  background-color: #1d4ed8;
+  border-color: #93c5fd;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.55);
+}
+
+.folder-search-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.folder-search-input {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  margin-left: 6px;
+  outline: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.folder-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 10px;
+}
+
+/* Individual File Cards */
+.folder-file {
+  position: absolute;
+  bottom: 10px;
+  left: 6%;
+  width: 88%;
+  height: 128px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 8px 22px rgba(0, 0, 0, 0.45);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 0;
+  cursor: pointer;
+}
+
+/* Holographic Shine Sweep */
+.folder-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+}
+
+.folder-toggle:checked ~ .folder-container .folder-shine {
+  left: 150%;
+  transition: left 0.8s ease-in-out;
+  transition-delay: 0.3s;
+}
+
+.folder-file-text {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: white;
+  padding: 13px 15px;
+  font-weight: 800;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.3s ease 0.35s;
+}
+
+.folder-toggle:checked ~ .folder-container .folder-file-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.folder-file-subtext {
+  font-size: 10px;
+  font-mono: monospace;
+  opacity: 0.9;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.folder-file-icon {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 17px;
+  height: 17px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.3s ease;
+}
+
+.folder-file-tag {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.95);
+  font-family: "Inter", -apple-system, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.folder-toggle:checked ~ .folder-container .folder-file-tag {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.folder-toggle:checked ~ .folder-container .folder-file:hover .folder-file-icon {
+  color: #ffffff;
+}
+
+/* Open State Flap */
+.folder-toggle:checked ~ .folder-container .folder-front-wrapper {
+  transform: rotateX(-45deg);
+}
+
+/* ============================================================== */
+/* DYNAMIC CARD FANNING RULES ACCORDING TO DOCUMENT COUNT          */
+/* ============================================================== */
+
+/* 1 Document */
+.folder-toggle:checked ~ .folder-container .file-count-1.file-idx-0 {
+  transform: translateY(-76px) rotate(-2deg) translateZ(15px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-1.file-idx-0:hover {
+  transform: translateY(-88px) rotate(-2deg) translateZ(25px) scale(1.03);
+}
+
+/* 2 Documents */
+.folder-toggle:checked ~ .folder-container .file-count-2.file-idx-0 {
+  transform: translateY(-80px) rotate(-8deg) translateX(-18px) translateZ(20px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-2.file-idx-0:hover {
+  transform: translateY(-92px) rotate(-8deg) translateX(-18px) translateZ(30px) scale(1.03);
+}
+.folder-toggle:checked ~ .folder-container .file-count-2.file-idx-1 {
+  transform: translateY(-56px) rotate(6deg) translateX(18px) translateZ(10px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-2.file-idx-1:hover {
+  transform: translateY(-68px) rotate(6deg) translateX(18px) translateZ(20px) scale(1.03);
+}
+
+/* 3 Documents */
+.folder-toggle:checked ~ .folder-container .file-count-3.file-idx-0 {
+  transform: translateY(-82px) rotate(-11deg) translateX(-22px) translateZ(25px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-3.file-idx-0:hover {
+  transform: translateY(-94px) rotate(-11deg) translateX(-22px) translateZ(35px) scale(1.03);
+}
+.folder-toggle:checked ~ .folder-container .file-count-3.file-idx-1 {
+  transform: translateY(-60px) rotate(0deg) translateX(0px) translateZ(15px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-3.file-idx-1:hover {
+  transform: translateY(-72px) rotate(0deg) translateX(0px) translateZ(25px) scale(1.03);
+}
+.folder-toggle:checked ~ .folder-container .file-count-3.file-idx-2 {
+  transform: translateY(-40px) rotate(10deg) translateX(20px) translateZ(8px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-3.file-idx-2:hover {
+  transform: translateY(-52px) rotate(10deg) translateX(20px) translateZ(18px) scale(1.03);
+}
+
+/* 4 or more Documents */
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-0,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-0 {
+  transform: translateY(-86px) rotate(-12deg) translateX(-26px) translateZ(30px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-0:hover,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-0:hover {
+  transform: translateY(-98px) rotate(-12deg) translateX(-26px) translateZ(40px) scale(1.03);
+}
+
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-1,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-1 {
+  transform: translateY(-68px) rotate(-4deg) translateX(-8px) translateZ(20px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-1:hover,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-1:hover {
+  transform: translateY(-80px) rotate(-4deg) translateX(-8px) translateZ(30px) scale(1.03);
+}
+
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-2,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-2 {
+  transform: translateY(-48px) rotate(5deg) translateX(10px) translateZ(12px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-2:hover,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-2:hover {
+  transform: translateY(-60px) rotate(5deg) translateX(10px) translateZ(22px) scale(1.03);
+}
+
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-3,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-3 {
+  transform: translateY(-30px) rotate(13deg) translateX(26px) translateZ(5px);
+}
+.folder-toggle:checked ~ .folder-container .file-count-4.file-idx-3:hover,
+.folder-toggle:checked ~ .folder-container .file-count-many.file-idx-3:hover {
+  transform: translateY(-42px) rotate(13deg) translateX(26px) translateZ(15px) scale(1.03);
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -451,4 +766,6 @@ body.is-scrolling * {
     scroll-behavior: auto !important;
   }
 }
+
+
 

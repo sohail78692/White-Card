@@ -6,6 +6,8 @@ import { sound } from "@/lib/sound";
 import { WalletCard } from "@/components/WalletCard";
 import { AddDocumentModal } from "@/components/AddDocumentModal";
 import { DocumentDetailModal } from "@/components/DocumentDetailModal";
+import { DocumentIcon } from "@/components/DocumentIcon";
+import { DOCUMENT_TYPES, DocumentType } from "@/lib/validators/documents";
 import {
   FolderLock,
   Share2,
@@ -20,6 +22,8 @@ import {
   LogOut,
   IdCard,
   Mail,
+  Plus,
+  ChevronRight,
 } from "lucide-react";
 
 export default function WalletPage() {
@@ -29,6 +33,7 @@ export default function WalletPage() {
   const [documents, setDocuments] = useState<any[]>([]);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const [isAddingDoc, setIsAddingDoc] = useState(false);
+  const [addModalType, setAddModalType] = useState<DocumentType>("DRIVING_LICENSE");
 
   const [emergencyContact, setEmergencyContact] = useState("+91 98765 43210");
   const [isEditingContact, setIsEditingContact] = useState(false);
@@ -127,16 +132,16 @@ export default function WalletPage() {
     <div className="space-y-8 sm:space-y-10 pt-1 sm:pt-2 pb-8 max-w-5xl mx-auto">
       {/* 3D Wide Multi-Card Wallet Display Section */}
       <section className="text-center space-y-4">
-        <div className="space-y-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold text-neutral-300 bg-white/[0.04] border border-white/10">
-            <IdCard className="h-3.5 w-3.5 text-sky-400" />
-            <span>Digital Sovereign Card</span>
+        <div className="space-y-1.5">
+          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-[11px] font-medium text-neutral-300 bg-white/[0.04] border border-white/10">
+            <FolderLock className="h-3 w-3 text-sky-400" />
+            <span>Encrypted Credential Holder</span>
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             White <span className="text-sky-400">Card</span>
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-md mx-auto">
-            Your cryptographic digital credential card. Tap to flip in 3D and verify offline.
+          <p className="text-xs text-neutral-400 max-w-sm mx-auto leading-relaxed">
+            Your encrypted personal identity holder. Tap the folder to open, search, and inspect your sovereign cards.
           </p>
         </div>
 
@@ -147,9 +152,82 @@ export default function WalletPage() {
           emergencyContact={emergencyContact}
           documents={documents}
           onEmergencyContactChange={handleUpdateEmergencyContact}
-          onAddDocument={() => setIsAddingDoc(true)}
+          onAddDocument={() => {
+            setAddModalType("DRIVING_LICENSE");
+            setIsAddingDoc(true);
+          }}
           onOpenDocument={(id) => setSelectedDocId(id)}
         />
+      </section>
+
+      {/* Core 4 Sovereign Credentials Hub */}
+      <section className="rounded-[28px] bg-white/[0.02] border border-white/[0.08] p-5 sm:p-6 space-y-4 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <h2 className="text-sm sm:text-base font-bold text-white tracking-tight">
+              4 Sovereign Documents · One Encrypted Wallet
+            </h2>
+          </div>
+          <Link
+            href="/vault"
+            className="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1 transition"
+          >
+            <span>Open Vault</span>
+            <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {(["DRIVING_LICENSE", "PAN", "VOTER_ID", "RATION_CARD"] as DocumentType[]).map((docType) => {
+            const meta = DOCUMENT_TYPES[docType];
+            const matchedDoc = documents.find((d) => d.type === docType);
+            const isLinked = !!matchedDoc;
+
+            return (
+              <div
+                key={docType}
+                onClick={() => {
+                  if (isLinked) {
+                    sound.playFlip();
+                    setSelectedDocId(matchedDoc.id);
+                  } else {
+                    sound.playPop();
+                    setAddModalType(docType);
+                    setIsAddingDoc(true);
+                  }
+                }}
+                className={`rounded-[20px] p-3.5 border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-3 backdrop-blur-xl group hover:scale-[1.02] active:scale-[0.98] ${
+                  isLinked
+                    ? "bg-white/[0.06] border-white/15 hover:border-white/30 shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+                    : "bg-white/[0.02] border-dashed border-white/10 hover:border-sky-400/40 hover:bg-sky-500/[0.05]"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <DocumentIcon type={docType} size="sm" className="group-hover:scale-110" />
+                  <span
+                    className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${
+                      isLinked
+                        ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
+                        : "bg-white/[0.06] border-white/10 text-neutral-400 group-hover:border-sky-400/40 group-hover:text-sky-300"
+                    }`}
+                  >
+                    {isLinked ? "✓ Linked" : "+ Add"}
+                  </span>
+                </div>
+
+                <div>
+                  <div className="text-xs font-bold text-white truncate leading-tight group-hover:text-sky-300 transition-colors">
+                    {meta.title}
+                  </div>
+                  <div className="text-[10px] font-mono mt-0.5 text-neutral-400">
+                    {isLinked ? matchedDoc.maskedNumber : "Tap to Link ID"}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* Live Wallet Counters Grid (iOS Frosted Glass Cards with Hover Animation) */}
@@ -354,6 +432,7 @@ export default function WalletPage() {
             setIsAddingDoc(false);
             loadProfile();
           }}
+          initialType={addModalType}
         />
       )}
 

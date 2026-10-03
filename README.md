@@ -26,37 +26,37 @@
 ```mermaid
 flowchart TD
     subgraph Client ["Client Browser"]
-        UI[Next.js App / 3D Wallet Card]
-        Scan[Web Scanner - jsQR / Camera]
-        Audio[Web Audio API - Synthesizer]
+        UI["Next.js App / 3D Wallet Card"]
+        Scan["Web Scanner - jsQR / Camera"]
+        Audio["Web Audio API - Synthesizer"]
     end
 
     subgraph Auth ["Authentication Layer"]
-        Passkey[WebAuthn Passkeys]
-        OTP[Email OTP - Resend / Brevo]
-        CSRF[Strict Origin & CSRF Guard]
+        Passkey["WebAuthn Passkeys"]
+        OTP["Email OTP - Resend / Brevo"]
+        CSRF["Strict Origin & CSRF Guard"]
     end
 
     subgraph Crypto ["Cryptographic Engine"]
-        MK[(MASTER_KEY)]
-        DEK[Per-User DEK - AES-256-GCM]
-        Blind[HKDF Blind Index - HMAC-SHA256]
-        EdDSA[Ed25519 Token Signing - jose]
+        MK[("MASTER_KEY")]
+        DEK["Per-User DEK - AES-256-GCM"]
+        Blind["HKDF Blind Index - HMAC-SHA256"]
+        EdDSA["Ed25519 Token Signing - jose"]
     end
 
     subgraph Storage ["MongoDB Atlas M0 Free Tier"]
-        Users[(users - wrappedDek)]
-        Docs[(documents - numberEnc, detailsEnc)]
-        Shares[(shares & consents)]
-        Audit[(audit_logs - SHA-256 Hash Chain)]
-        Ration[(ration_balances & ration_ledger)]
-        Checkin[(polling_checkins)]
+        Users[("users - wrappedDek")]
+        Docs[("documents - numberEnc, detailsEnc")]
+        Shares[("shares & consents")]
+        Audit[("audit_logs - SHA-256 Hash Chain")]
+        Ration[("ration_balances & ration_ledger")]
+        Checkin[("polling_checkins")]
     end
 
     subgraph Verifier ["Verifier Verification Pipeline"]
-        JWKS[/.well-known/jwks.json]
-        VerifyEngine[8-Step Verification Pipeline]
-        RoleViews[Police / FPS / Polling / Bank Views]
+        JWKS["/.well-known/jwks.json"]
+        VerifyEngine["8-Step Verification Pipeline"]
+        RoleViews["Police / FPS / Polling / Bank Views"]
     end
 
     UI --> Auth
