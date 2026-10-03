@@ -245,6 +245,11 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
       if (extracted.name) detUpdates.name = extracted.name;
       if (extracted.fatherName) detUpdates.fatherName = extracted.fatherName;
       if (extracted.dob) detUpdates.dob = extracted.dob;
+      if (extracted.address) detUpdates.address = extracted.address;
+      if (extracted.vehicleClasses) detUpdates.vehicleClasses = extracted.vehicleClasses;
+      if (extracted.validUntil) detUpdates.validUntil = extracted.validUntil;
+      if (extracted.rto) detUpdates.rto = extracted.rto;
+      if (extracted.category) detUpdates.category = extracted.category;
       if (Object.keys(detUpdates).length > 0) updates.details = detUpdates;
       if (extracted.issuer) updates.issuer = extracted.issuer;
 
@@ -406,6 +411,11 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
             if (extracted.name) detUpdates.name = extracted.name;
             if (extracted.fatherName) detUpdates.fatherName = extracted.fatherName;
             if (extracted.dob) detUpdates.dob = extracted.dob;
+            if (extracted.address) detUpdates.address = extracted.address;
+            if (extracted.vehicleClasses) detUpdates.vehicleClasses = extracted.vehicleClasses;
+            if (extracted.validUntil) detUpdates.validUntil = extracted.validUntil;
+            if (extracted.rto) detUpdates.rto = extracted.rto;
+            if (extracted.category) detUpdates.category = extracted.category;
             if (Object.keys(detUpdates).length > 0) updates.details = detUpdates;
 
             if (Object.keys(updates).length > 0) {

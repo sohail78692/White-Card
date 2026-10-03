@@ -23,9 +23,7 @@ interface WalletCardProps {
   walletId: string;
   userName?: string;
   linkedDocsCount?: number;
-  emergencyContact?: string;
-  onUpdateEmergencyContact?: (contact: string) => void;
-  onEmergencyContactChange?: (contact: string) => void;
+  privacyShield?: boolean;
   documents?: any[];
   onAddDocument?: () => void;
   onOpenDocument?: (docId: string) => void;
@@ -127,7 +125,7 @@ export function WalletCard({
   walletId,
   userName = "Personal Wallet Holder",
   linkedDocsCount = 0,
-  emergencyContact = "+91 98765 43210",
+  privacyShield = false,
   documents = [],
   onAddDocument,
   onOpenDocument,
@@ -372,12 +370,20 @@ export function WalletCard({
                   <IconComponent className="folder-file-icon" />
                   <div className="folder-file-text">
                     <div className="truncate pr-5">{doc.customTitle || cfg.title}</div>
-                    <div className="folder-file-subtext truncate">
-                      {doc.details?.name || doc.maskedNumber}
+                    <div className="folder-file-subtext truncate transition-all duration-300">
+                      {privacyShield ? (
+                        <span className="font-mono tracking-widest text-[9.5px] opacity-75 group-hover:opacity-100 transition-opacity">
+                          •••• •••• ••••
+                        </span>
+                      ) : (
+                        doc.details?.name || doc.maskedNumber
+                      )}
                     </div>
                   </div>
-                  <div className="folder-file-tag">
-                    {cfg.tagPrefix} • {doc.maskedNumber?.slice(-4) || "ACTIVE"}
+                  <div className="folder-file-tag transition-all duration-300">
+                    {privacyShield
+                      ? `${cfg.tagPrefix} • ••••`
+                      : `${cfg.tagPrefix} • ${doc.maskedNumber?.slice(-4) || "ACTIVE"}`}
                   </div>
                 </div>
               );

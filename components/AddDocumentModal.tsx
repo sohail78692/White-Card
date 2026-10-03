@@ -269,10 +269,11 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     if (docScanner.side === "front") {
       setFrontImage(slot);
       setRawFrontUrl(res.previewUrl);
-      extractDataFromFile(finalFile, cleanFilename);
+      extractDataFromFile(finalFile, cleanFilename, backImage?.file, backImage?.name);
     } else {
       setBackImage(slot);
       setRawBackUrl(res.previewUrl);
+      extractDataFromFile(finalFile, cleanFilename, frontImage?.file, frontImage?.name);
     }
     sound.playSuccess();
 
@@ -323,8 +324,13 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     setDocScanner({ isOpen: false, side: "front", rawImageUrl: "" });
   };
 
-  // Automated Document Data Extraction via server OCR and PDF parsing + Client OCR fallback
-  const extractDataFromFile = async (file: File | Blob, filename: string) => {
+  // Automated Document Data Extraction via Gemini Flash Vision + Server OCR + Client OCR fallback
+  const extractDataFromFile = async (
+    file: File | Blob,
+    filename: string,
+    secondaryFile?: File | Blob | null,
+    secondaryFilename?: string | null
+  ) => {
     // 1. Instant client-side check from filename (e.g., in.gov.pan-PANCR-ABCDE1234F.pdf or photo named with ID)
     const panFilenameMatch = filename.match(/\b([A-Z]{5}[0-9]{4}[A-Z])\b/i);
     if (panFilenameMatch && type === "PAN" && panFilenameMatch[1].toUpperCase() !== "ABCDE1234F") {
@@ -336,12 +342,21 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     }
 
     setIsExtractingData(true);
-    setExtractionMessage("Scanning card photo for real PAN number & details...");
+    const hasBothSides = !!secondaryFile;
+    setExtractionMessage(
+      hasBothSides
+        ? "AI Vision scanning both Front & Back card sides..."
+        : `AI Vision scanning ${type.replace("_", " ")} document...`
+    );
 
     try {
-      // 1. Try server extraction
+      // 1. Try server extraction (Google Gemini 3.8 Flash Vision + Tesseract Fallback)
       const formData = new FormData();
       formData.append("file", file, filename);
+      if (secondaryFile && secondaryFilename) {
+        formData.append("backFile", secondaryFile, secondaryFilename);
+      }
+
       const res = await fetch("/api/vault/extract", {
         method: "POST",
         body: formData,
@@ -351,28 +366,41 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
         const data = await res.json();
         const ext = data.extracted;
         if (ext) {
-          if (ext.detectedType && ext.detectedType !== type) {
+          if (ext.detectedType && ext.detectedType !== type && ext.detectedType !== "OTHER") {
             handleTypeChange(ext.detectedType);
           }
           if (ext.number && ext.number !== "ABCDE1234F") {
             sound.playSuccess();
             setNumber(ext.number);
-            setExtractionMessage(`✓ Auto-filled ${ext.number} from card photo!`);
+            const engineTag = ext.engine === "gemini-flash" ? "Gemini AI" : "OCR";
+            setExtractionMessage(`✓ ${engineTag} auto-filled ${ext.number} & extracted details!`);
             setQrMessage(`✓ Auto-extracted & verified ${ext.number} from your document!`);
             setTimeout(() => setExtractionMessage(null), 5000);
-            const activeType = ext.detectedType || type;
-            if (ext.fatherName || ext.dob || ext.name) {
-              setDetails((prev: any) => {
-                const cleaned = sanitizeDetailsForType(activeType, prev);
-                return sanitizeDetailsForType(activeType, {
-                  ...cleaned,
-                  ...(ext.fatherName ? { fatherName: ext.fatherName } : {}),
-                  ...(ext.dob ? { dob: ext.dob } : {}),
-                  ...(ext.name ? { name: ext.name } : {}),
-                });
-              });
+          }
+
+          const activeType = (ext.detectedType && ext.detectedType !== "OTHER") ? ext.detectedType : type;
+
+          setDetails((prev: any) => {
+            const cleaned = sanitizeDetailsForType(activeType, prev);
+            const merged: Record<string, any> = { ...cleaned };
+            if (ext.name) merged.name = ext.name;
+            if (ext.fatherName) merged.fatherName = ext.fatherName;
+            if (ext.dob) merged.dob = ext.dob;
+            if (ext.address) merged.address = ext.address;
+            if (ext.vehicleClasses && Array.isArray(ext.vehicleClasses)) merged.vehicleClasses = ext.vehicleClasses;
+            if (ext.validUntil) merged.validUntil = ext.validUntil;
+            if (ext.rto) merged.rto = ext.rto;
+            if (ext.category) merged.category = ext.category;
+            if (ext.familyMembers && Array.isArray(ext.familyMembers)) {
+              merged.familyMembersCount = ext.familyMembers.length;
+              merged.familyMembers = ext.familyMembers;
             }
-            if (ext.issuer) setIssuer(ext.issuer);
+            return sanitizeDetailsForType(activeType, merged);
+          });
+
+          if (ext.issuer) setIssuer(ext.issuer);
+
+          if (ext.number || ext.name || ext.dob) {
             setIsExtractingData(false);
             return;
           }
@@ -468,7 +496,8 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
   const handleImageFile = (file: File, side: "front" | "back") => {
     // 1. Support PDF document uploads directly
     if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
-      extractDataFromFile(file, file.name);
+      const otherSlot = side === "front" ? backImage : frontImage;
+      extractDataFromFile(file, file.name, otherSlot?.file, otherSlot?.name);
       const slot: IdImageSlot = {
         file,
         preview: "",
@@ -488,7 +517,8 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     }
 
     // 2. Direct upload & instant preview without forcing cropper
-    extractDataFromFile(file, file.name);
+    const otherSlot = side === "front" ? backImage : frontImage;
+    extractDataFromFile(file, file.name, otherSlot?.file, otherSlot?.name);
 
     const img = new Image();
     const objUrl = URL.createObjectURL(file);

@@ -12,7 +12,8 @@ import {
   Share2,
   Shield,
   ShieldCheck,
-  Phone,
+  Eye,
+  EyeOff,
   Laptop,
   CheckCircle2,
   AlertCircle,
@@ -33,9 +34,7 @@ export default function WalletPage() {
   const [isAddingDoc, setIsAddingDoc] = useState(false);
   const [addModalType, setAddModalType] = useState<DocumentType>("DRIVING_LICENSE");
 
-  const [emergencyContact, setEmergencyContact] = useState("+91 98765 43210");
-  const [isEditingContact, setIsEditingContact] = useState(false);
-  const [contactInput, setContactInput] = useState(emergencyContact);
+  const [privacyShield, setPrivacyShield] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,21 +80,23 @@ export default function WalletPage() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("wc_emergency_contact");
-      if (saved) {
-        setEmergencyContact(saved);
-        setContactInput(saved);
+      const saved = localStorage.getItem("wc_privacy_shield");
+      if (saved !== null) {
+        setPrivacyShield(saved === "true");
       }
     } catch {}
     loadProfile();
   }, []);
 
-  const handleUpdateEmergencyContact = (contact: string) => {
-    setEmergencyContact(contact);
-    setContactInput(contact);
-    try {
-      localStorage.setItem("wc_emergency_contact", contact);
-    } catch {}
+  const togglePrivacyShield = () => {
+    setPrivacyShield((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("wc_privacy_shield", String(next));
+      } catch {}
+      sound.playPop();
+      return next;
+    });
   };
 
   const handleRevokeSession = async (sessionId: string) => {
@@ -110,12 +111,6 @@ export default function WalletPage() {
     } catch {
       sound.playError();
     }
-  };
-
-  const handleSaveContact = () => {
-    setEmergencyContact(contactInput);
-    setIsEditingContact(false);
-    sound.playSuccess();
   };
 
   if (loading) {
@@ -147,9 +142,8 @@ export default function WalletPage() {
           walletId={user?.walletId || "WC-0000-0000-0000"}
           userName={user?.name || user?.email || "Personal Wallet Holder"}
           linkedDocsCount={documents.length || stats.linkedDocs}
-          emergencyContact={emergencyContact}
+          privacyShield={privacyShield}
           documents={documents}
-          onEmergencyContactChange={handleUpdateEmergencyContact}
           onAddDocument={() => {
             setAddModalType("DRIVING_LICENSE");
             setIsAddingDoc(true);
@@ -252,61 +246,74 @@ export default function WalletPage() {
           </div>
         </div>
 
-        {/* Emergency Contact */}
-        <div className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/20 transition-all duration-300">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shadow-sm">
-              <Phone className="h-5 w-5" />
+        {/* Privacy Shield / Anti-Shoulder Surfing */}
+        <div
+          onClick={togglePrivacyShield}
+          className="rounded-[28px] glass-ios-card p-6 sm:p-7 space-y-4 hover:border-white/20 transition-all duration-300 cursor-pointer group/shield select-none"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div
+                className={`h-10 w-10 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm ${
+                  privacyShield
+                    ? "bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+                    : "bg-white/[0.06] border border-white/10 text-neutral-400"
+                }`}
+              >
+                {privacyShield ? (
+                  <EyeOff className="h-5 w-5 transition-transform group-hover/shield:scale-110" />
+                ) : (
+                  <Eye className="h-5 w-5 transition-transform group-hover/shield:scale-110" />
+                )}
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  Privacy Shield
+                  {privacyShield && (
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  )}
+                </h3>
+                <span className="text-[11px] text-neutral-400">Anti-Shoulder Surfing Mode</span>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-white">Emergency Phone Number</h3>
-              <span className="text-[11px] text-neutral-400">Shown on card back</span>
+
+            {/* iOS Style Glass Toggle Switch */}
+            <div
+              className={`w-12 h-6 rounded-full p-0.5 transition-colors duration-300 border flex items-center ${
+                privacyShield
+                  ? "bg-indigo-600 border-indigo-400/50 justify-end shadow-[0_0_12px_rgba(99,102,241,0.4)]"
+                  : "bg-white/10 border-white/10 justify-start"
+              }`}
+            >
+              <div className="w-5 h-5 rounded-full bg-white shadow-md transition-transform" />
             </div>
           </div>
 
           <p className="text-xs text-neutral-400 leading-relaxed">
-            Helps traffic police, hospitals, and emergency responders quickly contact your loved ones.
+            Obscures and masks document numbers, cardholders, and personal identifiers to protect against prying eyes in public spaces.
           </p>
 
-          {isEditingContact ? (
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={contactInput}
-                onChange={(e) => setContactInput(e.target.value)}
-                className="flex-1 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-white/30"
-                placeholder="+91 98765 43210"
-              />
-              <button
-                type="button"
-                onClick={handleSaveContact}
-                className="rounded-full bg-white text-black px-4 py-2 text-xs font-bold hover:bg-neutral-200 transition"
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsEditingContact(false)}
-                className="rounded-full bg-white/10 text-neutral-300 px-3 py-2 text-xs font-medium hover:bg-white/15 transition"
-              >
-                Cancel
-              </button>
+          <div className="flex items-center justify-between rounded-2xl bg-white/[0.04] p-3.5 border border-white/5 group-hover/shield:border-white/10 transition-colors">
+            <div className="flex items-center gap-2.5">
+              <Shield className={`h-4 w-4 ${privacyShield ? "text-indigo-400" : "text-neutral-500"}`} />
+              <div className="text-xs">
+                <span className="text-neutral-400 mr-2 text-[11px]">Display Mode:</span>
+                <span className={`font-mono font-bold ${privacyShield ? "text-indigo-300" : "text-white"}`}>
+                  {privacyShield ? "•••• •••• ••••" : "DL-0420240019283"}
+                </span>
+              </div>
             </div>
-          ) : (
-            <div className="flex items-center justify-between rounded-2xl bg-white/[0.04] p-3.5 border border-white/5">
-              <span className="text-xs font-mono font-bold text-white">{emergencyContact}</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setContactInput(emergencyContact);
-                  setIsEditingContact(true);
-                }}
-                className="text-xs text-blue-400 hover:text-blue-300 font-semibold"
-              >
-                Change
-              </button>
-            </div>
-          )}
+
+            <span
+              className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border transition-colors ${
+                privacyShield
+                  ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-300"
+                  : "bg-white/5 border-white/10 text-neutral-400"
+              }`}
+            >
+              {privacyShield ? "Shielded" : "Tap to Shield"}
+            </span>
+          </div>
         </div>
       </section>
 
