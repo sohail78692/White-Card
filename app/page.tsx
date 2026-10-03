@@ -139,7 +139,7 @@ function DocumentFeatureCard({
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`group relative rounded-[28px] sm:rounded-[32px] bg-gradient-to-b from-[#0c1424]/90 via-[#080e1b]/95 to-[#040810]/98 border border-white/[0.08] ${styles.borderHover} p-4 sm:p-5 flex flex-col justify-between space-y-4 transition-all duration-300 shadow-[0_14px_40px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] overflow-hidden cursor-pointer`}
+      className={`group relative rounded-[28px] sm:rounded-[32px] bg-gradient-to-b from-[#0c1424]/90 via-[#080e1b]/95 to-[#040810]/98 border border-white/[0.08] ${styles.borderHover} p-5 sm:p-6 flex flex-col justify-between space-y-4 transition-all duration-300 shadow-[0_14px_40px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.15)] overflow-hidden cursor-pointer`}
       style={{
         transform: tilt.isHovered
           ? `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1.02, 1.02, 1.02)`
@@ -154,25 +154,26 @@ function DocumentFeatureCard({
       <div className={`absolute top-2 left-2 w-36 h-28 ${styles.glowBg} rounded-full blur-3xl pointer-events-none transition-all duration-500`} />
 
       {/* Glass specular shimmer sheen on hover */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.07] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/[0.05] to-transparent opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 group-hover:animate-shimmer-sweep" />
 
       {/* Top Bar: 3D Stacked Mini-Card & Chevron Button */}
-      <div className="flex items-center justify-between relative z-10">
-        {/* 3D Stacked Mini Card */}
-        <div className="relative w-30 sm:w-32 h-17 sm:h-18 flex items-center justify-start">
-          {/* Back card */}
+      <div className="flex items-center justify-between relative z-10 pt-1 pl-1">
+        {/* 3D Stacked Mini Card - Positioned safely inside container with zero edge clipping */}
+        <div className="relative w-28 sm:w-30 h-16 sm:h-17 flex items-center justify-start">
+          {/* Back card - gently fanned with controlled bounds */}
           <div
-            className={`absolute inset-0 rounded-[18px] ${styles.backCardBg} border -rotate-[9deg] -translate-x-2 -translate-y-1 blur-[0.4px] transition-transform duration-300 group-hover:-translate-x-2.5 group-hover:-translate-y-1.5 group-hover:-rotate-[11deg]`}
+            className={`absolute inset-0 rounded-[16px] ${styles.backCardBg} border -rotate-[4deg] -translate-x-1 -translate-y-0.5 blur-[0.3px] transition-transform duration-300 group-hover:-translate-x-1.5 group-hover:-translate-y-1 group-hover:-rotate-[6deg]`}
           />
-          {/* Front card */}
+          {/* Front card - stays cleanly inside card bounds */}
           <div
-            className={`relative w-full h-full rounded-[18px] bg-gradient-to-br ${styles.frontCardGrad} border ${styles.frontCardBorder} p-3 flex items-center justify-between ${styles.frontCardShadow} -rotate-[4deg] transition-all duration-300 group-hover:-rotate-[2deg] group-hover:-translate-y-1 backdrop-blur-xl`}
+            className={`relative w-full h-full rounded-[16px] bg-gradient-to-br ${styles.frontCardGrad} border ${styles.frontCardBorder} p-2.5 sm:p-3 flex items-center justify-between ${styles.frontCardShadow} -rotate-[1.5deg] transition-all duration-300 group-hover:rotate-0 group-hover:scale-[1.02] backdrop-blur-xl`}
           >
-            <div className="shrink-0 text-white">
+            <div className="shrink-0 text-white group-hover:scale-110 transition-transform duration-300">
               {icon}
             </div>
-            <div className="flex-1 pl-3 space-y-1.5 text-right">
-              <div className="text-[11px] font-black text-white tracking-widest leading-none">
+            <div className="flex-1 pl-2.5 space-y-1 text-right">
+              <div className="text-[10.5px] sm:text-[11px] font-black text-white tracking-widest leading-none">
                 {badgeText}
               </div>
               <div className="space-y-1 pt-0.5 flex flex-col items-end">
@@ -187,7 +188,7 @@ function DocumentFeatureCard({
         {/* Top-Right Circular Chevron Arrow Button */}
         <Link
           href={targetHref}
-          className={`h-11 w-11 rounded-full bg-white/[0.04] border border-white/10 ${styles.btnHover} flex items-center justify-center text-white/80 hover:text-white transition-all duration-200 shadow-md group/btn`}
+          className={`h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white/[0.04] border border-white/10 ${styles.btnHover} flex items-center justify-center text-white/80 hover:text-white transition-all duration-300 shadow-md group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]`}
         >
           <ChevronRight className="h-4.5 w-4.5 text-white group-hover:translate-x-0.5 transition-transform duration-200" />
         </Link>
@@ -195,22 +196,22 @@ function DocumentFeatureCard({
 
       {/* Title & Description */}
       <div className="space-y-1.5 relative z-10">
-        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug group-hover:text-white transition-colors">
           {title}
         </h3>
-        <p className="text-xs sm:text-[13px] text-neutral-400 leading-relaxed font-normal">
+        <p className="text-xs sm:text-[13px] text-neutral-400 group-hover:text-neutral-300 leading-relaxed font-normal transition-colors">
           {description}
         </p>
       </div>
 
-      {/* 4 Feature Pills in 2x2 */}
+      {/* 4 Feature Pills in 2x2 with Micro-Bounce and Glowing Borders */}
       <div className="grid grid-cols-2 gap-1.5 sm:gap-2 pt-1 relative z-10">
         {pills.map((pill, idx) => (
           <div
             key={idx}
-            className={`h-8.5 sm:h-9 rounded-full bg-white/[0.04] border border-white/[0.08] ${styles.pillHover} px-2.5 sm:px-3 flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-semibold tracking-tight text-neutral-200 transition-all duration-200 hover:bg-white/[0.08] hover:text-white overflow-hidden`}
+            className={`h-8.5 sm:h-9 rounded-full bg-white/[0.04] border border-white/[0.08] ${styles.pillHover} px-2.5 sm:px-3 flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-semibold tracking-tight text-neutral-200 transition-all duration-200 hover:bg-white/[0.1] hover:text-white hover:scale-[1.02] hover:shadow-[0_0_12px_rgba(255,255,255,0.12)] cursor-default`}
           >
-            <span className="text-white/70 group-hover:text-white shrink-0 scale-90">
+            <span className="text-white/70 group-hover:text-white shrink-0 scale-90 transition-colors">
               {pill.icon}
             </span>
             <span className="whitespace-nowrap">{pill.label}</span>
@@ -338,23 +339,27 @@ function HowItWorksStepCard({
           : "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)",
         transition: tilt.isHovered ? "transform 0.08s ease-out" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className="group relative flex-1 min-w-0 rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-white/[0.2] p-5 sm:p-6 lg:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-300 flex items-center justify-between gap-4 backdrop-blur-2xl"
+      className="group relative flex-1 min-w-0 rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#11131c]/90 via-[#0c0e15]/85 to-[#08090e]/95 border border-white/[0.08] hover:border-cyan-500/35 p-5 sm:p-6 lg:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.18)] transition-all duration-300 flex items-center justify-between gap-4 backdrop-blur-2xl overflow-hidden cursor-default"
     >
+      {/* Specular highlight & shimmer on hover */}
+      <div className="absolute inset-0 rounded-[26px] sm:rounded-[28px] bg-gradient-to-tr from-white/[0.05] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute -inset-full bg-gradient-to-r from-transparent via-cyan-400/[0.04] to-transparent opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 group-hover:animate-shimmer-sweep" />
+
       {/* Content Column */}
-      <div className="flex-1 min-w-0 space-y-2">
-        <div className="h-7 w-7 rounded-full bg-white/[0.06] border border-white/15 flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
+      <div className="flex-1 min-w-0 space-y-2 relative z-10">
+        <div className="h-7 w-7 rounded-full bg-white/[0.06] border border-white/15 group-hover:border-cyan-400/40 group-hover:bg-cyan-500/15 group-hover:text-cyan-300 group-hover:shadow-[0_0_12px_rgba(56,189,248,0.4)] flex items-center justify-center text-[11px] font-bold text-white shadow-sm transition-all duration-300">
           {stepNumber}
         </div>
-        <h3 className="text-base sm:text-lg lg:text-[19px] font-bold text-white tracking-tight leading-snug">
+        <h3 className="text-base sm:text-lg lg:text-[19px] font-bold text-white group-hover:text-white tracking-tight leading-snug transition-colors">
           {title}
         </h3>
-        <p className="text-[11px] sm:text-xs lg:text-[12.5px] text-neutral-400 leading-relaxed font-normal">
+        <p className="text-[11px] sm:text-xs lg:text-[12.5px] text-neutral-400 group-hover:text-neutral-300 leading-relaxed font-normal transition-colors">
           {description}
         </p>
       </div>
 
       {/* Graphic Container (Squircle) */}
-      <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 lg:w-[116px] lg:h-[116px] rounded-[22px] bg-[#11131a] border border-white/[0.08] group-hover:border-white/[0.18] shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_10px_24px_rgba(0,0,0,0.6)] flex items-center justify-center p-3 relative backdrop-blur-md transition-all duration-300 group-hover:scale-105">
+      <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 lg:w-[116px] lg:h-[116px] rounded-[22px] bg-[#11131a] border border-white/[0.08] group-hover:border-cyan-500/30 group-hover:shadow-[0_0_25px_rgba(47,134,255,0.25),inset_0_1px_0_rgba(255,255,255,0.12)] flex items-center justify-center p-3 relative backdrop-blur-md transition-all duration-300 group-hover:scale-105">
         {graphic}
       </div>
     </div>
@@ -582,12 +587,14 @@ function SelfDestructQRFeatureCard() {
             <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#2997FF] rounded-br-sm" />
           </div>
 
-          <div className="w-[94px] h-[94px] sm:w-[98px] sm:h-[98px] rounded-xl bg-white p-2 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.7)]">
+          <div className="relative w-[94px] h-[94px] sm:w-[98px] sm:h-[98px] rounded-xl bg-white p-2 flex items-center justify-center overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.7)]">
             {qrUrl ? (
               <img src={qrUrl} alt="Temporary Sharing QR Code" className="w-full h-full object-contain" />
             ) : (
               <QrCode className="w-full h-full text-[#070b14]" />
             )}
+            {/* Cyber Scanning Laser Beam */}
+            <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#2997FF] to-transparent shadow-[0_0_8px_#2997FF] animate-scan-beam pointer-events-none" />
           </div>
         </div>
 
@@ -1177,6 +1184,7 @@ function SecurityZeroTrackersCard() {
 export default function HomePage() {
   const [tilt, setTilt] = React.useState({ x: 0, y: 0, isHovered: false });
   const [user, setUser] = React.useState<{ email?: string; name?: string } | null>(null);
+  const [mousePos, setMousePos] = React.useState<{ x: number; y: number; active: boolean }>({ x: 0, y: 0, active: false });
 
   React.useEffect(() => {
     fetch("/api/auth/me")
@@ -1193,6 +1201,15 @@ export default function HomePage() {
   const vaultLink = user ? "/vault" : "/signin?redirect=/vault";
   const walletLink = user ? "/wallet" : "/signin?redirect=/wallet";
 
+  const handleGlobalMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top, active: true });
+  };
+
+  const handleGlobalMouseLeave = () => {
+    setMousePos((prev) => ({ ...prev, active: false }));
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
@@ -1205,17 +1222,42 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative space-y-10 sm:space-y-12 pt-0 pb-0 overflow-hidden bg-black">
+    <div
+      onMouseMove={handleGlobalMouseMove}
+      onMouseLeave={handleGlobalMouseLeave}
+      className="relative space-y-10 sm:space-y-12 pt-0 pb-0 overflow-hidden bg-black selection:bg-cyan-500/30 selection:text-white"
+    >
+      {/* 0. Interactive Global Cyber Ambient Light & Mesh Background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-700 ease-out"
+        style={{
+          opacity: mousePos.active ? 1 : 0,
+          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(56, 189, 248, 0.065), transparent 75%)`,
+        }}
+      />
+
+      {/* Floating Aurora Ambient Light Mesh */}
+      <div className="pointer-events-none absolute -top-36 left-1/4 w-[600px] h-[600px] rounded-full bg-blue-600/[0.07] blur-[140px] animate-aurora-1" />
+      <div className="pointer-events-none absolute top-[28%] -right-24 w-[520px] h-[520px] rounded-full bg-cyan-500/[0.05] blur-[150px] animate-aurora-2" />
+      <div className="pointer-events-none absolute top-[60%] -left-24 w-[560px] h-[560px] rounded-full bg-indigo-600/[0.045] blur-[150px] animate-aurora-1" />
+      <div className="pointer-events-none absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full bg-emerald-500/[0.035] blur-[130px] animate-aurora-2" />
+
+      {/* Subtle Cyber Grid with Radial Soft Fade */}
+      <div className="pointer-events-none absolute inset-0 bg-grid-cyber opacity-[0.32] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_85%)]" />
+
       {/* 1. Hero Section (Two-Column Layout with 3D Glass Wallet Mockup) */}
-      <section id="hero" className="relative max-w-7xl mx-auto pt-6 sm:pt-8 lg:pt-10 pb-0 sm:pb-1 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section id="hero" className="relative z-10 max-w-7xl mx-auto pt-6 sm:pt-8 lg:pt-10 pb-0 sm:pb-1 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* 2-Column Hero Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 items-center">
           {/* Left Column: Headlines & CTA */}
           <div className="lg:col-span-7 xl:col-span-7 text-left space-y-5 lg:space-y-6">
-            {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.05] border border-white/10 px-3 py-1 text-[9px] sm:text-[10px] font-semibold text-neutral-300 tracking-[0.15em] uppercase backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#00d2ff] shadow-[0_0_8px_#00d2ff]" />
-              <span>ONE WALLET. FOUR IDENTITY DOCUMENTS.</span>
+            {/* Pill Tag with Live Radar Wave */}
+            <div className="group inline-flex items-center gap-2.5 rounded-full bg-white/[0.05] hover:bg-white/[0.08] border border-white/10 hover:border-cyan-400/40 px-3.5 py-1.5 text-[9px] sm:text-[10px] font-semibold text-neutral-300 tracking-[0.16em] uppercase backdrop-blur-xl transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00d2ff] shadow-[0_0_10px_#00d2ff]" />
+              </span>
+              <span className="group-hover:text-white transition-colors">ONE WALLET. FOUR IDENTITY DOCUMENTS.</span>
             </div>
 
             {/* Bold Headline with Extruded 3D Isometric Text Shadow on Hover */}
@@ -1237,21 +1279,23 @@ export default function HomePage() {
               <strong className="text-white font-semibold">Voter ID (EPIC)</strong>, and <strong className="text-white font-semibold">Ration Card</strong> in a client-encrypted vault. Prove claims via signed, expiring, revocable QR tokens with zero raw PII leakage.
             </p>
 
-            {/* Action Buttons */}
+            {/* Action Buttons with High-End Micro-Animations */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <Link
                 href={walletLink}
-                className="group flex items-center gap-2.5 rounded-full bg-white hover:bg-neutral-100 text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_4px_20px_rgba(255,255,255,0.15),0_2px_6px_rgba(0,0,0,0.4)] hover:shadow-[0_6px_24px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 transition-all duration-200"
+                className="relative group overflow-hidden flex items-center gap-2.5 rounded-full bg-white hover:bg-neutral-100 text-black px-6 sm:px-7 py-3 text-xs sm:text-sm font-bold shadow-[0_4px_24px_rgba(255,255,255,0.2),0_2px_6px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_32px_rgba(56,189,248,0.4)] hover:scale-105 active:scale-95 transition-all duration-300"
               >
-                <Wallet className="h-4 w-4 text-black" />
+                {/* Shimmer sweep effect on hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-black/[0.08] to-transparent pointer-events-none" />
+                <Wallet className="h-4 w-4 text-black group-hover:scale-110 transition-transform duration-300" />
                 <span>Open Wallet</span>
-                <ArrowRight className="h-4 w-4 text-black/80 group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="h-4 w-4 text-black/80 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
               <a
                 href="#features"
-                className="flex items-center gap-2.5 rounded-full border border-white/[0.14] bg-white/[0.05] hover:bg-white/[0.09] hover:border-white/[0.22] hover:text-white px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-neutral-200 active:scale-95 transition-all duration-200 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+                className="group flex items-center gap-2.5 rounded-full border border-white/[0.14] hover:border-cyan-400/50 bg-white/[0.04] hover:bg-white/[0.09] hover:text-white px-5 sm:px-6 py-3 text-xs sm:text-sm font-semibold text-neutral-200 active:scale-95 transition-all duration-300 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_0_24px_rgba(56,189,248,0.2)]"
               >
-                <Layers className="h-4 w-4 text-white/90" />
+                <Layers className="h-4 w-4 text-white/90 group-hover:rotate-12 transition-transform duration-300" />
                 <span>Explore Features</span>
               </a>
             </div>
@@ -1318,7 +1362,7 @@ export default function HomePage() {
 
               {/* Main Front Glass Wallet Device Card (Interactive 3D Tilt) */}
               <div
-                className="relative z-10 w-full rounded-[26px] p-4 sm:p-5 bg-gradient-to-b from-[#131b2e]/85 via-[#0d1424]/80 to-[#080d18]/85 backdrop-blur-2xl border border-white/[0.15] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1.5px_1px_rgba(255,255,255,0.18),inset_0_-1px_1px_rgba(0,0,0,0.5)] group-hover/stack:border-white/[0.22] group-hover/stack:shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1.5px_2px_rgba(255,255,255,0.25),inset_0_-1px_1px_rgba(0,0,0,0.5)]"
+                className="relative z-10 w-full rounded-[26px] p-4 sm:p-5 bg-gradient-to-b from-[#131b2e]/85 via-[#0d1424]/80 to-[#080d18]/85 backdrop-blur-2xl border border-white/[0.15] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1.5px_1px_rgba(255,255,255,0.18),inset_0_-1px_1px_rgba(0,0,0,0.5)] group-hover/stack:border-white/[0.25] group-hover/stack:shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1.5px_2px_rgba(255,255,255,0.25),inset_0_-1px_1px_rgba(0,0,0,0.5)] overflow-hidden"
                 style={{
                   transform: tilt.isHovered
                     ? `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) rotate(-0.5deg) scale3d(1.02, 1.02, 1.02)`
@@ -1329,10 +1373,14 @@ export default function HomePage() {
                   transformStyle: "preserve-3d",
                 }}
               >
+                {/* Specular Sheen Overlays */}
+                <div className="absolute inset-0 rounded-[26px] bg-gradient-to-tr from-white/[0.08] via-transparent to-transparent opacity-0 group-hover/stack:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <div className="absolute -inset-full rounded-[26px] bg-gradient-to-r from-transparent via-cyan-400/[0.05] to-transparent opacity-0 group-hover/stack:opacity-100 pointer-events-none transition-opacity duration-500 group-hover/stack:animate-shimmer-sweep" />
+
                 {/* Card Header */}
-                <div className="flex items-center justify-between pb-3.5 sm:pb-4">
+                <div className="flex items-center justify-between pb-3.5 sm:pb-4 relative z-10">
                   <div className="flex items-center gap-2.5">
-                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] group-hover/stack:scale-105 transition-transform duration-300">
+                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] group-hover/stack:scale-105 group-hover/stack:border-cyan-400/30 group-hover/stack:shadow-[0_0_14px_rgba(56,189,248,0.3)] transition-all duration-300">
                       <Wallet className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-white" />
                     </div>
                     <div>
@@ -1349,24 +1397,24 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells with Hover States) */}
-                <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+                {/* 2x2 Grid of 4 Supported Documents (iOS Glass Cells with Vibrant Theme Glows) */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-2.5 relative z-10">
                   {/* 1. Driving License */}
                   <Link
                     href={vaultLink}
-                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-blue-400/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_18px_rgba(37,99,235,0.3)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(37,99,235,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(37,99,235,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-110 group-hover/item:shadow-[0_0_14px_rgba(37,99,235,0.7)] transition-all duration-300">
                         <CarFront className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight group-hover/item:text-blue-200 transition-colors">
                           Driving License
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-blue-500/25 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </Link>
@@ -1374,19 +1422,19 @@ export default function HomePage() {
                   {/* 2. PAN Card */}
                   <Link
                     href={vaultLink}
-                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-purple-400/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_18px_rgba(124,58,237,0.3)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(124,58,237,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(124,58,237,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-110 group-hover/item:shadow-[0_0_14px_rgba(124,58,237,0.7)] transition-all duration-300">
                         <FileText className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight group-hover/item:text-purple-200 transition-colors">
                           PAN Card
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-purple-500/25 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </Link>
@@ -1394,19 +1442,19 @@ export default function HomePage() {
                   {/* 3. Voter ID */}
                   <Link
                     href={vaultLink}
-                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-emerald-400/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_18px_rgba(16,185,129,0.3)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(16,185,129,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-110 group-hover/item:shadow-[0_0_14px_rgba(16,185,129,0.7)] transition-all duration-300">
                         <Vote className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight group-hover/item:text-emerald-200 transition-colors">
                           Voter ID
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-emerald-500/25 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </Link>
@@ -1414,26 +1462,26 @@ export default function HomePage() {
                   {/* 4. Ration Card */}
                   <Link
                     href={vaultLink}
-                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-white/[0.22] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.35)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.015] active:scale-[0.98]"
+                    className="group/item rounded-[16px] bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] hover:border-amber-400/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_rgba(0,0,0,0.25)] hover:shadow-[0_4px_18px_rgba(245,158,11,0.3)] p-2.5 sm:p-3 px-2.5 sm:px-3 flex items-center justify-between transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(245,158,11,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-105 transition-transform duration-200">
+                      <div className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center text-white shadow-[0_2px_8px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] shrink-0 group-hover/item:scale-110 group-hover/item:shadow-[0_0_14px_rgba(245,158,11,0.7)] transition-all duration-300">
                         <Wheat className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight">
+                        <div className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap leading-tight group-hover/item:text-amber-200 transition-colors">
                           Ration Card
                         </div>
                       </div>
                     </div>
-                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-white/15 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
+                    <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white/[0.06] group-hover/item:bg-amber-500/25 flex items-center justify-center text-neutral-400 group-hover/item:text-white shrink-0 ml-1.5 transition-all duration-200 group-hover/item:translate-x-0.5">
                       <ChevronRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </div>
                   </Link>
                 </div>
 
                 {/* Card Footer */}
-                <div className="pt-3.5 sm:pt-4 pb-0 flex items-center justify-center gap-2 text-[11px] sm:text-xs text-neutral-400 font-medium">
+                <div className="pt-3.5 sm:pt-4 pb-0 flex items-center justify-center gap-2 text-[11px] sm:text-xs text-neutral-400 font-medium relative z-10">
                   <Lock className="h-3 w-3 text-neutral-400" />
                   <span>4 documents · one secure wallet</span>
                 </div>
@@ -1442,15 +1490,15 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Bottom Trust Highlights (iOS Glass Squircles with Clean Dividers) */}
-        <div className="pt-8 sm:pt-10 lg:pt-12 pb-6 sm:pb-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 px-2">
+        {/* Bottom Trust Highlights (iOS Glass Squircles with Clean Dividers & Micro-Interactions) */}
+        <div className="pt-8 sm:pt-10 lg:pt-12 pb-6 sm:pb-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-3 px-2">
           {/* 1. Client Encrypted */}
-          <div className="flex items-center gap-4 flex-1">
-            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-              <Lock className="h-4.5 w-4.5" />
+          <div className="group flex items-center gap-4 flex-1 p-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300 cursor-default">
+            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-cyan-400/40 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_18px_rgba(56,189,248,0.35)] group-hover:scale-110 transition-all duration-300">
+              <Lock className="h-4.5 w-4.5 group-hover:text-cyan-400 transition-colors" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white leading-tight">Client Encrypted</div>
+              <div className="text-sm font-bold text-white group-hover:text-cyan-100 transition-colors leading-tight">Client Encrypted</div>
               <div className="text-xs text-neutral-400 leading-normal mt-0.5">Your data, your control</div>
             </div>
           </div>
@@ -1459,12 +1507,12 @@ export default function HomePage() {
           <div className="hidden md:block h-9 w-px bg-white/10 shrink-0" aria-hidden="true" />
 
           {/* 2. Zero PII Leakage */}
-          <div className="flex items-center gap-4 flex-1 md:justify-center">
-            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-              <ShieldCheck className="h-4.5 w-4.5" />
+          <div className="group flex items-center gap-4 flex-1 md:justify-center p-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300 cursor-default">
+            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-emerald-400/40 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)] group-hover:scale-110 transition-all duration-300">
+              <ShieldCheck className="h-4.5 w-4.5 group-hover:text-emerald-400 transition-colors" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white leading-tight">Zero PII Leakage</div>
+              <div className="text-sm font-bold text-white group-hover:text-emerald-100 transition-colors leading-tight">Zero PII Leakage</div>
               <div className="text-xs text-neutral-400 leading-normal mt-0.5">Share only what&apos;s needed</div>
             </div>
           </div>
@@ -1473,12 +1521,12 @@ export default function HomePage() {
           <div className="hidden md:block h-9 w-px bg-white/10 shrink-0" aria-hidden="true" />
 
           {/* 3. Fast & Secure */}
-          <div className="flex items-center gap-4 flex-1 md:justify-end">
-            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-              <Zap className="h-4.5 w-4.5" />
+          <div className="group flex items-center gap-4 flex-1 md:justify-end p-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300 cursor-default">
+            <div className="h-11 w-11 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-amber-400/40 flex items-center justify-center text-white/90 shrink-0 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_18px_rgba(245,158,11,0.35)] group-hover:scale-110 transition-all duration-300">
+              <Zap className="h-4.5 w-4.5 group-hover:text-amber-400 transition-colors" />
             </div>
             <div className="text-left">
-              <div className="text-sm font-bold text-white leading-tight">Fast & Secure</div>
+              <div className="text-sm font-bold text-white group-hover:text-amber-100 transition-colors leading-tight">Fast & Secure</div>
               <div className="text-xs text-neutral-400 leading-normal mt-0.5">Instant, verifiable tokens</div>
             </div>
           </div>
@@ -1486,7 +1534,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. Documents Section: All Your Important Documents, Together. */}
-      <section id="documents" className="scroll-mt-28 space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-6 sm:pt-8 mt-6 sm:mt-8 overflow-hidden">
+      <section id="documents" className="scroll-mt-28 space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-6 sm:pt-8 pb-4 sm:pb-6 mt-6 sm:mt-8">
         {/* Section Header: Pill, Headline, Subtitle */}
         <div className="space-y-4 max-w-3xl text-left">
           {/* Pill Tag */}
@@ -1508,8 +1556,8 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* 4 Supported Document Cards in 4 Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        {/* 4 Supported Document Cards in 4 Columns (With vertical padding for 3D tilt clearance) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 py-2 sm:py-3">
           <DocumentFeatureCard
             title="Driving License (DL)"
             description="Keep your driving license details safe and ready for verification."
@@ -1649,8 +1697,10 @@ export default function HomePage() {
             title={<>Share &amp;<br />Verify</>}
             description="Create a secure QR code and share it. The receiver can scan the QR code and verify the selected information."
             graphic={
-              <div className="relative flex items-center justify-center">
+              <div className="relative flex items-center justify-center overflow-hidden p-0.5">
                 <QrCode className="w-12 h-12 sm:w-13 sm:h-13 text-neutral-200 stroke-[1.6]" />
+                {/* Cyber Scanning Laser Beam */}
+                <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#00d2ff] to-transparent shadow-[0_0_8px_#00d2ff] animate-scan-beam pointer-events-none" />
                 <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-lg bg-[#161822] border border-white/30 flex items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                   <ShieldCheck className="h-3.5 w-3.5 text-white stroke-[2.2]" />
                 </div>

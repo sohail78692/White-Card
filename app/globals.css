@@ -233,6 +233,114 @@ html.lenis body {
   contain-intrinsic-size: 0 450px;
 }
 
+/* Cyberpunk Subtle Background Grid */
+.bg-grid-cyber {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Ambient Aurora Floating Blobs */
+@keyframes aurora-1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.08);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes aurora-2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-40px, 30px) scale(1.1);
+  }
+  66% {
+    transform: translate(25px, -25px) scale(0.92);
+  }
+}
+
+.animate-aurora-1 {
+  animation: aurora-1 18s ease-in-out infinite;
+}
+
+.animate-aurora-2 {
+  animation: aurora-2 22s ease-in-out infinite;
+}
+
+/* Shimmer Light Sweep for Premium Cards & Buttons */
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmer-sweep 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Radar Wave Pulse */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+.animate-radar-pulse {
+  animation: radar-pulse 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Glow Breathing Effect */
+@keyframes glow-breathe {
+  0%, 100% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.3));
+  }
+  50% {
+    opacity: 0.75;
+    filter: drop-shadow(0 0 30px rgba(56, 189, 248, 0.6));
+  }
+}
+
+.animate-glow-breathe {
+  animation: glow-breathe 4s ease-in-out infinite;
+}
+
+/* Cyber Scanning Laser Beam */
+@keyframes scan-beam {
+  0%, 100% {
+    top: 8%;
+    opacity: 0.3;
+  }
+  50% {
+    top: 88%;
+    opacity: 1;
+  }
+}
+
+.animate-scan-beam {
+  animation: scan-beam 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -242,3 +350,4 @@ html.lenis body {
     scroll-behavior: auto !important;
   }
 }
+
