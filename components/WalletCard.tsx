@@ -9,6 +9,7 @@ import {
   FileText,
   Vote,
   Wheat,
+  IdCard,
   Plus,
   ShieldCheck,
   Lock,
@@ -63,6 +64,12 @@ const DOC_CONFIG: Record<
     tagPrefix: "RC",
     icon: Wheat,
   },
+  RANDOM: {
+    title: "Random Document",
+    gradient: "linear-gradient(135deg, #ec4899 0%, #be185d 100%)",
+    tagPrefix: "RND",
+    icon: IdCard,
+  },
 };
 
 const DOC_ALIASES: Record<string, string[]> = {
@@ -78,6 +85,9 @@ const DOC_ALIASES: Record<string, string[]> = {
   ],
   RATION_CARD: [
     "ration", "rc", "rashan", "nfsa", "khadya", "food", "pds", "bpl", "apl", "aay", "quota", "depot", "grain"
+  ],
+  RANDOM: [
+    "random", "other", "custom", "doc", "id", "card", "misc", "passport", "pass", "membership", "insurance"
   ],
 };
 

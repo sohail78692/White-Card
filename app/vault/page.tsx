@@ -52,7 +52,7 @@ export default function VaultPage() {
     fetchDocs();
   }, []);
 
-  const categories = ["All", "Identity", "Financial", "Welfare"];
+  const categories = ["All", "Identity", "Financial", "Welfare", "Random"];
 
   const filteredDocs = documents.filter((doc) => {
     const meta = DOCUMENT_TYPES[doc.type as DocumentType];
@@ -81,7 +81,7 @@ export default function VaultPage() {
             Document <span className="text-[#60a5fa]">Vault</span>
           </h1>
           <p className="text-xs sm:text-sm text-neutral-400">
-            Your 4 core identity credentials, locked safely on your device with unique DEK envelope encryption.
+            Your sovereign identity credentials &amp; encrypted documents, locked safely on your device with unique DEK envelope encryption.
           </p>
         </div>
 
@@ -98,22 +98,22 @@ export default function VaultPage() {
         </button>
       </div>
 
-      {/* Core 4 Identity Hub (4-Card Linked Status Tray) */}
+      {/* Core Identity Hub (5-Card Linked Status Tray) */}
       <div className="rounded-[28px] bg-white/[0.02] border border-white/[0.08] p-4 sm:p-5 space-y-3 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-sky-400 animate-pulse" />
             <span className="text-xs font-bold text-white uppercase tracking-wider">
-              Core 4 Sovereign Identity Hub
+              Sovereign Identity &amp; Document Hub
             </span>
           </div>
           <span className="text-[11px] text-neutral-400 font-medium">
-            {documents.length}/4 Linked
+            {documents.length} Linked
           </span>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-          {(["DRIVING_LICENSE", "PAN", "VOTER_ID", "RATION_CARD"] as DocumentType[]).map((docType) => {
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
+          {(["DRIVING_LICENSE", "PAN", "VOTER_ID", "RATION_CARD", "RANDOM"] as DocumentType[]).map((docType) => {
             const meta = DOCUMENT_TYPES[docType];
             const matchedDoc = documents.find((d) => d.type === docType);
             const isLinked = !!matchedDoc;
@@ -304,6 +304,8 @@ export default function VaultPage() {
                     ? "bg-gradient-to-r from-blue-950/40 via-sky-900/30 to-blue-950/40 border-blue-500/20"
                     : doc.type === "VOTER_ID"
                     ? "bg-gradient-to-r from-emerald-950/40 via-teal-900/30 to-emerald-950/40 border-emerald-500/20"
+                    : doc.type === "RANDOM"
+                    ? "bg-gradient-to-r from-pink-950/40 via-rose-900/30 to-pink-950/40 border-pink-500/20"
                     : "bg-gradient-to-r from-amber-950/40 via-yellow-900/30 to-amber-950/40 border-amber-500/20"
                 }`}>
                   <div className="space-y-0.5">
@@ -314,6 +316,8 @@ export default function VaultPage() {
                         ? "Driving Licence Identifier"
                         : doc.type === "VOTER_ID"
                         ? "Elector Photo ID (EPIC)"
+                        : doc.type === "RANDOM"
+                        ? "Custom Document Identifier"
                         : "National Food Security Card"}
                     </span>
                     <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95">
@@ -328,6 +332,8 @@ export default function VaultPage() {
                         ? "🚗 MoRTH"
                         : doc.type === "VOTER_ID"
                         ? "🗳️ ECI"
+                        : doc.type === "RANDOM"
+                        ? "🪪 RND"
                         : "🌾 NFSA"}
                     </span>
                     <Lock className="h-3.5 w-3.5 text-neutral-400" />

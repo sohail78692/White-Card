@@ -19,11 +19,14 @@ import {
   Wheat,
   MapPin,
   Check,
+  Wifi,
+  IdCard,
 } from "lucide-react";
 
 interface PhysicalIdCardViewProps {
   type: DocumentType;
   number: string;
+  customTitle?: string;
   name?: string;
   issuer?: string;
   expiry?: string;
@@ -94,6 +97,7 @@ function RealisticBarcode({ code, className = "h-8 w-36" }: { code: string; clas
 export function PhysicalIdCardView({
   type,
   number,
+  customTitle,
   name,
   issuer,
   expiry,
@@ -908,6 +912,152 @@ export function PhysicalIdCardView({
                 <div className="relative z-10 pt-1.5 border-t border-amber-900/15 flex items-center justify-between text-[7.5px] font-mono font-bold text-amber-950">
                   <span>NFSA • ONE NATION ONE RATION CARD (ONORC)</span>
                   <span className="text-amber-800">TAP TO FLIP FRONT ➔</span>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ============================================================== */}
+          {/* ==================== 5. RANDOM / CUSTOM CARD ================= */}
+          {/* ============================================================== */}
+          {type === "RANDOM" && (
+            <>
+              {/* RANDOM FRONT */}
+              <div
+                className={`absolute inset-0 rounded-[22px] p-4 sm:p-5 flex flex-col justify-between overflow-hidden shadow-2xl border border-pink-500/30 backface-hidden ${
+                  isFlipped ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+                style={{
+                  background: "linear-gradient(135deg, #18181b 0%, #111115 45%, #1e1122 100%)",
+                  boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+                }}
+              >
+                {/* Holographic Security Overlay Pattern */}
+                <div
+                  className="absolute inset-0 opacity-20 pointer-events-none"
+                  style={{
+                    backgroundImage: `radial-gradient(circle at 50% 50%, rgba(236,72,153,0.25) 0%, transparent 60%), linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%)`,
+                    backgroundSize: "100% 100%, 16px 16px",
+                  }}
+                />
+
+                {/* Top Header */}
+                <div className="relative z-10 flex items-start justify-between border-b border-pink-500/20 pb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white shadow-md">
+                      <IdCard className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-[11px] sm:text-xs font-black tracking-wider uppercase text-white drop-shadow-sm">
+                        {customTitle || details.title || "CUSTOM IDENTITY CARD"}
+                      </h4>
+                      <p className="text-[8px] font-mono text-pink-300 font-semibold tracking-widest uppercase">
+                        {issuer || "UNIVERSAL SOVEREIGN PASS"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-[7.5px] font-mono font-bold bg-pink-500/20 border border-pink-500/40 text-pink-300 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      AES-256-GCM
+                    </span>
+                    <span className="text-[7px] text-neutral-400 font-mono mt-0.5">
+                      {expiry ? `EXP: ${expiry}` : "PERMANENT"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Body with EMV Chip & ID Info */}
+                <div className="relative z-10 grid grid-cols-[auto_1fr] gap-3 items-center my-auto py-1">
+                  <div className="space-y-1.5 shrink-0">
+                    <div className="w-10 h-7 rounded bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-500 border border-amber-600/60 p-0.5 shadow-sm flex flex-col justify-between">
+                      <div className="flex justify-between h-1.5">
+                        <div className="w-2 h-full border-b border-r border-amber-800/40" />
+                        <div className="w-2 h-full border-b border-l border-amber-800/40" />
+                      </div>
+                      <div className="h-1 w-full border-y border-amber-800/40" />
+                      <div className="flex justify-between h-1.5">
+                        <div className="w-2 h-full border-t border-r border-amber-800/40" />
+                        <div className="w-2 h-full border-t border-l border-amber-800/40" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 justify-center text-neutral-400">
+                      <Wifi className="h-3 w-3 rotate-90" />
+                      <span className="text-[7px] font-mono">NFC</span>
+                    </div>
+                  </div>
+
+                  <div className="min-w-0 space-y-1">
+                    <div className="text-[8px] font-mono text-neutral-400 tracking-wider uppercase">
+                      Document Number
+                    </div>
+                    <div className="text-base sm:text-lg font-mono font-extrabold text-white tracking-widest drop-shadow select-all truncate">
+                      {number}
+                    </div>
+                    <div className="text-xs font-bold text-pink-100 uppercase tracking-wide truncate">
+                      {cardholderName}
+                    </div>
+                    {details.notes && (
+                      <div className="text-[8.5px] text-neutral-300 truncate max-w-[200px]">
+                        {details.notes}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Footer Bar */}
+                <div className="relative z-10 pt-1.5 border-t border-white/10 flex items-center justify-between text-[7.5px] font-mono text-neutral-400">
+                  <span className="text-pink-300 font-semibold">SOVEREIGN CREDENTIAL</span>
+                  <span className="text-neutral-400">TAP CARD TO FLIP ➔</span>
+                </div>
+              </div>
+
+              {/* RANDOM BACK */}
+              <div
+                className={`absolute inset-0 rounded-[22px] p-4 sm:p-5 flex flex-col justify-between overflow-hidden shadow-2xl border border-pink-500/30 backface-hidden ${
+                  !isFlipped ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+                style={{
+                  background: "linear-gradient(135deg, #111115 0%, #18181b 50%, #1e1122 100%)",
+                  transform: "rotateY(180deg)",
+                  boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+                }}
+              >
+                {/* Magnetic Stripe */}
+                <div className="absolute top-3 left-0 right-0 h-8 bg-black/90 border-y border-white/10" />
+
+                <div className="pt-9 space-y-2 relative z-10">
+                  {/* Signature strip */}
+                  <div className="bg-white/90 rounded-md p-1.5 flex items-center justify-between">
+                    <span className="text-[7.5px] font-mono font-bold text-neutral-800">
+                      AUTHORIZED SIGNATURE
+                    </span>
+                    <span className="text-[9px] font-serif italic text-neutral-900 font-bold px-2">
+                      {cardholderName}
+                    </span>
+                  </div>
+
+                  {/* Attributes list */}
+                  <div className="grid grid-cols-2 gap-2 text-[8px] font-mono text-neutral-300 bg-white/[0.04] p-2 rounded-xl border border-white/5">
+                    <div>
+                      <span className="text-neutral-500 block">ISSUER</span>
+                      <span className="font-bold text-white truncate block">{issuer || "Self-Issued"}</span>
+                    </div>
+                    <div>
+                      <span className="text-neutral-500 block">STATUS</span>
+                      <span className="font-bold text-emerald-400">ACTIVE & VERIFIED</span>
+                    </div>
+                    {Object.entries(details).slice(0, 2).map(([k, v]) => (
+                      <div key={k} className="truncate">
+                        <span className="text-neutral-500 uppercase block">{k}</span>
+                        <span className="font-bold text-white truncate block">{String(v)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="relative z-10 pt-1 border-t border-white/10 flex items-center justify-between text-[7.5px] font-mono text-neutral-400">
+                  <span>ENCRYPTED CLIENT-SIDE WITH DEK</span>
+                  <span className="text-pink-300 font-bold">TAP TO FLIP FRONT ➔</span>
                 </div>
               </div>
             </>

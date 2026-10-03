@@ -5,13 +5,14 @@ export type DocumentType =
   | "DRIVING_LICENSE"
   | "PAN"
   | "VOTER_ID"
-  | "RATION_CARD";
+  | "RATION_CARD"
+  | "RANDOM";
 
 export interface DocumentTypeMeta {
   type: DocumentType;
   title: string;
   shortCode: string;
-  category: "Identity" | "Financial" | "Welfare";
+  category: "Identity" | "Financial" | "Welfare" | "Random";
   numberLabel: string;
   placeholder: string;
   regex: RegExp;
@@ -69,6 +70,18 @@ export const DOCUMENT_TYPES: Record<DocumentType, DocumentTypeMeta> = {
     hint: "8 to 18 uppercase alphanumeric characters.",
     gradient: "from-[#f59e0b] to-[#d97706]",
     accentColor: "#fbbf24",
+  },
+  RANDOM: {
+    type: "RANDOM",
+    title: "Random",
+    shortCode: "RND",
+    category: "Random",
+    numberLabel: "Document ID / Number",
+    placeholder: "e.g. DOC-9842 or ANY-ID-1234",
+    regex: /^.{1,100}$/,
+    hint: "Any custom ID, registration number, or identifier.",
+    gradient: "from-[#ec4899] to-[#be185d]",
+    accentColor: "#f472b6",
   },
 };
 
@@ -169,9 +182,32 @@ export const ALLOWED_DETAILS_BY_TYPE: Record<DocumentType, string[]> = {
     "state",
     "issueDate",
   ],
+  RANDOM: [
+    "name",
+    "fullName",
+    "cardholderName",
+    "notes",
+    "dob",
+    "category",
+    "department",
+    "organization",
+    "validityDate",
+    "issueDate",
+  ],
 };
 
 export function sanitizeDetailsForType(type: DocumentType, details: Record<string, any>): Record<string, any> {
+  if (type === "RANDOM") {
+    // For random/custom documents, preserve any key-value pairs the user adds
+    const sanitized: Record<string, any> = {};
+    for (const [key, val] of Object.entries(details || {})) {
+      if (val !== undefined && val !== null && val !== "") {
+        sanitized[key] = val;
+      }
+    }
+    return sanitized;
+  }
+
   const allowed = ALLOWED_DETAILS_BY_TYPE[type] || [];
   const sanitized: Record<string, any> = {};
   for (const [key, val] of Object.entries(details || {})) {
@@ -188,6 +224,7 @@ export const createDocumentSchema = z.object({
     "PAN",
     "VOTER_ID",
     "RATION_CARD",
+    "RANDOM",
   ]),
   customTitle: z.string().optional(),
   number: z.string().min(1, "Document number is required"),

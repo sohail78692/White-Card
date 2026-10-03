@@ -1,5 +1,5 @@
 import React from "react";
-import { CarFront, FileText, Vote, Wheat, CreditCard } from "lucide-react";
+import { CarFront, FileText, Vote, Wheat, IdCard, CreditCard } from "lucide-react";
 import { DocumentType } from "@/lib/validators/documents";
 
 interface DocumentIconProps {
@@ -33,6 +33,11 @@ export function DocumentIcon({ type, size = "md", className = "" }: DocumentIcon
       gradient = "from-[#f59e0b] to-[#d97706]";
       shadow = "shadow-[0_2px_8px_rgba(245,158,11,0.35),inset_0_1px_0_rgba(255,255,255,0.25)]";
       IconComponent = Wheat;
+      break;
+    case "RANDOM":
+      gradient = "from-[#ec4899] to-[#be185d]";
+      shadow = "shadow-[0_2px_8px_rgba(236,72,153,0.35),inset_0_1px_0_rgba(255,255,255,0.25)]";
+      IconComponent = IdCard;
       break;
     default:
       gradient = "from-[#475569] to-[#334155]";

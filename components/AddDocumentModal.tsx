@@ -32,6 +32,7 @@ import {
   Wheat,
   Crop,
   RotateCw,
+  IdCard,
 } from "lucide-react";
 import { DocumentIcon } from "@/components/DocumentIcon";
 import { DocScannerCropModal, DocScannerResult } from "@/components/DocScannerCropModal";
@@ -59,6 +60,8 @@ function getDefaultTemplate(t: DocumentType): string {
       return "XKG3489120";
     case "RATION_CARD":
       return "RC071098765432";
+    case "RANDOM":
+      return "DOC-2026-9842";
   }
 }
 
@@ -105,10 +108,20 @@ const DOCUMENT_THEMES: Record<
     selectedBorder: "border-amber-400/80",
     icon: Wheat,
   },
+  RANDOM: {
+    iconGradient: "from-[#ec4899] via-[#db2777] to-[#be185d]",
+    iconShadow: "shadow-[0_4px_14px_rgba(236,72,153,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)]",
+    selectedCard: "bg-gradient-to-b from-pink-500/20 via-pink-600/10 to-pink-950/40",
+    selectedGlow: "shadow-[0_12px_28px_-6px_rgba(236,72,153,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)]",
+    selectedBorder: "border-pink-400/80",
+    icon: IdCard,
+  },
 };
 
 export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICENSE" }: AddDocumentModalProps) {
   const [type, setType] = useState<DocumentType>(initialType);
+  const [customTitle, setCustomTitle] = useState(initialType === "RANDOM" ? "Custom Document" : "");
+  const [customFields, setCustomFields] = useState<{ id: string; key: string; value: string }[]>([]);
   const [number, setNumber] = useState(getDefaultTemplate(initialType));
   const [issuer, setIssuer] = useState(
     initialType === "PAN"
@@ -117,6 +130,8 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
       ? "Election Commission of India"
       : initialType === "RATION_CARD"
       ? "Department of Food and Civil Supplies"
+      : initialType === "RANDOM"
+      ? "Universal Issuer"
       : "Ministry of Road Transport & Highways"
   );
   const [expiry, setExpiry] = useState(initialType === "DRIVING_LICENSE" ? "2042-10-18" : "");
@@ -128,6 +143,8 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
         return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", acNumber: "AC-42 New Delhi", pollingBooth: "Booth 12A", partSerial: "24/110", state: "Delhi" };
       case "RATION_CARD":
         return { name: "SOHAIL AKHTAR", category: "NFSA-BPL", scheme: "Priority Household (PHH)", fpsDepotId: "FPS-9842", familyMembersCount: 4, monthlyRiceQuotaKg: 20, monthlyWheatQuotaKg: 15, state: "Delhi" };
+      case "RANDOM":
+        return { name: "SOHAIL AKHTAR", category: "General", notes: "Sovereign Encrypted ID" };
       default:
         return { name: "SOHAIL AKHTAR", fatherName: "SAHIMUDDIN ANSARI", dob: "10/01/2006", vehicleClasses: ["MCWG", "LMV"], organDonor: true, rto: "DL-01", bloodGroup: "O+", state: "Delhi" };
     }
@@ -224,6 +241,15 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
           familyMembersCount: 4,
           monthlyRiceQuotaKg: 20,
           monthlyWheatQuotaKg: 15,
+        });
+        break;
+      case "RANDOM":
+        setIssuer("Universal Issuer");
+        setCustomTitle("Custom Document");
+        setDetails({
+          name: "SOHAIL AKHTAR",
+          category: "General",
+          notes: "Encrypted Personal ID",
         });
         break;
     }
@@ -691,15 +717,25 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     setUploadStep("1/3 Encrypting document credentials with DEK...");
 
     try {
+      const finalDetails = { ...details };
+      if (type === "RANDOM") {
+        for (const cf of customFields) {
+          if (cf.key.trim() && cf.value.trim()) {
+            finalDetails[cf.key.trim()] = cf.value.trim();
+          }
+        }
+      }
+
       const res = await fetch("/api/vault", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type,
           number: validation.normalized,
-          issuer: issuer.trim(),
+          customTitle: (type === "RANDOM" ? (customTitle.trim() || "Custom Document") : customTitle.trim()) || undefined,
+          issuer: issuer.trim() || (type === "RANDOM" ? "Universal Issuer" : "Verified Issuer"),
           expiry: expiry || undefined,
-          details: sanitizeDetailsForType(type, details),
+          details: sanitizeDetailsForType(type, finalDetails),
         }),
       });
 
@@ -777,7 +813,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
     >
       <div className="min-h-full flex items-center justify-center p-3 sm:p-6 py-6 sm:py-10" data-lenis-prevent="true">
         <div
-          className="w-full max-w-2xl max-h-[86vh] overflow-y-auto rounded-[32px] glass-ios-card p-5 sm:p-7 shadow-2xl border border-white/15 backdrop-blur-2xl space-y-5 my-auto"
+          className="w-full max-w-3xl max-h-[88vh] overflow-y-auto rounded-[32px] glass-ios-card p-5 sm:p-7 shadow-2xl border border-white/15 backdrop-blur-2xl space-y-5 my-auto"
           data-lenis-prevent="true"
           onClick={(e) => e.stopPropagation()}
         >
@@ -836,7 +872,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-2.5">
             {Object.values(DOCUMENT_TYPES).map((docMeta) => {
               const isSelected = type === docMeta.type;
               const theme = DOCUMENT_THEMES[docMeta.type];
@@ -850,36 +886,35 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                     sound.playTone(540, "sine", 0.04);
                     handleTypeChange(docMeta.type);
                   }}
-                  className={`group relative rounded-[20px] p-2.5 sm:p-3 flex items-center gap-2.5 text-left transition-all duration-300 backdrop-blur-2xl border cursor-pointer active:scale-[0.97] ${isSelected
+                  className={`group relative rounded-2xl p-2.5 sm:p-3 flex flex-col items-center justify-between text-center transition-all duration-300 backdrop-blur-2xl border cursor-pointer active:scale-[0.97] min-h-[105px] sm:min-h-[116px] ${
+                    isSelected
                       ? `${theme.selectedCard} ${theme.selectedBorder} ${theme.selectedGlow} scale-[1.02]`
                       : "bg-gradient-to-b from-white/[0.07] to-white/[0.02] border-white/10 hover:border-white/25 hover:bg-white/[0.09] shadow-[0_4px_20px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15)] opacity-85 hover:opacity-100"
-                    }`}
+                  }`}
                 >
+                  {/* iOS Active Indicator Checkmark */}
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 h-4 w-4 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-md animate-in zoom-in-75 duration-200 z-10">
+                      <Check className="h-2.5 w-2.5 stroke-[3]" />
+                    </div>
+                  )}
+
                   {/* Apple Squircle Icon */}
                   <div
-                    className={`h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-br ${theme.iconGradient} ${theme.iconShadow} flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-105`}
+                    className={`h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-gradient-to-br ${theme.iconGradient} ${theme.iconShadow} flex items-center justify-center text-white shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md`}
                   >
-                    <IconComponent className="h-4.5 w-4.5 drop-shadow-md" />
+                    <IconComponent className="h-5 w-5 drop-shadow-md" />
                   </div>
 
                   {/* Document Name & Code */}
-                  <div className="min-w-0 flex-1 truncate pr-3">
-                    <div className="text-xs font-bold text-white tracking-tight leading-snug drop-shadow-sm truncate">
+                  <div className="w-full mt-2 flex flex-col items-center justify-center">
+                    <span className="text-[11px] sm:text-xs font-bold text-white tracking-tight leading-tight text-center break-words">
                       {docMeta.title}
-                    </div>
-                    <div className="mt-0.5 flex items-center gap-1">
-                      <span className="font-mono text-[9px] font-bold text-neutral-300 bg-white/[0.09] border border-white/10 px-1.5 py-0.2 rounded shadow-inner">
-                        {docMeta.shortCode}
-                      </span>
-                    </div>
+                    </span>
+                    <span className="mt-1 font-mono text-[9px] font-bold text-neutral-300 bg-white/[0.08] border border-white/10 px-1.5 py-0.5 rounded shadow-inner">
+                      {docMeta.shortCode}
+                    </span>
                   </div>
-
-                  {/* iOS Active Indicator Checkmark */}
-                  {isSelected && (
-                    <div className="absolute top-2 right-2 h-3.5 w-3.5 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-sm animate-in zoom-in-75 duration-200">
-                      <Check className="h-2 w-2 stroke-[3]" />
-                    </div>
-                  )}
                 </button>
               );
             })}
@@ -1241,12 +1276,27 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
               </div>
             )}
 
+            {type === "RANDOM" && (
+              <div className="space-y-1 pb-1">
+                <label className="text-[10px] text-pink-300 font-bold uppercase tracking-wider block">
+                  Document Title (e.g. Student ID, Health Insurance, Gym Pass, Club Card)
+                </label>
+                <input
+                  type="text"
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  placeholder="e.g. Student ID Card"
+                  className="w-full font-mono text-xs sm:text-sm font-bold bg-black/60 border border-pink-500/30 focus:border-pink-400 rounded-xl px-3 py-2 text-white outline-none transition"
+                />
+              </div>
+            )}
+
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 value={number}
-                onChange={(e) => setNumber(e.target.value.toUpperCase())}
-                placeholder="e.g. FORPA5522R"
+                onChange={(e) => setNumber(type === "RANDOM" ? e.target.value : e.target.value.toUpperCase())}
+                placeholder={type === "RANDOM" ? "e.g. DOC-9842 or ID-2026-X" : "e.g. FORPA5522R"}
                 className="flex-1 font-mono text-sm sm:text-base font-bold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-3 py-2 text-white uppercase tracking-wider outline-none transition"
               />
             </div>
@@ -1257,6 +1307,7 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                 {type === "PAN" && "Format: 5 letters, 4 numbers, 1 letter (e.g. FORPA5522R)"}
                 {type === "VOTER_ID" && "Format: 3 letters, 7 numbers (e.g. XKG3489120)"}
                 {type === "RATION_CARD" && "Format: 10-14 alphanumeric digits (e.g. RC071098765432)"}
+                {type === "RANDOM" && "Format: Any custom ID, card number, or identifier"}
               </span>
               <button
                 type="button"
@@ -1315,8 +1366,23 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                       monthlyWheatQuotaKg: 15,
                       state: "Delhi",
                     });
+                  } else if (type === "RANDOM") {
+                    setNumber("DOC-2026-9842");
+                    setCustomTitle("Sovereign Membership ID");
+                    setIssuer("Global Sovereign Network");
+                    setExpiry("2035-12-31");
+                    setDetails({
+                      name: "SOHAIL AKHTAR",
+                      category: "Verified Member",
+                      notes: "Universal Sovereign Credential",
+                    });
+                    setCustomFields([
+                      { id: "f1", key: "Membership Tier", value: "Founding Member" },
+                      { id: "f2", key: "Access Level", value: "All-Access VIP" },
+                      { id: "f3", key: "Emergency Contact", value: "+91 98765 43210" },
+                    ]);
                   }
-                  setExtractionMessage("✓ Sample verified government data loaded!");
+                  setExtractionMessage("✓ Sample verified data loaded!");
                 }}
                 className="inline-flex items-center gap-1 rounded-full bg-white/[0.08] hover:bg-white/[0.16] border border-white/10 px-2.5 py-1 text-[10px] font-bold text-sky-300 transition active:scale-95"
               >
@@ -1528,6 +1594,119 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
                       placeholder="Linked"
                       className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
                     />
+                  </div>
+                </div>
+              )}
+
+              {type === "RANDOM" && (
+                <div className="space-y-3 pt-2 border-t border-white/10 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div>
+                      <label className="text-[10px] text-neutral-400 block mb-1 font-medium">
+                        Issuing Authority / Organization
+                      </label>
+                      <input
+                        type="text"
+                        value={issuer}
+                        onChange={(e) => setIssuer(e.target.value)}
+                        placeholder="e.g. Delhi University / Star Health / Gym"
+                        className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-pink-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-neutral-400 block mb-1 font-medium">
+                        Valid Until / Expiry Date (Optional)
+                      </label>
+                      <input
+                        type="date"
+                        value={expiry}
+                        onChange={(e) => setExpiry(e.target.value)}
+                        className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-pink-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-neutral-400 block mb-1 font-medium">
+                      Category / Notes
+                    </label>
+                    <input
+                      type="text"
+                      value={details?.notes || ""}
+                      onChange={(e) => setDetails((prev: any) => ({ ...prev, notes: e.target.value }))}
+                      placeholder="e.g. Computer Science Dept, Roll #42"
+                      className="w-full font-mono text-xs font-semibold bg-black/60 border border-white/15 focus:border-pink-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                    />
+                  </div>
+
+                  {/* Dynamic Custom Fields - Add Anything You Want */}
+                  <div className="space-y-2 pt-2 border-t border-white/10">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10.5px] uppercase font-bold text-pink-400 tracking-wider flex items-center gap-1.5">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Custom Fields (Add Anything)
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          sound.playPop();
+                          setCustomFields((prev) => [
+                            ...prev,
+                            { id: `field_${Date.now()}_${Math.random()}`, key: "", value: "" },
+                          ]);
+                        }}
+                        className="inline-flex items-center gap-1 rounded-full bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 px-2.5 py-1 text-[10.5px] font-semibold transition active:scale-95"
+                      >
+                        <Plus className="h-3 w-3" />
+                        <span>Add Field</span>
+                      </button>
+                    </div>
+
+                    {customFields.length === 0 ? (
+                      <p className="text-[11px] text-neutral-500 italic">
+                        Tap &apos;Add Field&apos; above to attach any custom attributes (e.g. Blood Group, Plan, Roll No, Department, Membership Tier).
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {customFields.map((field, idx) => (
+                          <div key={field.id} className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={field.key}
+                              onChange={(e) => {
+                                const newFields = [...customFields];
+                                newFields[idx].key = e.target.value;
+                                setCustomFields(newFields);
+                              }}
+                              placeholder="Field Name (e.g. Roll No)"
+                              className="w-1/2 font-mono text-xs bg-black/60 border border-white/15 focus:border-pink-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                            />
+                            <input
+                              type="text"
+                              value={field.value}
+                              onChange={(e) => {
+                                const newFields = [...customFields];
+                                newFields[idx].value = e.target.value;
+                                setCustomFields(newFields);
+                              }}
+                              placeholder="Value (e.g. 2026-CS-89)"
+                              className="w-1/2 font-mono text-xs bg-black/60 border border-white/15 focus:border-pink-400 rounded-xl px-2.5 py-1.5 text-white outline-none transition"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                sound.playPop();
+                                setCustomFields((prev) => prev.filter((_, i) => i !== idx));
+                              }}
+                              className="p-1.5 text-neutral-500 hover:text-red-400 transition shrink-0"
+                              title="Delete field"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

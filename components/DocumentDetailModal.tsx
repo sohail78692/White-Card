@@ -542,6 +542,7 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
               <PhysicalIdCardView
                 type={doc.type}
                 number={doc.number}
+                customTitle={doc.customTitle}
                 name={doc.details?.name || doc.details?.fullName || doc.details?.cardholderName}
                 issuer={doc.issuer}
                 expiry={doc.expiry}
@@ -829,7 +830,7 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
             {doc.details && (() => {
               const allowedKeys = ALLOWED_DETAILS_BY_TYPE[doc.type as DocumentType] || [];
               const validEntries = Object.entries(doc.details).filter(
-                ([k, v]) => allowedKeys.includes(k) && v !== undefined && v !== null && v !== ""
+                ([k, v]) => (doc.type === "RANDOM" || allowedKeys.includes(k)) && v !== undefined && v !== null && v !== ""
               );
               if (validEntries.length === 0) return null;
               return (
