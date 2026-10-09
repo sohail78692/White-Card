@@ -21,6 +21,9 @@ import {
   Check,
   Wifi,
   IdCard,
+  UploadCloud,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 
 interface PhysicalIdCardViewProps {
@@ -94,6 +97,66 @@ function RealisticBarcode({ code, className = "h-8 w-36" }: { code: string; clas
   );
 }
 
+/**
+ * Photorealistic Dense Security 2D Matrix (Income Tax Department QR Code)
+ */
+function AuthenticPanQrCode({ className = "h-20 w-20 sm:h-24 sm:w-24" }: { className?: string }) {
+  const dots: [number, number][] = [
+    [32, 6], [36, 6], [44, 6], [52, 6], [60, 6], [64, 6],
+    [32, 10], [40, 10], [48, 10], [56, 10], [64, 10],
+    [32, 14], [36, 14], [44, 14], [52, 14], [60, 14],
+    [32, 18], [40, 18], [48, 18], [56, 18], [64, 18],
+    [32, 22], [36, 22], [44, 22], [52, 22], [60, 22], [64, 22],
+    [6, 34], [12, 34], [18, 34], [24, 34], [30, 34], [36, 34], [42, 34], [48, 34], [54, 34], [60, 34], [66, 34], [72, 34], [78, 34], [84, 34], [90, 34],
+    [8, 38], [14, 38], [22, 38], [28, 38], [34, 38], [40, 38], [46, 38], [52, 38], [58, 38], [64, 38], [70, 38], [76, 38], [82, 38], [88, 38], [94, 38],
+    [6, 42], [10, 42], [18, 42], [26, 42], [32, 42], [38, 42], [44, 42], [50, 42], [56, 42], [62, 42], [68, 42], [74, 42], [80, 42], [86, 42], [92, 42],
+    [8, 46], [16, 46], [24, 46], [30, 46], [36, 46], [42, 46], [48, 46], [54, 46], [60, 46], [66, 46], [72, 46], [78, 46], [84, 46], [90, 46],
+    [6, 50], [12, 50], [20, 50], [28, 50], [34, 50], [40, 50], [46, 50], [52, 50], [58, 50], [64, 50], [70, 50], [76, 50], [82, 50], [88, 50],
+    [8, 54], [14, 54], [22, 54], [30, 54], [38, 54], [44, 54], [50, 54], [56, 54], [62, 54], [68, 54], [74, 54], [80, 54], [86, 54], [92, 54],
+    [6, 58], [16, 58], [24, 58], [32, 58], [40, 58], [48, 58], [54, 58], [60, 58], [66, 58], [72, 58], [78, 58], [84, 58], [90, 58],
+    [8, 62], [14, 62], [20, 62], [28, 62], [36, 62], [42, 62], [50, 62], [58, 62], [64, 62], [70, 62], [76, 62], [82, 62], [88, 62], [94, 62],
+    [6, 66], [12, 66], [18, 66], [26, 66], [34, 66], [40, 66], [46, 66], [52, 66], [60, 66], [68, 66], [74, 66], [80, 66], [86, 66], [92, 66],
+    [32, 74], [40, 74], [48, 74], [56, 74], [64, 74], [72, 74], [80, 74], [88, 74],
+    [36, 78], [44, 78], [52, 78], [60, 78], [68, 78], [76, 78], [84, 78], [92, 78],
+    [32, 82], [38, 82], [46, 82], [54, 82], [62, 82], [70, 82], [78, 82], [86, 82], [94, 82],
+    [34, 86], [42, 86], [50, 86], [58, 86], [66, 86], [74, 86], [82, 86], [90, 86],
+    [32, 90], [40, 90], [48, 90], [56, 90], [64, 90], [72, 90], [80, 90], [88, 90], [94, 90],
+    [36, 94], [44, 94], [52, 94], [60, 94], [68, 94], [76, 94], [84, 94], [92, 94],
+  ];
+
+  return (
+    <div className={`flex flex-col items-center justify-center p-1 sm:p-1.5 rounded-lg bg-white border border-slate-300 shadow-sm shrink-0 ${className}`}>
+      <svg className="w-full h-full" viewBox="0 0 100 100" fill="#0f172a">
+        {/* Finder Pattern Top-Left */}
+        <rect x="4" y="4" width="24" height="24" rx="2" fill="#0f172a" />
+        <rect x="8" y="8" width="16" height="16" rx="1" fill="#ffffff" />
+        <rect x="12" y="12" width="8" height="8" rx="0.5" fill="#0f172a" />
+
+        {/* Finder Pattern Top-Right */}
+        <rect x="72" y="4" width="24" height="24" rx="2" fill="#0f172a" />
+        <rect x="76" y="8" width="16" height="16" rx="1" fill="#ffffff" />
+        <rect x="80" y="12" width="8" height="8" rx="0.5" fill="#0f172a" />
+
+        {/* Finder Pattern Bottom-Left */}
+        <rect x="4" y="72" width="24" height="24" rx="2" fill="#0f172a" />
+        <rect x="8" y="76" width="16" height="16" rx="1" fill="#ffffff" />
+        <rect x="12" y="80" width="8" height="8" rx="0.5" fill="#0f172a" />
+
+        {/* Center Shield Indicator */}
+        <circle cx="50" cy="50" r="4" fill="#0284c7" />
+
+        {/* Dense Micro-Matrix Security Data Dots */}
+        {dots.map(([x, y], idx) => (
+          <rect key={idx} x={x} y={y} width="3.2" height="3.2" rx="0.4" />
+        ))}
+      </svg>
+      <span className="text-[6.5px] font-mono text-slate-500 font-bold tracking-widest uppercase mt-0.5 block">
+        SECURE 2D CODE
+      </span>
+    </div>
+  );
+}
+
 export function PhysicalIdCardView({
   type,
   number,
@@ -112,6 +175,7 @@ export function PhysicalIdCardView({
     frontImageUrl || backImageUrl ? "photo" : "card"
   );
   const [isFullCardImage, setIsFullCardImage] = useState(true);
+  const [photoFit, setPhotoFit] = useState<"cover" | "contain">("cover");
 
   // 3D Interactive Tilt & Holographic Sheen physics
   const [rotateX, setRotateX] = useState(0);
@@ -187,7 +251,38 @@ export function PhysicalIdCardView({
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Toggle Fill Frame (object-cover) vs Fit Full Photo (object-contain) */}
+            <button
+              type="button"
+              onClick={() => {
+                sound.playPop();
+                setPhotoFit((prev) => (prev === "cover" ? "contain" : "cover"));
+              }}
+              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold border transition active:scale-95 ${
+                photoFit === "cover"
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30"
+                  : "bg-white/[0.08] hover:bg-white/[0.15] text-neutral-300 border-white/10"
+              }`}
+              title={
+                photoFit === "cover"
+                  ? "Currently filling frame (zoomed to fit card borders). Click to view full uncropped photo."
+                  : "Currently showing full uncropped photo. Click to fill card frame."
+              }
+            >
+              {photoFit === "cover" ? (
+                <>
+                  <Maximize2 className="h-3 w-3 text-emerald-400" />
+                  <span>Fill Frame</span>
+                </>
+              ) : (
+                <>
+                  <Minimize2 className="h-3 w-3 text-neutral-400" />
+                  <span>Fit Full</span>
+                </>
+              )}
+            </button>
+
             {backImageUrl && frontImageUrl && (
               <button
                 type="button"
@@ -196,6 +291,17 @@ export function PhysicalIdCardView({
               >
                 <RotateCw className="h-3 w-3" />
                 <span>Show {isFlipped ? "Front" : "Back"}</span>
+              </button>
+            )}
+            {onUploadPhoto && (
+              <button
+                type="button"
+                onClick={onUploadPhoto}
+                className="inline-flex items-center gap-1 rounded-full bg-white/[0.08] hover:bg-white/[0.15] px-3 py-1 text-[11px] font-semibold text-neutral-300 hover:text-white border border-white/10 transition active:scale-95"
+                title="Upload or replace photo"
+              >
+                <UploadCloud className="h-3 w-3 text-sky-400" />
+                <span>Replace</span>
               </button>
             )}
             <button
@@ -216,11 +322,10 @@ export function PhysicalIdCardView({
           <img
             src={currentPhoto!}
             alt="Real ID Card"
-            className="w-full h-full object-contain bg-slate-950"
+            className={`w-full h-full transition-all duration-300 bg-slate-950 ${
+              photoFit === "cover" ? "object-cover object-center" : "object-contain"
+            }`}
           />
-          <div className="absolute bottom-2.5 left-3 bg-black/70 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-mono text-emerald-300 border border-emerald-500/30">
-            Encrypted DEK Vault Storage • {isFlipped ? "Back" : "Front"}
-          </div>
         </div>
       </div>
     );
@@ -319,80 +424,111 @@ export function PhysicalIdCardView({
           {type === "PAN" && (
             <>
               {/* PAN FRONT */}
-              <div className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] backface-hidden overflow-hidden border border-sky-300/80 p-3.5 sm:p-5 flex flex-col justify-between text-slate-900 bg-gradient-to-br from-[#d4ecfd] via-[#e8f5fe] to-[#bde1f9] shadow-2xl">
-                {/* Guilloche Security Pattern */}
-                <svg className="absolute inset-0 w-full h-full opacity-[0.16] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+              <div className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] backface-hidden overflow-hidden border border-sky-400/40 p-3.5 sm:p-5 flex flex-col justify-between text-slate-900 bg-gradient-to-br from-[#ebf5fb] via-[#f7fbfe] via-[#edf5fc] to-[#e1eff9] shadow-2xl ring-1 ring-white/80 ring-inset">
+                {/* Ultra-Fine Banknote Security Guilloche */}
+                <svg className="absolute inset-0 w-full h-full opacity-[0.07] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
-                    <pattern id="pan-pat" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <path d="M0 20 Q 10 0, 20 20 T 40 20" fill="none" stroke="#0284c7" strokeWidth="0.6" />
-                      <circle cx="20" cy="20" r="14" fill="none" stroke="#0ea5e9" strokeWidth="0.4" />
+                    <pattern id="pan-fine-guilloche" width="20" height="20" patternUnits="userSpaceOnUse">
+                      <path d="M0 10 Q 5 0, 10 10 T 20 10" fill="none" stroke="#0369a1" strokeWidth="0.4" />
+                      <path d="M0 10 Q 5 20, 10 10 T 20 10" fill="none" stroke="#0284c7" strokeWidth="0.4" />
+                      <circle cx="10" cy="10" r="4.5" fill="none" stroke="#0284c7" strokeWidth="0.3" opacity="0.6" />
                     </pattern>
                   </defs>
-                  <rect width="100%" height="100%" fill="url(#pan-pat)" />
+                  <rect width="100%" height="100%" fill="url(#pan-fine-guilloche)" />
                 </svg>
 
-                {/* Lion Capital Watermark */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-[0.065] pointer-events-none">
-                  <NationalEmblemOfIndia className="h-52 w-52 text-sky-950" />
+                {/* Subtle Ashoka Emblem Watermark */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none">
+                  <NationalEmblemOfIndia className="h-48 w-48 text-[#002d62]" />
                 </div>
 
                 {/* Dynamic 3D Glare */}
                 <div
                   className="absolute inset-0 pointer-events-none transition-opacity duration-200"
                   style={{
-                    background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.45) 0%, rgba(253, 224, 71, 0.15) 25%, rgba(56, 189, 248, 0.2) 50%, transparent 70%)`,
+                    background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.5) 0%, rgba(253, 224, 71, 0.12) 25%, rgba(56, 189, 248, 0.15) 50%, transparent 70%)`,
                     opacity: glarePos.opacity,
                     mixBlendMode: "overlay",
                   }}
                 />
 
                 {/* Top Header */}
-                <div className="relative z-10 flex items-center justify-between border-b border-sky-900/20 pb-2">
+                <div className="relative z-10 flex items-center justify-between border-b border-sky-900/15 pb-2">
                   <div className="leading-tight text-left">
-                    <span className="text-[10px] sm:text-[12px] font-black tracking-wider text-slate-900 uppercase block font-serif">
+                    <span className="text-[10px] sm:text-[12px] font-black tracking-wider text-[#002d62] uppercase block font-serif">
                       आयकर विभाग
                     </span>
-                    <span className="text-[7.5px] sm:text-[8.5px] font-extrabold text-slate-800 tracking-wide uppercase block">
+                    <span className="text-[7.5px] sm:text-[8.5px] font-extrabold text-[#0f2847] tracking-wider uppercase block">
                       INCOME TAX DEPARTMENT
                     </span>
                   </div>
 
-                  <NationalEmblemOfIndia className="h-7 w-7 sm:h-8 sm:w-8 text-slate-900 drop-shadow-sm" />
+                  <div className="flex flex-col items-center justify-center">
+                    <NationalEmblemOfIndia className="h-7 w-7 sm:h-8 sm:w-8 text-[#002d62] drop-shadow-sm" />
+                  </div>
 
-                  <div className="flex items-center gap-2 text-right">
+                  <div className="flex items-center gap-2.5 text-right">
                     <div className="leading-tight">
-                      <span className="text-[10px] sm:text-[12px] font-black tracking-wider text-slate-900 uppercase block font-serif">
+                      <span className="text-[10px] sm:text-[12px] font-black tracking-wider text-[#002d62] uppercase block font-serif">
                         भारत सरकार
                       </span>
-                      <span className="text-[7.5px] sm:text-[8.5px] font-extrabold text-slate-800 tracking-wide uppercase block">
+                      <span className="text-[7.5px] sm:text-[8.5px] font-extrabold text-[#0f2847] tracking-wider uppercase block">
                         GOVT. OF INDIA
                       </span>
                     </div>
-                    {/* Metallic Hologram */}
-                    <div className="relative h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-gradient-to-tr from-[#fcd34d] via-[#6ee7b7] via-[#c084fc] to-[#38bdf8] shadow border border-amber-200/90 flex items-center justify-center overflow-hidden shrink-0">
-                      <span className="text-[6px] font-black text-slate-800 uppercase tracking-tighter">ITD</span>
+                    {/* Prismatic Metallic Silver Hologram */}
+                    <div
+                      className="relative w-7 h-9 sm:w-8 sm:h-10 rounded-sm shadow-md border border-slate-300/80 overflow-hidden shrink-0 flex flex-col items-center justify-between p-0.5 select-none"
+                      style={{
+                        background: "linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 20%, #fef08a 40%, #a7f3d0 60%, #bae6fd 80%, #cbd5e1 100%)",
+                      }}
+                    >
+                      <div
+                        className="absolute inset-0 opacity-75 pointer-events-none mix-blend-color-dodge"
+                        style={{
+                          background: `linear-gradient(${((glarePos.x + glarePos.y) * 2) % 360}deg, transparent 20%, rgba(255,255,255,0.85) 50%, transparent 80%)`,
+                        }}
+                      />
+                      <span className="text-[5px] font-bold text-slate-800 tracking-tighter uppercase z-10">भारत</span>
+                      <NationalEmblemOfIndia className="h-4 w-4 sm:h-5 sm:w-5 text-slate-800/80 drop-shadow-sm my-auto z-10" />
+                      <span className="text-[4.5px] font-black text-slate-800 tracking-tighter uppercase z-10">INDIA</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Body */}
                 <div className="relative z-10 flex items-start justify-between gap-2.5 sm:gap-4 my-auto">
-                  {/* Photo & DOB */}
+                  {/* Photo, DOB & Signature */}
                   <div className="flex flex-col items-center shrink-0 w-20 sm:w-24 space-y-1">
-                    <div className="relative w-18 h-22 sm:w-20 sm:h-24 rounded-lg overflow-hidden border border-slate-400/90 bg-white shadow-sm flex items-center justify-center">
+                    <div className="relative w-18 h-22 sm:w-20 sm:h-24 rounded-md overflow-hidden border border-slate-400/80 bg-slate-100 shadow-sm flex items-center justify-center">
                       {frontImageUrl ? (
-                        <img
-                          src={frontImageUrl}
-                          alt="Cardholder Photo"
-                          className="w-full h-full object-cover"
-                        />
+                        isFullCardImage ? (
+                          <div className="relative w-full h-full overflow-hidden bg-slate-200">
+                            <img
+                              src={frontImageUrl}
+                              alt="Cardholder Face"
+                              className="absolute max-w-none w-[370%] h-[260%] object-cover pointer-events-none select-none"
+                              style={{
+                                left: "-18%",
+                                top: "-36%",
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <img
+                            src={frontImageUrl}
+                            alt="Cardholder Photo"
+                            className="w-full h-full object-cover"
+                          />
+                        )
                       ) : (
-                        <div className="flex flex-col items-center justify-center text-slate-400">
-                          <User className="h-9 w-9 stroke-[1.2]" />
-                          <span className="text-[7px] uppercase font-bold mt-0.5 text-slate-500">Photo</span>
+                        <div className="flex flex-col items-center justify-center text-slate-400 bg-gradient-to-b from-slate-100 to-slate-200 w-full h-full">
+                          <User className="h-9 w-9 stroke-[1.2] text-slate-500" />
+                          <span className="text-[7px] uppercase font-bold mt-0.5 text-slate-600">PHOTO</span>
                         </div>
                       )}
                     </div>
+
                     <div className="text-center w-full">
                       <span className="text-[6.5px] uppercase font-bold text-slate-600 block leading-tight">
                         जन्म की तारीख / DOB
@@ -401,62 +537,56 @@ export function PhysicalIdCardView({
                         {dob}
                       </span>
                     </div>
-                    <div className="text-center w-full px-0.5 pt-0.5">
-                      <div className="border-b border-slate-800/80 pb-0.5">
-                        <span className="text-[11px] sm:text-xs font-serif italic text-slate-900 tracking-wide block leading-none font-bold">
+
+                    <div className="text-center w-full px-0.5">
+                      <div className="bg-white/85 rounded border border-slate-300 px-1 py-0.5 shadow-inner">
+                        <span
+                          className="text-[11px] sm:text-xs font-serif italic text-slate-800 tracking-normal block leading-tight font-medium select-none"
+                          style={{ fontFamily: 'Georgia, serif' }}
+                        >
                           {cardholderName.toLowerCase().split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                         </span>
                       </div>
-                      <span className="text-[6.5px] uppercase font-bold text-slate-600 block mt-0.5 tracking-wider">
-                        हस्ताक्षर / Signature
+                      <span className="text-[6px] uppercase font-bold text-slate-500 block mt-0.5 tracking-wider">
+                        हस्ताक्षर / SIGNATURE
                       </span>
                     </div>
                   </div>
 
                   {/* Details */}
-                  <div className="flex-1 min-w-0 space-y-2 pl-1 sm:pl-2 text-left pt-1">
+                  <div className="flex-1 min-w-0 space-y-2 pl-1.5 sm:pl-2.5 text-left pt-0.5">
                     <div>
-                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-600 block leading-tight font-serif">
-                        स्थायी लेखा संख्या कार्ड / Permanent Account Number
+                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-600 block leading-tight">
+                        स्थायी लेखा संख्या कार्ड / Permanent Account Number Card
                       </span>
-                      <span className="text-base sm:text-[19px] font-mono font-black tracking-[0.22em] text-slate-950 uppercase select-all block leading-tight mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+                      <span className="text-[16px] sm:text-[20px] font-mono font-black tracking-[0.24em] text-slate-950 uppercase select-all block leading-tight mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
                         {number}
                       </span>
                     </div>
 
-                    <div>
-                      <span className="text-[6.5px] sm:text-[7.5px] uppercase tracking-wider text-slate-500 font-bold block">
-                        नाम / Name
-                      </span>
-                      <span className="text-xs sm:text-[13.5px] font-black text-slate-900 tracking-wide uppercase truncate block font-sans">
-                        {cardholderName}
-                      </span>
-                    </div>
+                    <div className="space-y-1.5">
+                      <div>
+                        <span className="text-[6.5px] sm:text-[7.5px] uppercase tracking-wider text-slate-500 font-bold block">
+                          नाम / Name
+                        </span>
+                        <span className="text-xs sm:text-[14px] font-black text-slate-900 tracking-wide uppercase truncate block font-sans">
+                          {cardholderName}
+                        </span>
+                      </div>
 
-                    <div>
-                      <span className="text-[6.5px] sm:text-[7.5px] uppercase tracking-wider text-slate-500 font-bold block">
-                        पिता का नाम / Father&apos;s Name
-                      </span>
-                      <span className="text-[11px] sm:text-xs font-bold text-slate-800 tracking-wide uppercase truncate block font-sans">
-                        {fatherName}
-                      </span>
-                    </div>
-
-                    <div className="pt-1 flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 rounded bg-emerald-700/15 border border-emerald-700/30 px-2 py-0.5 text-[8.5px] font-bold text-emerald-900">
-                        <CheckCircle2 className="h-2.5 w-2.5 text-emerald-700" />
-                        <span>Active &amp; Aadhaar Linked</span>
-                      </span>
+                      <div>
+                        <span className="text-[6.5px] sm:text-[7.5px] uppercase tracking-wider text-slate-500 font-bold block">
+                          पिता का नाम / Father&apos;s Name
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-bold text-slate-800 tracking-wide uppercase truncate block font-sans">
+                          {fatherName}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* QR Code */}
-                  <div className="flex flex-col items-center justify-center p-1 sm:p-1.5 rounded-xl bg-white border border-slate-300 shadow-sm shrink-0">
-                    <QrCode className="h-16 w-16 sm:h-20 sm:w-20 text-slate-900 stroke-[1.6]" />
-                    <span className="text-[7px] font-mono text-slate-600 font-bold tracking-widest mt-0.5">
-                      ITD-VERIFIED
-                    </span>
-                  </div>
+                  {/* Authentic Dense 2D Barcode */}
+                  <AuthenticPanQrCode className="h-20 w-20 sm:h-24 sm:w-24" />
                 </div>
 
                 {/* Footer */}
@@ -467,14 +597,19 @@ export function PhysicalIdCardView({
               </div>
 
               {/* PAN BACK */}
-              <div className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] rotate-y-180 backface-hidden overflow-hidden border border-sky-300/80 p-3.5 sm:p-5 flex flex-col justify-between text-slate-900 bg-gradient-to-br from-[#e0f2fe] via-[#f0f9ff] to-[#bae6fd] shadow-2xl">
+              <div className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[26px] rotate-y-180 backface-hidden overflow-hidden border border-sky-400/40 p-3.5 sm:p-5 flex flex-col justify-between text-slate-900 bg-gradient-to-br from-[#ebf5fb] via-[#f7fbfe] to-[#e1eff9] shadow-2xl ring-1 ring-white/80 ring-inset">
                 {/* Guilloche */}
-                <div className="absolute inset-0 opacity-[0.08] pointer-events-none">
-                  <NationalEmblemOfIndia className="h-full w-full mx-auto text-sky-900" />
+                <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+                  <NationalEmblemOfIndia className="h-full w-full mx-auto text-[#002d62]" />
                 </div>
 
                 {/* Top Hologram Strip */}
-                <div className="relative z-10 w-full h-7 rounded-md bg-gradient-to-r from-amber-200 via-emerald-200 via-sky-300 to-amber-200 border border-slate-300 flex items-center justify-around px-2 text-[7px] font-mono font-bold text-slate-800 tracking-wider shadow-inner">
+                <div
+                  className="relative z-10 w-full h-7 rounded-sm border border-slate-300 flex items-center justify-around px-2 text-[7px] font-mono font-bold text-slate-800 tracking-wider shadow-inner select-none"
+                  style={{
+                    background: "linear-gradient(90deg, #fef08a 0%, #a7f3d0 25%, #bae6fd 50%, #fef08a 75%, #bae6fd 100%)",
+                  }}
+                >
                   <span>★ GOVT OF INDIA</span>
                   <span>INCOME TAX DEPARTMENT</span>
                   <span>GOVT OF INDIA ★</span>
@@ -483,10 +618,10 @@ export function PhysicalIdCardView({
                 {/* Back Advisory & Return Notice */}
                 <div className="relative z-10 space-y-2 text-left my-auto px-1">
                   <div className="text-[8.5px] sm:text-[9.5px] text-slate-800 font-medium leading-relaxed space-y-1">
-                    <p className="font-bold text-slate-950 font-serif">
+                    <p className="font-bold text-[#002d62] font-serif">
                       इस कार्ड के खोने/पाने पर कृपया सूचित करें / If found, please return to:
                     </p>
-                    <p className="font-mono text-[8px] sm:text-[9px] text-slate-700 bg-white/70 p-2 rounded-lg border border-slate-300 leading-snug">
+                    <p className="font-mono text-[8px] sm:text-[9px] text-slate-700 bg-white/80 p-2 rounded-lg border border-slate-300/80 shadow-sm leading-snug">
                       Income Tax PAN Services Unit, Protean / NSDL e-Gov,<br />
                       5th Floor, Mantri Sterling, Plot No. 341, Survey No. 997/8,<br />
                       Model Colony, Near Deep Bungalow Chowk, Pune - 411 016.<br />
@@ -497,7 +632,7 @@ export function PhysicalIdCardView({
                   <div className="flex items-center justify-between pt-1">
                     <RealisticBarcode code={number} className="h-7 w-44" />
                     <div className="text-right text-[8px] font-mono text-slate-700">
-                      <div>CARD STATUS: <strong>ACTIVE</strong></div>
+                      <div>CARD STATUS: <strong className="text-emerald-700">ACTIVE</strong></div>
                       <div>TAX CATEGORY: <strong>INDIVIDUAL</strong></div>
                     </div>
                   </div>

@@ -57,7 +57,12 @@ async function extractWithGemini(
   backMime?: string | null,
   backFilename?: string | null
 ): Promise<ExtractedData | null> {
-  const models = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"];
+  const models = [
+    "gemini-3.6-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+  ];
 
   const promptText = `You are a high-accuracy government document and ID card parser specializing in Indian identification credentials (Driving License, PAN Card, Voter ID / EPIC, Ration Card, Aadhaar, Passport).
 You are provided with document file(s) which may include:
@@ -129,8 +134,7 @@ Strict Rules:
       if (!response.ok) {
         const errText = await response.text();
         logger.warn({ model, status: response.status, errText }, "Gemini API attempt error");
-        if (response.status === 404) continue; // Try next model
-        break;
+        continue; // Seamlessly try next model if 503 (high demand), 429 (rate limit), or 404
       }
 
       const data = await response.json();

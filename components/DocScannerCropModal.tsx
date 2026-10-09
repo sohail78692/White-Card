@@ -13,6 +13,7 @@ import {
   Wand2,
   RefreshCw,
   ScanLine,
+  CreditCard,
 } from "lucide-react";
 
 export interface DocScannerResult {
@@ -42,37 +43,41 @@ interface DocScannerCropModalProps {
  */
 function detectDocumentBounds(
   canvas: HTMLCanvasElement,
-  ctx: CanvasRenderingContext2D
+  ctx: CanvasRenderingContext2D,
+  side?: "front" | "back"
 ): { p1: CornerPoint; p2: CornerPoint; p3: CornerPoint; p4: CornerPoint } {
   const w = canvas.width;
   const h = canvas.height;
 
-  // Defaults: 6% inset from image border
+  // Defaults: 100% full frame
   const def = {
-    p1: { x: 6, y: 7 },
-    p2: { x: 94, y: 7 },
-    p3: { x: 94, y: 93 },
-    p4: { x: 6, y: 93 },
+    p1: { x: 0, y: 0 },
+    p2: { x: 100, y: 0 },
+    p3: { x: 100, y: 100 },
+    p4: { x: 0, y: 100 },
   };
+
+  // Back of cards (especially PAN, DL, Aadhaar) have plain background with center text blocks
+  // Never auto-shrink down on back side to prevent cropping out the card edges!
+  if (side === "back") {
+    return def;
+  }
 
   try {
     const imgData = ctx.getImageData(0, 0, w, h);
     const data = imgData.data;
 
-    // Get luminance at (x, y)
     const getL = (x: number, y: number) => {
       const idx = (y * w + x) * 4;
       return 0.299 * data[idx] + 0.587 * data[idx + 1] + 0.114 * data[idx + 2];
     };
 
-    // Sample corner background luminance
     const bgL = (getL(5, 5) + getL(w - 6, 5) + getL(5, h - 6) + getL(w - 6, h - 6)) / 4;
+    const threshold = 28;
 
-    const threshold = 22; // Contrast threshold for edge detection
-
-    // Scan inward from Left
-    let left = Math.round(w * 0.05);
-    for (let x = Math.round(w * 0.03); x < w * 0.4; x += 3) {
+    // Scan inward only up to 12% (never deep into the card body)
+    let left = 0;
+    for (let x = Math.round(w * 0.02); x < w * 0.12; x += 3) {
       let diffSum = 0;
       for (let y = Math.round(h * 0.2); y < h * 0.8; y += 8) {
         diffSum += Math.abs(getL(x, y) - bgL);
@@ -84,9 +89,8 @@ function detectDocumentBounds(
       }
     }
 
-    // Scan inward from Right
-    let right = Math.round(w * 0.95);
-    for (let x = Math.round(w * 0.97); x > w * 0.6; x -= 3) {
+    let right = w;
+    for (let x = Math.round(w * 0.98); x > w * 0.88; x -= 3) {
       let diffSum = 0;
       for (let y = Math.round(h * 0.2); y < h * 0.8; y += 8) {
         diffSum += Math.abs(getL(x, y) - bgL);
@@ -98,9 +102,8 @@ function detectDocumentBounds(
       }
     }
 
-    // Scan inward from Top
-    let top = Math.round(h * 0.06);
-    for (let y = Math.round(h * 0.03); y < h * 0.4; y += 3) {
+    let top = 0;
+    for (let y = Math.round(h * 0.02); y < h * 0.12; y += 3) {
       let diffSum = 0;
       for (let x = Math.round(w * 0.2); x < w * 0.8; x += 8) {
         diffSum += Math.abs(getL(x, y) - bgL);
@@ -112,9 +115,8 @@ function detectDocumentBounds(
       }
     }
 
-    // Scan inward from Bottom
-    let bottom = Math.round(h * 0.94);
-    for (let y = Math.round(h * 0.97); y > h * 0.6; y -= 3) {
+    let bottom = h;
+    for (let y = Math.round(h * 0.98); y > h * 0.88; y -= 3) {
       let diffSum = 0;
       for (let x = Math.round(w * 0.2); x < w * 0.8; x += 8) {
         diffSum += Math.abs(getL(x, y) - bgL);
@@ -126,9 +128,9 @@ function detectDocumentBounds(
       }
     }
 
-    // Clamp sanity
-    const minW = w * 0.35;
-    const minH = h * 0.35;
+    // Must occupy at least 75% of the frame to be recognized as a valid card boundary
+    const minW = w * 0.75;
+    const minH = h * 0.75;
     if (right - left < minW || bottom - top < minH) {
       return def;
     }
@@ -153,22 +155,22 @@ export function DocScannerCropModal({
   onCancel,
 }: DocScannerCropModalProps) {
   const [mounted, setMounted] = useState(false);
-  const [rotation, setRotation] = useState(0);
   const [filterMode, setFilterMode] = useState<"magic" | "original" | "clean">("magic");
   const [isProcessing, setIsProcessing] = useState(false);
   const [autoDetected, setAutoDetected] = useState(false);
+  const [workingUrl, setWorkingUrl] = useState<string>(rawImageUrl);
 
-  // 4 Draggable Corners in Percentages (0 - 100)
+  // 4 Draggable Corners in Percentages of the rendered image (0 - 100)
   const [corners, setCorners] = useState<{
     p1: CornerPoint; // Top-Left
     p2: CornerPoint; // Top-Right
     p3: CornerPoint; // Bottom-Right
     p4: CornerPoint; // Bottom-Left
   }>({
-    p1: { x: 6, y: 7 },
-    p2: { x: 94, y: 7 },
-    p3: { x: 94, y: 93 },
-    p4: { x: 6, y: 93 },
+    p1: { x: 0, y: 0 },
+    p2: { x: 100, y: 0 },
+    p3: { x: 100, y: 100 },
+    p4: { x: 0, y: 100 },
   });
 
   // Active dragging state
@@ -182,7 +184,7 @@ export function DocScannerCropModal({
   });
 
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const imageBoxRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -196,16 +198,57 @@ export function DocScannerCropModal({
     };
   }, [isOpen]);
 
+  // 1-Tap ID Card Ratio Preset (ISO ID-1 1.586:1 aspect ratio)
+  const calculateCardPreset = (imgW: number, imgH: number) => {
+    const imgRatio = imgW / imgH;
+    const cardRatio = 1.586; // standard ISO ID-1 width / height
+
+    if (imgRatio >= cardRatio) {
+      // Landscape or wide photo
+      const cardHeightPct = 90;
+      const cardWidthPct = Math.min(96, (cardHeightPct * cardRatio) / imgRatio);
+      const xMargin = (100 - cardWidthPct) / 2;
+      const yMargin = (100 - cardHeightPct) / 2;
+      return {
+        p1: { x: Number(xMargin.toFixed(1)), y: Number(yMargin.toFixed(1)) },
+        p2: { x: Number((100 - xMargin).toFixed(1)), y: Number(yMargin.toFixed(1)) },
+        p3: { x: Number((100 - xMargin).toFixed(1)), y: Number((100 - yMargin).toFixed(1)) },
+        p4: { x: Number(xMargin.toFixed(1)), y: Number((100 - yMargin).toFixed(1)) },
+      };
+    } else {
+      // Portrait photo from mobile phone
+      const cardWidthPct = 96;
+      const cardHeightPct = Math.min(96, (cardWidthPct * imgRatio) / cardRatio);
+      const xMargin = (100 - cardWidthPct) / 2;
+      const yMargin = (100 - cardHeightPct) / 2;
+      return {
+        p1: { x: Number(xMargin.toFixed(1)), y: Number(yMargin.toFixed(1)) },
+        p2: { x: Number((100 - xMargin).toFixed(1)), y: Number(yMargin.toFixed(1)) },
+        p3: { x: Number((100 - xMargin).toFixed(1)), y: Number((100 - yMargin).toFixed(1)) },
+        p4: { x: Number(xMargin.toFixed(1)), y: Number((100 - yMargin).toFixed(1)) },
+      };
+    }
+  };
+
   // Load image & trigger automatic Doc Scanner edge detection
   useEffect(() => {
     if (!isOpen || !rawImageUrl) return;
+    setWorkingUrl(rawImageUrl);
 
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
       imgRef.current = img;
 
-      // Run edge detection on temporary small canvas
+      // When photo is portrait or side is back, Card Preset is optimal!
+      if (side === "back" || img.naturalHeight > img.naturalWidth) {
+        setCorners(calculateCardPreset(img.naturalWidth, img.naturalHeight));
+        setAutoDetected(true);
+        sound.playPop();
+        return;
+      }
+
+      // Edge detection for horizontal front side photos
       const testCanvas = document.createElement("canvas");
       const scale = Math.min(1, 400 / img.naturalWidth);
       testCanvas.width = Math.round(img.naturalWidth * scale);
@@ -213,14 +256,14 @@ export function DocScannerCropModal({
       const ctx = testCanvas.getContext("2d");
       if (ctx) {
         ctx.drawImage(img, 0, 0, testCanvas.width, testCanvas.height);
-        const detected = detectDocumentBounds(testCanvas, ctx);
+        const detected = detectDocumentBounds(testCanvas, ctx, side);
         setCorners(detected);
         setAutoDetected(true);
         sound.playPop();
       }
     };
     img.src = rawImageUrl;
-  }, [isOpen, rawImageUrl]);
+  }, [isOpen, rawImageUrl, side]);
 
   const handlePointerDown = (
     handle: "p1" | "p2" | "p3" | "p4" | "top" | "bottom" | "left" | "right",
@@ -231,7 +274,7 @@ export function DocScannerCropModal({
     setActiveDrag(handle);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
 
-    const rect = containerRef.current?.getBoundingClientRect();
+    const rect = imageBoxRef.current?.getBoundingClientRect();
     if (rect) {
       setLoupePos({
         x: e.clientX - rect.left,
@@ -242,8 +285,8 @@ export function DocScannerCropModal({
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!activeDrag || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    if (!activeDrag || !imageBoxRef.current) return;
+    const rect = imageBoxRef.current.getBoundingClientRect();
     const curX = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
     const curY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
 
@@ -255,31 +298,27 @@ export function DocScannerCropModal({
 
     setCorners((prev) => {
       const next = { ...prev };
-      if (activeDrag === "p1") next.p1 = { x: Math.min(curX, next.p2.x - 5), y: Math.min(curY, next.p4.y - 5) };
-      if (activeDrag === "p2") next.p2 = { x: Math.max(curX, next.p1.x + 5), y: Math.min(curY, next.p3.y - 5) };
-      if (activeDrag === "p3") next.p3 = { x: Math.max(curX, next.p4.x + 5), y: Math.max(curY, next.p2.y + 5) };
-      if (activeDrag === "p4") next.p4 = { x: Math.min(curX, next.p3.x - 5), y: Math.max(curY, next.p1.y + 5) };
+      if (activeDrag === "p1") next.p1 = { x: Math.min(curX, next.p2.x - 4), y: Math.min(curY, next.p4.y - 4) };
+      if (activeDrag === "p2") next.p2 = { x: Math.max(curX, next.p1.x + 4), y: Math.min(curY, next.p3.y - 4) };
+      if (activeDrag === "p3") next.p3 = { x: Math.max(curX, next.p4.x + 4), y: Math.max(curY, next.p2.y + 4) };
+      if (activeDrag === "p4") next.p4 = { x: Math.min(curX, next.p3.x - 4), y: Math.max(curY, next.p1.y + 4) };
 
       // Edge midpoint drags
       if (activeDrag === "top") {
-        const delta = curY;
-        next.p1.y = delta;
-        next.p2.y = delta;
+        next.p1.y = curY;
+        next.p2.y = curY;
       }
       if (activeDrag === "bottom") {
-        const delta = curY;
-        next.p3.y = delta;
-        next.p4.y = delta;
+        next.p3.y = curY;
+        next.p4.y = curY;
       }
       if (activeDrag === "left") {
-        const delta = curX;
-        next.p1.x = delta;
-        next.p4.x = delta;
+        next.p1.x = curX;
+        next.p4.x = curX;
       }
       if (activeDrag === "right") {
-        const delta = curX;
-        next.p2.x = delta;
-        next.p3.x = delta;
+        next.p2.x = curX;
+        next.p3.x = curX;
       }
       return next;
     });
@@ -304,21 +343,65 @@ export function DocScannerCropModal({
     });
   };
 
+  // 1-Tap ID Card Ratio Preset (ISO ID-1 1.586:1 aspect ratio)
+  const handleSelectCardPreset = () => {
+    sound.playPop();
+    const img = imgRef.current;
+    if (!img) return;
+    setCorners(calculateCardPreset(img.naturalWidth, img.naturalHeight));
+  };
+
   // Re-run Auto-Detection
   const handleReAutoDetect = () => {
-    if (!imgRef.current) return;
-    const testCanvas = document.createElement("canvas");
     const img = imgRef.current;
+    if (!img) return;
+    if (side === "back" || img.naturalHeight > img.naturalWidth) {
+      setCorners(calculateCardPreset(img.naturalWidth, img.naturalHeight));
+      sound.playSuccess();
+      return;
+    }
+    const testCanvas = document.createElement("canvas");
     const scale = Math.min(1, 400 / img.naturalWidth);
     testCanvas.width = Math.round(img.naturalWidth * scale);
     testCanvas.height = Math.round(img.naturalHeight * scale);
     const ctx = testCanvas.getContext("2d");
     if (ctx) {
       ctx.drawImage(img, 0, 0, testCanvas.width, testCanvas.height);
-      const detected = detectDocumentBounds(testCanvas, ctx);
+      const detected = detectDocumentBounds(testCanvas, ctx, side);
       setCorners(detected);
       sound.playSuccess();
     }
+  };
+
+  // Rotate working image on canvas by 90 degrees clockwise
+  const handleRotate = () => {
+    sound.playPop();
+    const img = imgRef.current;
+    if (!img) return;
+
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = nh;
+    canvas.height = nw;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.translate(nh / 2, nw / 2);
+    ctx.rotate((90 * Math.PI) / 180);
+    ctx.drawImage(img, -nw / 2, -nh / 2);
+
+    const rotatedData = canvas.toDataURL("image/jpeg", 0.95);
+    setWorkingUrl(rotatedData);
+
+    const nextImg = new Image();
+    nextImg.crossOrigin = "anonymous";
+    nextImg.onload = () => {
+      imgRef.current = nextImg;
+      setCorners(calculateCardPreset(nextImg.naturalWidth, nextImg.naturalHeight));
+    };
+    nextImg.src = rotatedData;
   };
 
   // Execute Final Crop & DocScanner Image Enhancement
@@ -332,11 +415,11 @@ export function DocScannerCropModal({
       const nw = img.naturalWidth || img.width;
       const nh = img.naturalHeight || img.height;
 
-      // Calculate pixel crop coordinates from corners
-      const minX = Math.round(Math.min(corners.p1.x, corners.p4.x) * (nw / 100));
-      const maxX = Math.round(Math.max(corners.p2.x, corners.p3.x) * (nw / 100));
-      const minY = Math.round(Math.min(corners.p1.y, corners.p2.y) * (nh / 100));
-      const maxY = Math.round(Math.max(corners.p4.y, corners.p3.y) * (nh / 100));
+      // Exact pixel crop coordinates relative to the image
+      const minX = Math.max(0, Math.round(Math.min(corners.p1.x, corners.p4.x) * (nw / 100)));
+      const maxX = Math.min(nw, Math.round(Math.max(corners.p2.x, corners.p3.x) * (nw / 100)));
+      const minY = Math.max(0, Math.round(Math.min(corners.p1.y, corners.p2.y) * (nh / 100)));
+      const maxY = Math.min(nh, Math.round(Math.max(corners.p4.y, corners.p3.y) * (nh / 100)));
 
       const cropW = Math.max(50, maxX - minX);
       const cropH = Math.max(50, maxY - minY);
@@ -370,16 +453,8 @@ export function DocScannerCropModal({
         ctx.filter = "none";
       }
 
-      // Handle Rotation
-      if (rotation !== 0) {
-        ctx.save();
-        ctx.translate(targetW / 2, targetH / 2);
-        ctx.rotate((rotation * Math.PI) / 180);
-        ctx.drawImage(img, minX, minY, cropW, cropH, -targetW / 2, -targetH / 2, targetW, targetH);
-        ctx.restore();
-      } else {
-        ctx.drawImage(img, minX, minY, cropW, cropH, 0, 0, targetW, targetH);
-      }
+      // Draw precisely what was framed inside the handles
+      ctx.drawImage(img, minX, minY, cropW, cropH, 0, 0, targetW, targetH);
 
       // Export compressed JPEG Blob (< 500 KB)
       const blob = await new Promise<Blob>((resolve, reject) => {
@@ -459,120 +534,124 @@ export function DocScannerCropModal({
 
       {/* Main Interactive Scanner Viewport */}
       <div
-        ref={containerRef}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        className="relative w-full max-w-2xl flex-1 max-h-[62vh] rounded-2xl overflow-hidden bg-neutral-950 border border-white/20 shadow-2xl flex items-center justify-center touch-none group"
+        className="relative w-full max-w-2xl flex-1 max-h-[62vh] rounded-2xl overflow-hidden bg-neutral-950 border border-white/20 shadow-2xl flex items-center justify-center p-3 touch-none select-none group"
       >
-        {/* Base Image */}
-        {rawImageUrl && (
-          <img
-            src={rawImageUrl}
-            alt="Captured Document"
-            className="w-full h-full object-contain pointer-events-none transition-all duration-150"
-            style={{
-              transform: `rotate(${rotation}deg)`,
-              filter:
-                filterMode === "magic"
-                  ? "contrast(1.15) brightness(1.04)"
-                  : filterMode === "clean"
-                    ? "contrast(1.3) grayscale(1)"
-                    : "none",
-            }}
-          />
-        )}
-
-        {/* SVG Polygon Overlay & Semi-Transparent Crop Mask */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
+        {/* Tightly-wrapped image box: exact same dimensions as rendered image */}
+        <div
+          ref={imageBoxRef}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          className="relative inline-block max-w-full max-h-[58vh] select-none shadow-2xl rounded-lg"
         >
-          {/* Outer Dimmed Background Mask */}
-          <path
-            d={`M0 0 L100 0 L100 100 L0 100 Z M${corners.p1.x} ${corners.p1.y} L${corners.p4.x} ${corners.p4.y} L${corners.p3.x} ${corners.p3.y} L${corners.p2.x} ${corners.p2.y} Z`}
-            fill="rgba(0, 0, 0, 0.65)"
-            fillRule="evenodd"
-          />
+          {workingUrl && (
+            <img
+              ref={imgRef}
+              src={workingUrl}
+              alt="Captured Document"
+              className="max-w-full max-h-[58vh] w-auto h-auto block select-none pointer-events-none rounded-lg"
+              style={{
+                filter:
+                  filterMode === "magic"
+                    ? "contrast(1.15) brightness(1.04)"
+                    : filterMode === "clean"
+                      ? "contrast(1.3) grayscale(1)"
+                      : "none",
+              }}
+            />
+          )}
 
-          {/* Glowing Green/Cyan Document Edge Lines */}
-          <polygon
-            points={`${corners.p1.x},${corners.p1.y} ${corners.p2.x},${corners.p2.y} ${corners.p3.x},${corners.p3.y} ${corners.p4.x},${corners.p4.y}`}
-            fill="rgba(56, 189, 248, 0.08)"
-            stroke="#38bdf8"
-            strokeWidth="0.8"
-            strokeDasharray="2 1"
-            className="animate-pulse"
-          />
-        </svg>
-
-        {/* 4 Interactive Corner Handles */}
-        {[
-          { id: "p1", point: corners.p1, label: "Top-Left" },
-          { id: "p2", point: corners.p2, label: "Top-Right" },
-          { id: "p3", point: corners.p3, label: "Bottom-Right" },
-          { id: "p4", point: corners.p4, label: "Bottom-Left" },
-        ].map((c) => (
-          <div
-            key={c.id}
-            onPointerDown={(e) => handlePointerDown(c.id as any, e)}
-            style={{ left: `${c.point.x}%`, top: `${c.point.y}%` }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-move touch-none z-30 group/pin"
-            title={`Drag ${c.label} corner`}
+          {/* SVG Polygon Overlay & Semi-Transparent Crop Mask */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-none rounded-lg overflow-hidden"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
           >
-            {/* Outer Pulse Ring */}
-            <div className="absolute inset-0 rounded-full bg-sky-400/30 animate-ping opacity-75 pointer-events-none" />
-            {/* Handle Pin */}
-            <div className="h-5 w-5 rounded-full bg-white border-2 border-sky-500 shadow-[0_0_12px_rgba(56,189,248,0.8)] transition-transform duration-100 group-hover/pin:scale-125" />
-          </div>
-        ))}
+            {/* Outer Dimmed Background Mask */}
+            <path
+              d={`M0 0 L100 0 L100 100 L0 100 Z M${corners.p1.x} ${corners.p1.y} L${corners.p4.x} ${corners.p4.y} L${corners.p3.x} ${corners.p3.y} L${corners.p2.x} ${corners.p2.y} Z`}
+              fill="rgba(0, 0, 0, 0.65)"
+              fillRule="evenodd"
+            />
 
-        {/* 4 Edge Midpoint Handles (to drag full edges) */}
-        {[
-          { id: "top", point: midTop, label: "Top Edge" },
-          { id: "right", point: midRight, label: "Right Edge" },
-          { id: "bottom", point: midBottom, label: "Bottom Edge" },
-          { id: "left", point: midLeft, label: "Left Edge" },
-        ].map((m) => (
-          <div
-            key={m.id}
-            onPointerDown={(e) => handlePointerDown(m.id as any, e)}
-            style={{ left: `${m.point.x}%`, top: `${m.point.y}%` }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 w-7 h-4 rounded-full bg-sky-400/90 hover:bg-sky-300 border border-white/60 shadow-md cursor-pointer flex items-center justify-center z-20 transition active:scale-95"
-            title={`Drag ${m.label}`}
-          >
-            <div className="w-2.5 h-0.5 bg-slate-900 rounded" />
-          </div>
-        ))}
+            {/* Glowing Green/Cyan Document Edge Lines */}
+            <polygon
+              points={`${corners.p1.x},${corners.p1.y} ${corners.p2.x},${corners.p2.y} ${corners.p3.x},${corners.p3.y} ${corners.p4.x},${corners.p4.y}`}
+              fill="rgba(56, 189, 248, 0.08)"
+              stroke="#38bdf8"
+              strokeWidth="0.8"
+              strokeDasharray="2 1"
+              className="animate-pulse"
+            />
+          </svg>
 
-        {/* Floating Magnifier / Loupe while dragging */}
-        {loupePos.visible && (
-          <div
-            style={{
-              left: `${loupePos.x}px`,
-              top: `${Math.max(40, loupePos.y - 70)}px`,
-            }}
-            className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border-2 border-white shadow-[0_8px_25px_rgba(0,0,0,0.8)] overflow-hidden bg-black z-40"
-          >
-            <div className="w-full h-full relative flex items-center justify-center">
-              {rawImageUrl && (
-                <img
-                  src={rawImageUrl}
-                  alt="Loupe"
-                  className="w-[250%] h-[250%] max-w-none object-cover"
-                  style={{
-                    transform: `translate(-${loupePos.x * 0.4}px, -${loupePos.y * 0.4}px)`,
-                  }}
-                />
-              )}
-              {/* Center Crosshairs */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-3 h-0.5 bg-sky-400" />
-                <div className="h-3 w-0.5 bg-sky-400 -ml-1.5" />
+          {/* 4 Interactive Corner Handles */}
+          {[
+            { id: "p1", point: corners.p1, label: "Top-Left" },
+            { id: "p2", point: corners.p2, label: "Top-Right" },
+            { id: "p3", point: corners.p3, label: "Bottom-Right" },
+            { id: "p4", point: corners.p4, label: "Bottom-Left" },
+          ].map((c) => (
+            <div
+              key={c.id}
+              onPointerDown={(e) => handlePointerDown(c.id as any, e)}
+              style={{ left: `${c.point.x}%`, top: `${c.point.y}%` }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-move touch-none z-30 group/pin"
+              title={`Drag ${c.label} corner`}
+            >
+              {/* Outer Pulse Ring */}
+              <div className="absolute inset-0 rounded-full bg-sky-400/30 animate-ping opacity-75 pointer-events-none" />
+              {/* Handle Pin */}
+              <div className="h-5 w-5 rounded-full bg-white border-2 border-sky-500 shadow-[0_0_12px_rgba(56,189,248,0.8)] transition-transform duration-100 group-hover/pin:scale-125" />
+            </div>
+          ))}
+
+          {/* 4 Edge Midpoint Handles (to drag full edges) */}
+          {[
+            { id: "top", point: midTop, label: "Top Edge" },
+            { id: "right", point: midRight, label: "Right Edge" },
+            { id: "bottom", point: midBottom, label: "Bottom Edge" },
+            { id: "left", point: midLeft, label: "Left Edge" },
+          ].map((m) => (
+            <div
+              key={m.id}
+              onPointerDown={(e) => handlePointerDown(m.id as any, e)}
+              style={{ left: `${m.point.x}%`, top: `${m.point.y}%` }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 w-7 h-4 rounded-full bg-sky-400/90 hover:bg-sky-300 border border-white/60 shadow-md cursor-pointer flex items-center justify-center z-20 transition active:scale-95"
+              title={`Drag ${m.label}`}
+            >
+              <div className="w-2.5 h-0.5 bg-slate-900 rounded" />
+            </div>
+          ))}
+
+          {/* Floating Magnifier / Loupe while dragging */}
+          {loupePos.visible && (
+            <div
+              style={{
+                left: `${loupePos.x}px`,
+                top: `${Math.max(40, loupePos.y - 70)}px`,
+              }}
+              className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border-2 border-white shadow-[0_8px_25px_rgba(0,0,0,0.8)] overflow-hidden bg-black z-40"
+            >
+              <div className="w-full h-full relative flex items-center justify-center">
+                {workingUrl && (
+                  <img
+                    src={workingUrl}
+                    alt="Loupe"
+                    className="w-[250%] h-[250%] max-w-none object-cover"
+                    style={{
+                      transform: `translate(-${loupePos.x * 0.4}px, -${loupePos.y * 0.4}px)`,
+                    }}
+                  />
+                )}
+                {/* Center Crosshairs */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-3 h-0.5 bg-sky-400" />
+                  <div className="h-3 w-0.5 bg-sky-400 -ml-1.5" />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Bottom Toolbars & Action Controls */}
@@ -591,6 +670,15 @@ export function DocScannerCropModal({
             </button>
             <button
               type="button"
+              onClick={handleSelectCardPreset}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 px-2.5 py-1.5 font-semibold text-emerald-300 border border-emerald-500/30 transition active:scale-95"
+              title="Crop to standard 16:10 / 1.586 ID Card aspect ratio"
+            >
+              <CreditCard className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Card Preset</span>
+            </button>
+            <button
+              type="button"
               onClick={handleSelectFull}
               className="inline-flex items-center gap-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] px-2.5 py-1.5 text-neutral-300 hover:text-white transition active:scale-95"
             >
@@ -599,10 +687,7 @@ export function DocScannerCropModal({
             </button>
             <button
               type="button"
-              onClick={() => {
-                sound.playPop();
-                setRotation((prev) => (prev + 90) % 360);
-              }}
+              onClick={handleRotate}
               className="inline-flex items-center gap-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] px-2.5 py-1.5 text-neutral-300 hover:text-white transition active:scale-95"
             >
               <RotateCw className="h-3.5 w-3.5" />

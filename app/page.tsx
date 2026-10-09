@@ -403,13 +403,16 @@ function SelectiveDisclosureFeatureCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration filling the box properly with smooth left fade mask */}
-      <img
-        src="/privacy/share-only.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/privacy/share-only.webp" type="image/webp" />
+        <img
+          src="/privacy/share-only.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
@@ -544,13 +547,16 @@ function SelfDestructQRFeatureCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration filling the box properly with smooth left fade mask */}
-      <img
-        src="/privacy/temporary-qr.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/privacy/temporary-qr.webp" type="image/webp" />
+        <img
+          src="/privacy/temporary-qr.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_55%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left, fading smoothly right for text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070b14]/95 from-20% to-transparent pointer-events-none z-[1]" />
@@ -658,13 +664,16 @@ function PasswordlessAuthFeatureCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration */}
-      <img
-        src="/privacy/passwordless-otp.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/privacy/passwordless-otp.webp" type="image/webp" />
+        <img
+          src="/privacy/passwordless-otp.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -729,13 +738,16 @@ function InstantRevokeFeatureCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] via-transparent to-red-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration */}
-      <img
-        src="/privacy/instant-revocation.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/privacy/instant-revocation.webp" type="image/webp" />
+        <img
+          src="/privacy/instant-revocation.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -799,13 +811,16 @@ function LiveAuditLogFeatureCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration */}
-      <img
-        src="/privacy/verification-log.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/privacy/verification-log.webp" type="image/webp" />
+        <img
+          src="/privacy/verification-log.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -860,13 +875,16 @@ function SecurityEnclaveMasterCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-blue-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration filling right side with smooth left fade mask */}
-      <img
-        src="/security/silicon-sealed.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/security/silicon-sealed.webp" type="image/webp" />
+        <img
+          src="/security/silicon-sealed.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left for pristine text readability */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[62%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -942,13 +960,16 @@ function SecurityProofSealCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.06] via-transparent to-indigo-500/[0.02] pointer-events-none rounded-[22px]" />
 
       {/* Background Illustration filling right side with smooth left fade mask */}
-      <img
-        src="/security/sha256-chain.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/security/sha256-chain.webp" type="image/webp" />
+        <img
+          src="/security/sha256-chain.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[62%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -1021,13 +1042,16 @@ function SecurityShredderCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] via-transparent to-red-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration */}
-      <img
-        src="/security/shredder.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/security/shredder.webp" type="image/webp" />
+        <img
+          src="/security/shredder.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -1086,13 +1110,16 @@ function SecurityAntiReplayCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-emerald-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration */}
-      <img
-        src="/security/anti-screenshot.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/security/anti-screenshot.webp" type="image/webp" />
+        <img
+          src="/security/anti-screenshot.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />
@@ -1140,13 +1167,16 @@ function SecurityZeroTrackersCard() {
       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/[0.06] via-transparent to-purple-500/[0.02] pointer-events-none rounded-[20px]" />
 
       {/* Background Illustration */}
-      <img
-        src="/security/zero-trackers.png"
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
+      <picture className="absolute inset-0 w-full h-full pointer-events-none">
+        <source srcSet="/security/zero-trackers.webp" type="image/webp" />
+        <img
+          src="/security/zero-trackers.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-right pointer-events-none [mask-image:linear-gradient(to_right,transparent_15%,black_60%)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </picture>
       {/* Dark protective shield on left */}
       <div className="absolute inset-y-0 left-0 w-full sm:w-[68%] bg-gradient-to-r from-[#070b14]/95 from-45% via-[#070b14]/80 via-75% to-transparent pointer-events-none z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#070b14]/90 from-20% to-transparent pointer-events-none z-[1]" />

@@ -22,10 +22,12 @@ import {
   Edit3,
   Save,
   CheckCircle2,
+  Crop,
 } from "lucide-react";
 import { DocumentIcon } from "@/components/DocumentIcon";
 import { DOCUMENT_TYPES, DocumentType, ALLOWED_DETAILS_BY_TYPE, sanitizeDetailsForType } from "@/lib/validators/documents";
 import { PhysicalIdCardView } from "@/components/PhysicalIdCardView";
+import { DocScannerCropModal, DocScannerResult } from "@/components/DocScannerCropModal";
 
 interface DocumentDetailModalProps {
   docId: string;
@@ -46,6 +48,13 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
   const [extractingAttId, setExtractingAttId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [savingEdit, setSavingEdit] = useState(false);
+  const [cropModal, setCropModal] = useState<{
+    isOpen: boolean;
+    attId: string;
+    filename: string;
+    rawImageUrl: string;
+    side: "front" | "back";
+  } | null>(null);
 
   // Edit form states
   const [editNumber, setEditNumber] = useState("");
@@ -306,6 +315,59 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
     }
   };
 
+  const handleOpenCropModal = async (att: any) => {
+    try {
+      const fileRes = await fetch(`/api/vault/${docId}/attachment/${att.id}`);
+      if (!fileRes.ok) throw new Error("Could not load image for cropping");
+      const blob = await fileRes.blob();
+      const objUrl = URL.createObjectURL(blob);
+      setCropModal({
+        isOpen: true,
+        attId: att.id,
+        filename: att.filename,
+        rawImageUrl: objUrl,
+        side: att.filename?.toLowerCase().includes("back") ? "back" : "front",
+      });
+    } catch {
+      setError("Failed to open image in crop tool");
+    }
+  };
+
+  const handleConfirmCrop = async (result: DocScannerResult) => {
+    if (!cropModal) return;
+    const oldAttId = cropModal.attId;
+    const filename = cropModal.filename;
+    setCropModal(null);
+    setUploading(true);
+
+    try {
+      // 1. Delete old uncropped attachment
+      await fetch(`/api/vault/${docId}/attachment/${oldAttId}`, { method: "DELETE" });
+
+      // 2. Upload cropped replacement file
+      const formData = new FormData();
+      formData.append("file", result.file, filename);
+      const uploadRes = await fetch(`/api/vault/${docId}/attachment`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload cropped attachment");
+      }
+
+      sound.playSuccess();
+      setSuccessMessage("Card cropped and updated successfully!");
+      setTimeout(() => setSuccessMessage(null), 3000);
+      await loadData();
+    } catch (err: any) {
+      sound.playError();
+      setError(err?.message || "Failed to update cropped photo");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawFile = e.target.files?.[0];
     if (!rawFile) return;
@@ -368,9 +430,15 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
     }
 
     const hasFront = attachments.some((a) => a.filename?.toLowerCase().includes("front"));
+    const hasBack = attachments.some((a) => a.filename?.toLowerCase().includes("back"));
     let uploadName = file.name;
-    if (!hasFront && (file.type.startsWith("image/") || file.name.match(/\.(jpe?g|png|webp)$/i))) {
-      uploadName = `${doc?.type || "DOC"}_FRONT.jpg`;
+    const isImg = file.type.startsWith("image/") || file.name.match(/\.(jpe?g|png|webp)$/i);
+    if (isImg) {
+      if (!hasFront) {
+        uploadName = `${doc?.type || "DOC"}_FRONT.jpg`;
+      } else if (!hasBack) {
+        uploadName = `${doc?.type || "DOC"}_BACK.jpg`;
+      }
     }
 
     const formData = new FormData();
@@ -956,6 +1024,19 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
                         </div>
 
                         <div className="flex items-center gap-1.5 shrink-0">
+                          {/* 1-Click Crop & Align for images */}
+                          {isImg && (
+                            <button
+                              type="button"
+                              onClick={() => handleOpenCropModal(att)}
+                              className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 text-[11px] font-semibold text-emerald-300 transition active:scale-95"
+                              title="Crop, rotate, or adjust card borders"
+                            >
+                              <Crop className="h-3 w-3 text-emerald-400" />
+                              <span className="hidden sm:inline">Crop</span>
+                            </button>
+                          )}
+
                           {/* 1-Click Extract Button for this file */}
                           <button
                             type="button"
@@ -1012,6 +1093,21 @@ export function DocumentDetailModal({ docId, onClose, onDeleted }: DocumentDetai
         ) : null}
       </div>
     </div>
+
+    {/* Crop & Edge Alignment Tool Modal */}
+    {cropModal && cropModal.isOpen && (
+      <DocScannerCropModal
+        isOpen={cropModal.isOpen}
+        rawImageUrl={cropModal.rawImageUrl}
+        title={`Crop & Align Card (${cropModal.filename})`}
+        side={cropModal.side}
+        onConfirm={handleConfirmCrop}
+        onCancel={() => {
+          if (cropModal.rawImageUrl) URL.revokeObjectURL(cropModal.rawImageUrl);
+          setCropModal(null);
+        }}
+      />
+    )}
   </div>,
   document.body
 );

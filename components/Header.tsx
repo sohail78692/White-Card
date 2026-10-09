@@ -200,11 +200,16 @@ export function Header() {
               className="flex items-center gap-2 sm:gap-2.5 group transition-all"
               aria-label="White Card Wallet Home"
             >
-              <img
-                src="/logo.png"
-                alt="White Card Logo"
-                className="h-8 w-8 sm:h-9 sm:w-9 object-contain group-hover:scale-105 transition-transform duration-200"
-              />
+              <picture className="shrink-0">
+                <source srcSet="/logo.webp" type="image/webp" />
+                <img
+                  src="/logo.png"
+                  alt="White Card Logo"
+                  width={36}
+                  height={36}
+                  className="h-8 w-8 sm:h-9 sm:w-9 object-contain group-hover:scale-105 transition-transform duration-200"
+                />
+              </picture>
               <div className="flex flex-col">
                 <span className="text-xs sm:text-sm font-bold tracking-wider text-white leading-tight">
                   WHITE <span className="text-[#38bdf8]">CARD</span>

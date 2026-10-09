@@ -268,11 +268,11 @@ export function AddDocumentModal({ onClose, onAdded, initialType = "DRIVING_LICE
 
     if (docScanner.side === "front") {
       setFrontImage(slot);
-      setRawFrontUrl(res.previewUrl);
+      setRawFrontUrl((prev) => prev || res.previewUrl);
       extractDataFromFile(finalFile, cleanFilename, backImage?.file, backImage?.name);
     } else {
       setBackImage(slot);
-      setRawBackUrl(res.previewUrl);
+      setRawBackUrl((prev) => prev || res.previewUrl);
       extractDataFromFile(finalFile, cleanFilename, frontImage?.file, frontImage?.name);
     }
     sound.playSuccess();
